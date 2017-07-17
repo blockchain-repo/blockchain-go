@@ -53,3 +53,22 @@ Web server and API.
 ### [`LICENSE`](./LICENSE)
 
 ### [`.gitignore`](./.gitignore)
+
+```
+unichain-go/
+├── backend
+│   ├── mongodb
+│   └── rethinkdb
+├── common/
+├── config/
+├── CONTRIBUTING.md
+├── LICENSE
+├── log/
+├── main.go
+├── models/
+├── pipelines/
+├── README.md
+├── vendor/
+├── version.go
+└── web/
+```
