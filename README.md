@@ -44,6 +44,10 @@ Code for building the database connection, creating indexes, and other database 
 
 Web server and API.
 
+### [`vendor`](./vendor)
+
+Golang vendor tool to copy external source code from GOPATH or remote location to the local vendor folder. 
+
 ## Others
 
 ### [`README.md`](./README.md)
