@@ -43,3 +43,13 @@ Code for building the database connection, creating indexes, and other database 
 ### [`web`](./web)
 
 Web server and API.
+
+## Others
+
+### [`README.md`](./README.md)
+
+### [`CONTRIBUTING.md`](./CONTRIBUTING.md)
+
+### [`LICENSE`](./LICENSE)
+
+### [`.gitignore`](./.gitignore)
