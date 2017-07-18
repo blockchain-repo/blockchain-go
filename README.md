@@ -56,6 +56,8 @@ Golang vendor tool to copy external source code from GOPATH or remote location t
 
 ### [`LICENSE`](./LICENSE)
 
+### [`CHANGELOG`](./CHANGELOG)
+
 ### [`.gitignore`](./.gitignore)
 
 ```
@@ -65,13 +67,10 @@ unichain-go/
 │   └── rethinkdb
 ├── common/
 ├── config/
-├── CONTRIBUTING.md
-├── LICENSE
 ├── log/
 ├── main.go
 ├── models/
 ├── pipelines/
-├── README.md
 ├── vendor/
 ├── version.go
 └── web/
