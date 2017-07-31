@@ -50,13 +50,13 @@ Golang vendor tool to copy external source code from GOPATH or remote location t
 
 ## Others
 
-### [`README.md`](./README.md)
+### [`CHANGELOG`](./CHANGELOG)
 
 ### [`CONTRIBUTING.md`](./CONTRIBUTING.md)
 
 ### [`LICENSE`](./LICENSE)
 
-### [`CHANGELOG`](./CHANGELOG)
+### [`README.md`](./README.md)
 
 ### [`VERSION`](./VERSION)
 
