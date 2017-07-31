@@ -10,10 +10,6 @@ There are four database tables which underpin Unichain: `backlog`, where incomin
 
 Contains code for the CLI.
 
-### [`version.go`](./version.go)
-
-Dev and release version.
-
 ## Folders
 
 ### [`config`](./config)
@@ -57,6 +53,11 @@ Golang vendor tool to copy external source code from GOPATH or remote location t
 ### [`LICENSE`](./LICENSE)
 
 ### [`CHANGELOG`](./CHANGELOG)
+
+### [`VERSION`](./VERSION)
+
+Dev and release version.
+
 
 ### [`.gitignore`](./.gitignore)
 
