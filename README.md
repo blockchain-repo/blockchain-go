@@ -24,6 +24,10 @@ Logging infrastructure.
 
 crypto and utils.
 
+### [`core`](./core)
+
+functional interface.
+
 ### [`models`](./models)
 
 There are three main kinds: Transaction,Block,Vote.
@@ -65,6 +69,7 @@ unichain-go/
 │   └── rethinkdb/
 ├── common/
 ├── config/
+├── core/
 ├── log/
 ├── main.go
 ├── models/
