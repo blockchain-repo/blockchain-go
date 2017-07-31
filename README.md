@@ -56,23 +56,18 @@ Golang vendor tool to copy external source code from GOPATH or remote location t
 
 ### [`VERSION`](./VERSION)
 
-Dev and release version.
-
-
 ### [`.gitignore`](./.gitignore)
 
 ```
 unichain-go/
-├── backend
-│   ├── mongodb
-│   └── rethinkdb
+├── backend/
+│   ├── mongodb/
+│   └── rethinkdb/
 ├── common/
 ├── config/
 ├── log/
 ├── main.go
 ├── models/
 ├── pipelines/
-├── vendor/
-├── version.go
 └── web/
 ```
