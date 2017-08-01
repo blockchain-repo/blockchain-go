@@ -1,0 +1,13 @@
+{
+	"comment": "",
+	"ignore": "test",
+	"package": [
+		{
+			"checksumSHA1": "KNBQcbF54kfQiSZbzYSLGtzh/WQ=",
+			"path": "github.com/google/uuid",
+			"revision": "281f560d28af7174109514e936f94c2ab2cb2823",
+			"revisionTime": "2017-07-28T17:43:18Z"
+		}
+	],
+	"rootPath": "unichain-go"
+}
