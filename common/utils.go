@@ -4,6 +4,10 @@ import (
 	"time"
 	"strconv"
 	"github.com/google/uuid"
+	"bytes"
+	"encoding/json"
+	"unicontract/src/common/uniledgerlog"
+	"strings"
 )
 
 func GenTimestamp() string {
@@ -21,4 +25,22 @@ func GenDate() string {
 
 func GenerateUUID() string {
 	return uuid.New().String()
+}
+
+func Serialize(obj interface{}, escapeHTML ...bool) string { //FIXME
+	setEscapeHTML := false
+	if len(escapeHTML) >= 1 {
+		setEscapeHTML = escapeHTML[0]
+	}
+	var buf bytes.Buffer
+	enc := json.NewEncoder(&buf)
+	// disabled the HTMLEscape for &, <, and > to \u0026, \u003c, and \u003e in json string
+	enc.SetEscapeHTML(setEscapeHTML)
+	err := enc.Encode(obj)
+	if err != nil {
+		uniledgerlog.Error(err.Error())
+		return ""
+	}
+	return strings.TrimSpace(buf.String())
+	//return strings.Replace(strings.TrimSpace(buf.String()), "\n", "", -1)
 }

@@ -3,10 +3,88 @@
 	"ignore": "test",
 	"package": [
 		{
+			"checksumSHA1": "BCmjskha6fhGDUxvgayGZnF8RUc=",
+			"path": "github.com/Sirupsen/logrus",
+			"revision": "181d419aa9e2223811b824e8f0b4af96f9ba9302",
+			"revisionTime": "2017-07-28T07:42:14Z"
+		},
+		{
+			"checksumSHA1": "hFFFYFqtS10h1arNtLUo2MmkYZE=",
+			"path": "github.com/cenkalti/backoff",
+			"revision": "61153c768f31ee5f130071d08fc82b85208528de",
+			"revisionTime": "2017-07-11T19:02:43Z"
+		},
+		{
+			"checksumSHA1": "yqF125xVSkmfLpIVGrLlfE05IUk=",
+			"path": "github.com/golang/protobuf/proto",
+			"revision": "748d386b5c1ea99658fd69fe9f03991ce86a90c1",
+			"revisionTime": "2017-07-26T21:28:29Z"
+		},
+		{
 			"checksumSHA1": "KNBQcbF54kfQiSZbzYSLGtzh/WQ=",
 			"path": "github.com/google/uuid",
 			"revision": "281f560d28af7174109514e936f94c2ab2cb2823",
 			"revisionTime": "2017-07-28T17:43:18Z"
+		},
+		{
+			"checksumSHA1": "O0r0hj4YL+jSRNjnshkeH4GY+4s=",
+			"path": "github.com/hailocab/go-hostpool",
+			"revision": "e80d13ce29ede4452c43dea11e79b9bc8a15b478",
+			"revisionTime": "2016-01-25T11:53:50Z"
+		},
+		{
+			"checksumSHA1": "1MGpGDQqnUoRpv7VEcQrXOBydXE=",
+			"path": "golang.org/x/crypto/pbkdf2",
+			"revision": "4bc1c249b153ce1da9f55437759cec51fe6acabb",
+			"revisionTime": "2017-07-15T21:28:07Z"
+		},
+		{
+			"checksumSHA1": "ZaU56svwLgiJD0y8JOB3+/mpYBA=",
+			"path": "golang.org/x/crypto/ssh/terminal",
+			"revision": "4bc1c249b153ce1da9f55437759cec51fe6acabb",
+			"revisionTime": "2017-07-15T21:28:07Z"
+		},
+		{
+			"checksumSHA1": "dr5+PfIRzXeN+l1VG+s0lea9qz8=",
+			"path": "golang.org/x/net/context",
+			"revision": "f5079bd7f6f74e23c4d65efa0f4ce14cbd6a3c0f",
+			"revisionTime": "2017-07-19T21:11:51Z"
+		},
+		{
+			"checksumSHA1": "UPq+uMkqthG1w9dHJuzPvmiVENI=",
+			"path": "golang.org/x/sys/unix",
+			"revision": "b892924b68aa53038e8a55b255ee0d8391e8eec5",
+			"revisionTime": "2017-07-27T14:30:18Z"
+		},
+		{
+			"checksumSHA1": "1xrcK4/LiP98awGcvqTL5CClTIc=",
+			"path": "gopkg.in/fatih/pool.v2",
+			"revision": "6e328e67893eb46323ad06f0e92cb9536babbabc",
+			"revisionTime": "2017-01-11T21:10:42Z"
+		},
+		{
+			"checksumSHA1": "d+A151umi7aKIlP1tFdN+fxj4vA=",
+			"path": "gopkg.in/gorethink/gorethink.v3",
+			"revision": "7ab832f7b65573104a555d84a27992ae9ea1f659",
+			"revisionTime": "2017-04-17T08:51:06Z"
+		},
+		{
+			"checksumSHA1": "yjQTriVMAzKdR8CKhDFQMbgrFvg=",
+			"path": "gopkg.in/gorethink/gorethink.v3/encoding",
+			"revision": "7ab832f7b65573104a555d84a27992ae9ea1f659",
+			"revisionTime": "2017-04-17T08:51:06Z"
+		},
+		{
+			"checksumSHA1": "aWKVb1QHxeor0el0wybSLEd4pBc=",
+			"path": "gopkg.in/gorethink/gorethink.v3/ql2",
+			"revision": "7ab832f7b65573104a555d84a27992ae9ea1f659",
+			"revisionTime": "2017-04-17T08:51:06Z"
+		},
+		{
+			"checksumSHA1": "E5k29XlUCWLvucxkOimNHtozB7g=",
+			"path": "gopkg.in/gorethink/gorethink.v3/types",
+			"revision": "7ab832f7b65573104a555d84a27992ae9ea1f659",
+			"revisionTime": "2017-04-17T08:51:06Z"
 		}
 	],
 	"rootPath": "unichain-go"
