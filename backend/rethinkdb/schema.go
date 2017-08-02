@@ -13,9 +13,8 @@ var Tables = []string{
 	"transaction",
 }
 
-func CreateTable(db string, name string) {
-	session := ConnectDB(db)
-	respo, err := r.TableCreate(name).RunWrite(session)
+func (c *RethinkDBConnection)CreateTable(db string, table string) {
+	respo, err := r.DB(db).TableCreate(table).RunWrite(c.Session)
 	if err != nil {
 		log.Printf("Error creating table: %s", err)
 	}
@@ -23,9 +22,8 @@ func CreateTable(db string, name string) {
 	fmt.Printf("%d table created\n", respo.TablesCreated)
 }
 
-func CreateDatabase(name string) {
-	session := Connect()
-	resp, err := r.DBCreate(name).RunWrite(session)
+func (c *RethinkDBConnection)CreateDatabase(db string) {
+	resp, err := r.DBCreate(db).RunWrite(c.Session)
 	if err != nil {
 		log.Printf("Error creating database: %s", err)
 	}
@@ -33,10 +31,8 @@ func CreateDatabase(name string) {
 	fmt.Printf("%d DB created\n", resp.DBsCreated)
 }
 
-func DropDatabase() {
-	dbname := DBNAME
-	session := Connect()
-	resp, err := r.DBDrop(dbname).RunWrite(session)
+func (c *RethinkDBConnection)DropDatabase(db string) {
+	resp, err := r.DBDrop(db).RunWrite(c.Session)
 	if err != nil {
 		log.Printf("Error dropping database: %s", err)
 	}
@@ -44,11 +40,10 @@ func DropDatabase() {
 	fmt.Printf("%d DB dropped, %d tables dropped\n", resp.DBsDropped, resp.TablesDropped)
 }
 
-func InitDatabase() {
+func (c *RethinkDBConnection)InitDatabase() {
 	dbname := DBNAME
-	CreateDatabase(dbname)
-
+	c.CreateDatabase(dbname)
 	for _, x := range Tables {
-		CreateTable(dbname, x)
+		c.CreateTable(dbname, x)
 	}
 }

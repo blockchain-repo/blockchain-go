@@ -5,9 +5,8 @@ import (
 	"log"
 )
 
-func Changefeed(db string, name string) *r.Cursor {
-	session := ConnectDB(db)
-	res, err := r.Table(name).Changes().Run(session)
+func (c *RethinkDBConnection)Changefeed(db string, name string) *r.Cursor {
+	res, err := r.DB(db).Table(name).Changes().Run(c.Session)
 	if err != nil {
 		log.Print(err)
 	}

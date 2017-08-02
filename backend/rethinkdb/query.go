@@ -8,36 +8,32 @@ import (
 )
 
 
-func Get(db string, table string, id string) *r.Cursor {
-	session := ConnectDB(db)
-	res, err := r.Table(table).Get(id).Run(session)
+func (c *RethinkDBConnection)get(db string, table string, id string) *r.Cursor {
+	res, err := r.DB(db).Table(table).Get(id).Run(c.Session)
 	if err != nil {
 		log.Print(err)
 	}
 	return res
 }
 
-func Insert(db string, table string, jsonstr string) r.WriteResponse {
-	session := ConnectDB(db)
-	res, err := r.Table(table).Insert(r.JSON(jsonstr)).RunWrite(session)
+func (c *RethinkDBConnection)insert(db string, table string, jsonstr string) r.WriteResponse {
+	res, err := r.DB(db).Table(table).Insert(r.JSON(jsonstr)).RunWrite(c.Session)
 	if err != nil {
 		log.Print(err)
 	}
 	return res
 }
 
-func Update(db string, table string, id string, jsonstr string) r.WriteResponse {
-	session := ConnectDB(db)
-	res, err := r.Table(table).Get(id).Update(r.JSON(jsonstr)).RunWrite(session)
+func (c *RethinkDBConnection)update(db string, table string, id string, jsonstr string) r.WriteResponse {
+	res, err := r.DB(db).Table(table).Get(id).Update(r.JSON(jsonstr)).RunWrite(c.Session)
 	if err != nil {
 		log.Print(err)
 	}
 	return res
 }
 
-func Delete(db string, table string, id string) r.WriteResponse {
-	session := ConnectDB(db)
-	res, err := r.Table(table).Get(id).Delete().RunWrite(session)
+func (c *RethinkDBConnection)delete(db string, table string, id string) r.WriteResponse {
+	res, err := r.DB(db).Table(table).Get(id).Delete().RunWrite(c.Session)
 	if err != nil {
 		log.Print(err)
 	}
@@ -45,7 +41,7 @@ func Delete(db string, table string, id string) r.WriteResponse {
 }
 
 func (c *RethinkDBConnection)GetTransaction(id string) map[string]interface{} {
-	res := Get("test","test",id)//TODO
+	res := c.get("test","test",id)//TODO
 	var blo map[string]interface{}
 	err := res.One(&blo)
 	if err != nil {
@@ -55,7 +51,7 @@ func (c *RethinkDBConnection)GetTransaction(id string) map[string]interface{} {
 }
 
 func (c *RethinkDBConnection)SetTransaction(transaction string) int {
-	res := Insert("test","test",transaction)//TODO
+	res := c.insert("test","test",transaction)//TODO
 	fmt.Print(res)
 	return res.Inserted
 }

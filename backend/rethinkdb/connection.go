@@ -6,9 +6,11 @@ import (
 	r "gopkg.in/gorethink/gorethink.v3"
 )
 
-type RethinkDBConnection struct {}
+type RethinkDBConnection struct {
+	Session *r.Session
+}
 
-func Connect() *r.Session {
+func (c *RethinkDBConnection)Connect() {
 	ip := "localhost"
 	session, err := r.Connect(r.ConnectOpts{
 		Address: ip + ":28015",
@@ -17,17 +19,5 @@ func Connect() *r.Session {
 	if err != nil {
 		log.Print(err)
 	}
-	return session
-}
-
-func ConnectDB(dbname string) *r.Session {
-	session, err := r.Connect(r.ConnectOpts{
-		Address: "localhost:28015",
-		Database: dbname,
-	})
-
-	if err != nil {
-		log.Print(err)
-	}
-	return session
+	c.Session =session
 }

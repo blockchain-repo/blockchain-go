@@ -10,12 +10,12 @@ import (
 func main(){
 	fmt.Printf("Hello Unichain-go!\n")
 
-	bd := backend.GetBackend()
+	conn := backend.GetConnection()
 
-	map_string := bd.GetTransaction("1111")
+	map_string := conn.GetTransaction("1111")
 	str := common.Serialize(map_string)
 	fmt.Printf("tx:%s\n", str)
 
-	int_res := bd.SetTransaction("{\"back\":\"jihhh\"}")
-	fmt.Printf(int_res)
+	int_res := conn.SetTransaction(`{"back":"j22222ihhh"}`)
+	fmt.Print(int_res)
 }
