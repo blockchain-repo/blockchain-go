@@ -9,6 +9,10 @@ import (
 
 const DBNAME = "test"
 
+var Tables = []string{
+	"transaction",
+}
+
 func CreateTable(db string, name string) {
 	session := ConnectDB(db)
 	respo, err := r.TableCreate(name).RunWrite(session)

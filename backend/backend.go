@@ -8,7 +8,8 @@ import (
 var regStruct map[string]Backend
 
 type Backend interface {
-	GetTransaction(string) map[string]interface{}
+	GetTransaction(id string) map[string]interface{}
+	SetTransaction(transaction string) int
 }
 
 func init() {
