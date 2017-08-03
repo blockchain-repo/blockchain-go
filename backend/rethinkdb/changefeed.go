@@ -5,7 +5,7 @@ import (
 	"unichain-go/common"
 
 	r "gopkg.in/gorethink/gorethink.v3"
-	mp "github.com/altairlee/multipiplines/multipipes"
+	mp "github.com/altairlee/multipipelines/multipipes"
 )
 
 const (
