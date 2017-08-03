@@ -9,6 +9,65 @@
 			"revisionTime": "2017-07-28T07:42:14Z"
 		},
 		{
+			"checksumSHA1": "vOVK+3/6ip7qo5xIhgtGGWMVDvo=",
+			"origin": "unicontract/vendor/github.com/astaxie/beego",
+			"path": "github.com/astaxie/beego",
+			"revision": "66f5335369a104cc713b429f26a405ce0d2d3cfd",
+			"revisionTime": "2017-07-18T07:57:39Z"
+		},
+		{
+			"checksumSHA1": "bwz/1vy/v5db0uhkckArS/KZ5xI=",
+			"path": "github.com/astaxie/beego/config",
+			"revision": ""
+		},
+		{
+			"checksumSHA1": "Ke5tJx+JR8p4oMbr4aU4OND0fsk=",
+			"origin": "unicontract/vendor/github.com/astaxie/beego/context",
+			"path": "github.com/astaxie/beego/context",
+			"revision": "66f5335369a104cc713b429f26a405ce0d2d3cfd",
+			"revisionTime": "2017-07-18T07:57:39Z"
+		},
+		{
+			"checksumSHA1": "MXGs366RP4mY+x7vtP8V0ko4iPM=",
+			"origin": "unicontract/vendor/github.com/astaxie/beego/context/param",
+			"path": "github.com/astaxie/beego/context/param",
+			"revision": "66f5335369a104cc713b429f26a405ce0d2d3cfd",
+			"revisionTime": "2017-07-18T07:57:39Z"
+		},
+		{
+			"checksumSHA1": "nvu//SCUWiPzXaxuQg3Nkuj33g0=",
+			"origin": "unicontract/vendor/github.com/astaxie/beego/grace",
+			"path": "github.com/astaxie/beego/grace",
+			"revision": "66f5335369a104cc713b429f26a405ce0d2d3cfd",
+			"revisionTime": "2017-07-18T07:57:39Z"
+		},
+		{
+			"checksumSHA1": "+MEWMsS4mJ9jNhwfVeyBMpdyVCQ=",
+			"path": "github.com/astaxie/beego/logs",
+			"revision": ""
+		},
+		{
+			"checksumSHA1": "qGvZUP7mTKGvMa3ui7kqLJQiXNc=",
+			"origin": "unicontract/vendor/github.com/astaxie/beego/session",
+			"path": "github.com/astaxie/beego/session",
+			"revision": "66f5335369a104cc713b429f26a405ce0d2d3cfd",
+			"revisionTime": "2017-07-18T07:57:39Z"
+		},
+		{
+			"checksumSHA1": "EOoY9qbCsWnu5FlZZnMKUKkLcMk=",
+			"origin": "unicontract/vendor/github.com/astaxie/beego/toolbox",
+			"path": "github.com/astaxie/beego/toolbox",
+			"revision": "66f5335369a104cc713b429f26a405ce0d2d3cfd",
+			"revisionTime": "2017-07-18T07:57:39Z"
+		},
+		{
+			"checksumSHA1": "W7HBzu7HlF18vCfNPgax7xvHXB0=",
+			"origin": "unicontract/vendor/github.com/astaxie/beego/utils",
+			"path": "github.com/astaxie/beego/utils",
+			"revision": "66f5335369a104cc713b429f26a405ce0d2d3cfd",
+			"revisionTime": "2017-07-18T07:57:39Z"
+		},
+		{
 			"checksumSHA1": "hFFFYFqtS10h1arNtLUo2MmkYZE=",
 			"path": "github.com/cenkalti/backoff",
 			"revision": "61153c768f31ee5f130071d08fc82b85208528de",
@@ -85,7 +144,7 @@
 			"path": "gopkg.in/gorethink/gorethink.v3/types",
 			"revision": "7ab832f7b65573104a555d84a27992ae9ea1f659",
 			"revisionTime": "2017-04-17T08:51:06Z"
-		}
+		},
 	],
 	"rootPath": "unichain-go"
 }
