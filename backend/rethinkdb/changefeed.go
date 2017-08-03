@@ -12,17 +12,11 @@ const (
 	UPDATE = 4
 )
 
-func (c *RethinkDBConnection)Changefeed(db string, table string) *r.Cursor {
-	res, err := r.DB(db).Table(table).Changes().Run(c.Session)
-	if err != nil {
-		log.Error(err)
-	}
-	return res
-}
 
-func (c *RethinkDBConnection) RunChangeFeed(operation int){
+
+func (c *RethinkDBConnection)ChangefeedRunForever(operation int){
 	var value interface{}
-	res := c.Changefeed("test", "test")
+	res := c.GetChangefeed("test", "test")
 	for res.Next(&value){
 		m := value.(map[string]interface{})
 		isInsert := (m["old_val"] == nil)
@@ -39,3 +33,12 @@ func (c *RethinkDBConnection) RunChangeFeed(operation int){
 		}
 	}
 }
+
+func (c *RethinkDBConnection)GetChangefeed(db string, table string) *r.Cursor {
+	res, err := r.DB(db).Table(table).Changes().Run(c.Session)
+	if err != nil {
+		log.Error(err)
+	}
+	return res
+}
+

@@ -14,7 +14,7 @@ type Connection interface {
 	GetTransaction(id string) map[string]interface{}
 	SetTransaction(transaction string) int
 	//changefeed TODO
-	RunChangeFeed(operation int)
+	ChangefeedRunForever(operation int)
 	//schema
 	InitDatabase(db string)
 	DropDatabase(db string)

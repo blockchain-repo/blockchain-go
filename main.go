@@ -17,7 +17,7 @@ func main(){
 	fmt.Printf("tx:%s\n", str)
 	int_res := conn.SetTransaction(`{"back":"j22222ihhh"}`)
 	fmt.Println(int_res)
-	conn.RunChangeFeed(1)
+	conn.ChangefeedRunForever(1)
 
 	log.Error("1")
 }
