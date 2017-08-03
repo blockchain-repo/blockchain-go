@@ -5,7 +5,6 @@ import (
 	"unichain-go/common"
 
 	r "gopkg.in/gorethink/gorethink.v3"
-	mp "github.com/altairlee/multipipelines/multipipes"
 )
 
 const (
@@ -16,11 +15,9 @@ const (
 
 
 
-func (c *RethinkDBConnection)ChangefeedRunForever(operation int) mp.Node {
+func (c *RethinkDBConnection)ChangefeedRunForever(operation int) chan interface{} {
 	var value interface{}
-	node := mp.Node{
-		Output:make(chan interface{}),
-	}
+	ch := make(chan interface{})
 	res := c.GetChangefeed("test", "test")
 	go func() {
 		for res.Next(&value){
@@ -29,17 +26,17 @@ func (c *RethinkDBConnection)ChangefeedRunForever(operation int) mp.Node {
 			isDelete := (m["new_val"] == nil)
 			isUpdate := !isInsert && !isDelete
 			if isInsert && ((operation & INSERT) != 0) {
-				node.Output<- common.Serialize(m["new_val"])
+				ch<- common.Serialize(m["new_val"])
 			}
 			if isDelete && ((operation & DELETE) != 0) {
-				node.Output <- common.Serialize(m["old_val"])
+				ch <- common.Serialize(m["old_val"])
 			}
 			if isUpdate && ((operation & UPDATE) != 0) {
-				node.Output <- common.Serialize(m["new_val"])
+				ch <- common.Serialize(m["new_val"])
 			}
 		}
 	}()
-	return node
+	return ch
 }
 
 func (c *RethinkDBConnection)GetChangefeed(db string, table string) *r.Cursor {

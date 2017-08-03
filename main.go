@@ -4,7 +4,7 @@ import (
 	"fmt"
 
 	"unichain-go/backend"
-	"unichain-go/log"
+	mp "github.com/altairlee/multipipelines/multipipes"
 )
 
 func main(){
@@ -16,9 +16,10 @@ func main(){
 	int_res := conn.SetTransaction(`{"back":"j22222ihhh"}`)
 	fmt.Println(int_res)
 
-	for i := range conn.ChangefeedRunForever(1).Output{
+	node := mp.Node{
+		Output:conn.ChangefeedRunForever(1),
+	}
+	for i := range node.Output {
 		fmt.Println(i)
 	}
-
-	log.Error("1")
 }

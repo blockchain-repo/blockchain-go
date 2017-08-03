@@ -4,7 +4,7 @@ import (
 	"unichain-go/backend/rethinkdb"
 //	"unichain-go/backend/mongodb"
 
-	mp "github.com/altairlee/multipipelines/multipipes"
+
 )
 
 var regStruct map[string]Connection
@@ -16,7 +16,7 @@ type Connection interface {
 	GetTransaction(id string) string
 	SetTransaction(transaction string) int
 	//changefeed TODO
-	ChangefeedRunForever(operation int) mp.Node
+	ChangefeedRunForever(operation int) chan interface{}
 	//schema
 	InitDatabase(db string)
 	DropDatabase(db string)

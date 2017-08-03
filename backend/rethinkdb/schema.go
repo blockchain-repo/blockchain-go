@@ -10,7 +10,13 @@ import (
 
 
 var Tables = []string{
-	"transaction",
+	"block",
+	"vote",
+	"backlog",
+	"asset",
+	"contract",
+	"contractvote",
+	"contractoutput",
 }
 
 func (c *RethinkDBConnection)CreateTable(db string, table string) {
