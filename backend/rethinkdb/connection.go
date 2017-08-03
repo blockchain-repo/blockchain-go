@@ -1,7 +1,7 @@
 package rethinkdb
 
 import (
-	"log"
+	"unichain-go/log"
 
 	r "gopkg.in/gorethink/gorethink.v3"
 )
@@ -17,7 +17,7 @@ func (c *RethinkDBConnection)Connect() {
 	})
 
 	if err != nil {
-		log.Print(err)
+		log.Error(err)
 	}
 	c.Session =session
 }

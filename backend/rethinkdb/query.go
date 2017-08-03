@@ -1,17 +1,18 @@
 package rethinkdb
 
 import (
-	"log"
+	"fmt"
+
+	"unichain-go/log"
 
 	r "gopkg.in/gorethink/gorethink.v3"
-	"fmt"
 )
 
 
 func (c *RethinkDBConnection)get(db string, table string, id string) *r.Cursor {
 	res, err := r.DB(db).Table(table).Get(id).Run(c.Session)
 	if err != nil {
-		log.Print(err)
+		log.Error(err)
 	}
 	return res
 }
@@ -19,7 +20,7 @@ func (c *RethinkDBConnection)get(db string, table string, id string) *r.Cursor {
 func (c *RethinkDBConnection)insert(db string, table string, jsonstr string) r.WriteResponse {
 	res, err := r.DB(db).Table(table).Insert(r.JSON(jsonstr)).RunWrite(c.Session)
 	if err != nil {
-		log.Print(err)
+		log.Error(err)
 	}
 	return res
 }
@@ -27,7 +28,7 @@ func (c *RethinkDBConnection)insert(db string, table string, jsonstr string) r.W
 func (c *RethinkDBConnection)update(db string, table string, id string, jsonstr string) r.WriteResponse {
 	res, err := r.DB(db).Table(table).Get(id).Update(r.JSON(jsonstr)).RunWrite(c.Session)
 	if err != nil {
-		log.Print(err)
+		log.Error(err)
 	}
 	return res
 }
@@ -35,7 +36,7 @@ func (c *RethinkDBConnection)update(db string, table string, id string, jsonstr 
 func (c *RethinkDBConnection)delete(db string, table string, id string) r.WriteResponse {
 	res, err := r.DB(db).Table(table).Get(id).Delete().RunWrite(c.Session)
 	if err != nil {
-		log.Print(err)
+		log.Error(err)
 	}
 	return res
 }
