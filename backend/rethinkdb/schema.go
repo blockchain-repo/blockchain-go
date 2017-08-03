@@ -8,7 +8,6 @@ import (
 	r "gopkg.in/gorethink/gorethink.v3"
 )
 
-const DBNAME = "test"
 
 var Tables = []string{
 	"transaction",
@@ -41,10 +40,9 @@ func (c *RethinkDBConnection)DropDatabase(db string) {
 	fmt.Printf("%d DB dropped, %d tables dropped\n", resp.DBsDropped, resp.TablesDropped)
 }
 
-func (c *RethinkDBConnection)InitDatabase() {
-	dbname := DBNAME
-	c.CreateDatabase(dbname)
+func (c *RethinkDBConnection)InitDatabase(db string) {
+	c.CreateDatabase(db)
 	for _, x := range Tables {
-		c.CreateTable(dbname, x)
+		c.CreateTable(db, x)
 	}
 }

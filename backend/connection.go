@@ -13,7 +13,11 @@ type Connection interface {
 	//query
 	GetTransaction(id string) map[string]interface{}
 	SetTransaction(transaction string) int
-	//changefeed
+	//changefeed TODO
+	RunChangeFeed(operation int)
+	//schema
+	InitDatabase(db string)
+	DropDatabase(db string)
 }
 
 func init() {
@@ -24,8 +28,8 @@ func init() {
 
 func GetConnection() Connection{
 	var conn Connection
-	str := "rethinkdb"//	TODO Config
+	str := "rethinkdb"//TODO Config
 	conn = regStruct[str]
-	conn.Connect()
+	conn.Connect()//needed?
 	return conn
 }
