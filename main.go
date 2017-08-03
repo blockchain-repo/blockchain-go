@@ -4,7 +4,6 @@ import (
 	"fmt"
 
 	"unichain-go/backend"
-	"unichain-go/common"
 	"unichain-go/log"
 )
 
@@ -13,11 +12,12 @@ func main(){
 
 	conn := backend.GetConnection()
 	map_string := conn.GetTransaction("1111")
-	str := common.Serialize(map_string)
-	fmt.Printf("tx:%s\n", str)
+	fmt.Printf("tx:%s\n", map_string)
 	int_res := conn.SetTransaction(`{"back":"j22222ihhh"}`)
 	fmt.Println(int_res)
-	conn.ChangefeedRunForever(1)
+	//for i := range conn.ChangefeedRunForever(1){
+	//	fmt.Println(i)
+	//}
 
 	log.Error("1")
 }

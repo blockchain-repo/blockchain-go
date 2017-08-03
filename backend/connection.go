@@ -11,10 +11,10 @@ type Connection interface {
 	//connection
 	Connect()
 	//query
-	GetTransaction(id string) map[string]interface{}
+	GetTransaction(id string) string
 	SetTransaction(transaction string) int
 	//changefeed TODO
-	ChangefeedRunForever(operation int)
+	ChangefeedRunForever(operation int) chan string
 	//schema
 	InitDatabase(db string)
 	DropDatabase(db string)

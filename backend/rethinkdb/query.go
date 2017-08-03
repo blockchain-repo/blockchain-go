@@ -2,7 +2,7 @@ package rethinkdb
 
 import (
 	"fmt"
-
+	"unichain-go/common"
 	"unichain-go/log"
 
 	r "gopkg.in/gorethink/gorethink.v3"
@@ -41,14 +41,15 @@ func (c *RethinkDBConnection)Delete(db string, table string, id string) r.WriteR
 	return res
 }
 
-func (c *RethinkDBConnection)GetTransaction(id string) map[string]interface{} {
+func (c *RethinkDBConnection)GetTransaction(id string) string {
 	res := c.Get("test","test",id)//TODO
-	var blo map[string]interface{}
-	err := res.One(&blo)
+	var value map[string]interface{}
+	err := res.One(&value)
+	map_string :=common.Serialize(value)
 	if err != nil {
 		fmt.Printf("Error scanning database result: %s", err)
 	}
-	return blo
+	return map_string
 }
 
 func (c *RethinkDBConnection)SetTransaction(transaction string) int {
