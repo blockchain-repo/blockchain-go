@@ -2,12 +2,14 @@ package common
 
 import (
 	"time"
-	"strconv"
-	"github.com/google/uuid"
 	"bytes"
-	"encoding/json"
-	"unicontract/src/common/uniledgerlog"
+	"strconv"
 	"strings"
+	"encoding/json"
+
+	"unichain-go/log"
+
+	"github.com/google/uuid"
 )
 
 func GenTimestamp() string {
@@ -38,7 +40,7 @@ func Serialize(obj interface{}, escapeHTML ...bool) string { //FIXME
 	enc.SetEscapeHTML(setEscapeHTML)
 	err := enc.Encode(obj)
 	if err != nil {
-		uniledgerlog.Error(err.Error())
+		log.Error(err.Error())
 		return ""
 	}
 	return strings.TrimSpace(buf.String())

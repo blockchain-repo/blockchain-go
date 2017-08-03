@@ -144,7 +144,7 @@
 			"path": "gopkg.in/gorethink/gorethink.v3/types",
 			"revision": "7ab832f7b65573104a555d84a27992ae9ea1f659",
 			"revisionTime": "2017-04-17T08:51:06Z"
-		},
+		}
 	],
 	"rootPath": "unichain-go"
 }
