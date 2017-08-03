@@ -15,9 +15,10 @@ func main(){
 	fmt.Printf("tx:%s\n", map_string)
 	int_res := conn.SetTransaction(`{"back":"j22222ihhh"}`)
 	fmt.Println(int_res)
-	//for i := range conn.ChangefeedRunForever(1){
-	//	fmt.Println(i)
-	//}
+
+	for i := range conn.ChangefeedRunForever(1).Output{
+		fmt.Println(i)
+	}
 
 	log.Error("1")
 }

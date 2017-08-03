@@ -3,6 +3,8 @@ package backend
 import (
 	"unichain-go/backend/rethinkdb"
 //	"unichain-go/backend/mongodb"
+
+	mp "github.com/altairlee/multipiplines/multipipes"
 )
 
 var regStruct map[string]Connection
@@ -14,7 +16,7 @@ type Connection interface {
 	GetTransaction(id string) string
 	SetTransaction(transaction string) int
 	//changefeed TODO
-	ChangefeedRunForever(operation int) chan string
+	ChangefeedRunForever(operation int) mp.Node
 	//schema
 	InitDatabase(db string)
 	DropDatabase(db string)

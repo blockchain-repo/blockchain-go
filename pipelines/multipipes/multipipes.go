@@ -8,16 +8,16 @@ import (
 )
 
 type Node struct {
-	target     func(interface{}) interface{}
-	input      chan interface{}
-	output     chan interface{}
-	routineNum int
-	name       string
-	timeout    int64
+	Target     func(interface{}) interface{}
+	Input      chan interface{}
+	Output     chan interface{}
+	RoutineNum int
+	Name       string
+	Timeout    int64
 }
 
 func (n *Node) start() {
-	for i := 0; i < n.routineNum; i++ {
+	for i := 0; i < n.RoutineNum; i++ {
 		go n.runForever()
 	}
 }
@@ -36,24 +36,24 @@ func (n *Node) runForever() {
 func (n *Node) run() error {
 	timeout := make(chan bool, 1)
 	go func() {
-		time.Sleep(time.Second * time.Duration(n.timeout)) //等待10秒钟
-		if n.timeout != 0 {
+		time.Sleep(time.Second * time.Duration(n.Timeout)) //等待10秒钟
+		if n.Timeout != 0 {
 			timeout <- true
 		}
 	}()
 	select {
-	case x, ok := <-n.input:
+	case x, ok := <-n.Input:
 		//从ch中读到数据
 		if !ok {
 			log.Error(errors.New("read data from inputchannel error"))
 			return nil
 		}
 		//TODO  not good enough, how to support multi params and returns
-		out := n.target(x)
-		if n.output == nil || out == nil {
+		out := n.Target(x)
+		if n.Output == nil || out == nil {
 			return nil
 		}
-		n.output <- out
+		n.Output <- out
 	case <-timeout:
 		//一直没有从ch中读取到数据，但从timeout中读取到数据
 		//log.Info("read data timeout")
@@ -79,11 +79,11 @@ func (p *Pipeline) connect(nodes []*Node) (ch chan interface{}) {
 	}
 
 	head := nodes[0]
-	head.input = make(chan interface{}, 10)
-	head.output = make(chan interface{}, 10)
+	head.Input = make(chan interface{}, 10)
+	head.Output = make(chan interface{}, 10)
 	tail := nodes[1:]
-	head.output = p.connect(tail)
-	return head.input
+	head.Output = p.connect(tail)
+	return head.Input
 }
 
 func (p *Pipeline) start() {

@@ -9,6 +9,12 @@
 			"revisionTime": "2017-07-28T07:42:14Z"
 		},
 		{
+			"checksumSHA1": "Zwc42th+Rc/5IZRx4i3l86aCDpQ=",
+			"path": "github.com/altairlee/multipiplines/multipipes",
+			"revision": "a2a1c60fb91c5d559791a6400439fd10e1b0becf",
+			"revisionTime": "2017-07-06T01:45:57Z"
+		},
+		{
 			"checksumSHA1": "vOVK+3/6ip7qo5xIhgtGGWMVDvo=",
 			"origin": "unicontract/vendor/github.com/astaxie/beego",
 			"path": "github.com/astaxie/beego",
