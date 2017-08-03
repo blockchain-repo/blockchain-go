@@ -114,11 +114,11 @@ func NewMyBeegoLogAdapterMultiFile(myBeego *MyBeegoLogAdapterMultiFile) *MyBeego
 		if err != nil {
 			logs.Error("create log dir error!", err)
 		} else {
-			logs.Info("API log dir", log_dir, " create success!")
+			logs.Info("log dir", log_dir, " create success!")
 		}
 
 	}
-	logs.Info("API log will store in dir", log_dir)
+	logs.Info("log will store in dir", log_dir)
 
 	if myBeego.MaxLines >= 0 {
 		maxlines = myBeego.MaxLines
