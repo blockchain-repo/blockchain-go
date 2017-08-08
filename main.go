@@ -11,9 +11,10 @@ func main(){
 	fmt.Printf("Hello Unichain-go!\n")
 
 	conn := backend.GetConnection()
-	map_string := conn.GetTransaction("1111")
+//	conn.InitDatabase("unichain")
+	map_string := conn.GetTransactionFromBacklog("1111")
 	fmt.Printf("tx:%s\n", map_string)
-	int_res := conn.SetTransaction(`{"back":"j22222ihhh"}`)
+	int_res := conn.SetTransactionToBacklog(`{"back":"j22222ihhh"}`)
 	fmt.Println(int_res)
 
 	node := mp.Node{

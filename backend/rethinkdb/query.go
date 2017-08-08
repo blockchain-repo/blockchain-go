@@ -41,8 +41,8 @@ func (c *RethinkDBConnection)Delete(db string, table string, id string) r.WriteR
 	return res
 }
 
-func (c *RethinkDBConnection)GetTransaction(id string) string {
-	res := c.Get("test","test",id)//TODO
+func (c *RethinkDBConnection)GetTransactionFromBacklog(id string) string {
+	res := c.Get("unichain","backlog",id)//TODO
 	var value map[string]interface{}
 	err := res.One(&value)
 	map_string :=common.Serialize(value)
@@ -52,8 +52,8 @@ func (c *RethinkDBConnection)GetTransaction(id string) string {
 	return map_string
 }
 
-func (c *RethinkDBConnection)SetTransaction(transaction string) int {
-	res := c.Insert("test","test",transaction)//TODO
+func (c *RethinkDBConnection)SetTransactionToBacklog(transaction string) int {
+	res := c.Insert("unichain","backlog",transaction)//TODO
 	fmt.Print(res)
 	return res.Inserted
 }

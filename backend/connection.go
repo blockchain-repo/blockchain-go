@@ -13,8 +13,8 @@ type Connection interface {
 	//connection
 	Connect()
 	//query
-	GetTransaction(id string) string
-	SetTransaction(transaction string) int
+	GetTransactionFromBacklog(id string) string
+	SetTransactionToBacklog(transaction string) int
 	//changefeed TODO
 	ChangefeedRunForever(operation int) chan interface{}
 	//schema
