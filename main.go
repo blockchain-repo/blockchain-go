@@ -4,7 +4,7 @@ import (
 	"fmt"
 
 	"unichain-go/common"
-	"unichain-go/config"
+//	"unichain-go/config"
 //	"unichain-go/backend"
 
 //	mp "github.com/altairlee/multipipelines/multipipes"
@@ -12,9 +12,9 @@ import (
 
 func main(){
 	fmt.Printf("Hello Unichain-go!\n")
-	config.ConfigToFile()
-	config.FileToConfig()
-	fmt.Println(common.Serialize(config.Config))
+	//config.ConfigToFile()
+	//config.FileToConfig()
+	//fmt.Println(common.Serialize(config.Config))
 
 //	conn := backend.GetConnection()
 ////	conn.InitDatabase("unichain")
@@ -29,4 +29,6 @@ func main(){
 //	for i := range node.Output {
 //		fmt.Println(i)
 //	}
+	c :=common.GetCrypto()
+	fmt.Println(c.Hash("jihao"))
 }

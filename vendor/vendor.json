@@ -3,7 +3,7 @@
 	"ignore": "test",
 	"package": [
 		{
-			"checksumSHA1": "BCmjskha6fhGDUxvgayGZnF8RUc=",
+			"checksumSHA1": "eAs4vsUCoIXEEj63ZUb/5xqsbe0=",
 			"path": "github.com/Sirupsen/logrus",
 			"revision": "181d419aa9e2223811b824e8f0b4af96f9ba9302",
 			"revisionTime": "2017-07-28T07:42:14Z"
@@ -15,37 +15,9 @@
 			"revisionTime": "2017-08-03T08:10:46Z"
 		},
 		{
-			"checksumSHA1": "vOVK+3/6ip7qo5xIhgtGGWMVDvo=",
-			"origin": "unicontract/vendor/github.com/astaxie/beego",
-			"path": "github.com/astaxie/beego",
-			"revision": "66f5335369a104cc713b429f26a405ce0d2d3cfd",
-			"revisionTime": "2017-07-18T07:57:39Z"
-		},
-		{
 			"checksumSHA1": "bwz/1vy/v5db0uhkckArS/KZ5xI=",
 			"path": "github.com/astaxie/beego/config",
 			"revision": ""
-		},
-		{
-			"checksumSHA1": "Ke5tJx+JR8p4oMbr4aU4OND0fsk=",
-			"origin": "unicontract/vendor/github.com/astaxie/beego/context",
-			"path": "github.com/astaxie/beego/context",
-			"revision": "66f5335369a104cc713b429f26a405ce0d2d3cfd",
-			"revisionTime": "2017-07-18T07:57:39Z"
-		},
-		{
-			"checksumSHA1": "MXGs366RP4mY+x7vtP8V0ko4iPM=",
-			"origin": "unicontract/vendor/github.com/astaxie/beego/context/param",
-			"path": "github.com/astaxie/beego/context/param",
-			"revision": "66f5335369a104cc713b429f26a405ce0d2d3cfd",
-			"revisionTime": "2017-07-18T07:57:39Z"
-		},
-		{
-			"checksumSHA1": "nvu//SCUWiPzXaxuQg3Nkuj33g0=",
-			"origin": "unicontract/vendor/github.com/astaxie/beego/grace",
-			"path": "github.com/astaxie/beego/grace",
-			"revision": "66f5335369a104cc713b429f26a405ce0d2d3cfd",
-			"revisionTime": "2017-07-18T07:57:39Z"
 		},
 		{
 			"checksumSHA1": "+MEWMsS4mJ9jNhwfVeyBMpdyVCQ=",
@@ -53,43 +25,27 @@
 			"revision": ""
 		},
 		{
-			"checksumSHA1": "qGvZUP7mTKGvMa3ui7kqLJQiXNc=",
-			"origin": "unicontract/vendor/github.com/astaxie/beego/session",
-			"path": "github.com/astaxie/beego/session",
-			"revision": "66f5335369a104cc713b429f26a405ce0d2d3cfd",
-			"revisionTime": "2017-07-18T07:57:39Z"
+			"checksumSHA1": "Or7JBEOYS7o4DXXOenIO17iNQWs=",
+			"path": "github.com/btcsuite/btcutil/base58",
+			"revision": "5ffa719c3882fd2ec1e8b9f4978066701c31a343",
+			"revisionTime": "2017-06-12T00:02:13Z"
 		},
 		{
-			"checksumSHA1": "EOoY9qbCsWnu5FlZZnMKUKkLcMk=",
-			"origin": "unicontract/vendor/github.com/astaxie/beego/toolbox",
-			"path": "github.com/astaxie/beego/toolbox",
-			"revision": "66f5335369a104cc713b429f26a405ce0d2d3cfd",
-			"revisionTime": "2017-07-18T07:57:39Z"
-		},
-		{
-			"checksumSHA1": "W7HBzu7HlF18vCfNPgax7xvHXB0=",
-			"origin": "unicontract/vendor/github.com/astaxie/beego/utils",
-			"path": "github.com/astaxie/beego/utils",
-			"revision": "66f5335369a104cc713b429f26a405ce0d2d3cfd",
-			"revisionTime": "2017-07-18T07:57:39Z"
-		},
-		{
-			"checksumSHA1": "hFFFYFqtS10h1arNtLUo2MmkYZE=",
+			"checksumSHA1": "/Mnlunlc2itBnPrzcnhYPt8JbfQ=",
 			"path": "github.com/cenkalti/backoff",
 			"revision": "61153c768f31ee5f130071d08fc82b85208528de",
 			"revisionTime": "2017-07-11T19:02:43Z"
 		},
 		{
-			"checksumSHA1": "yqF125xVSkmfLpIVGrLlfE05IUk=",
+			"checksumSHA1": "kBeNcaKk56FguvPSUCEaH6AxpRc=",
 			"path": "github.com/golang/protobuf/proto",
 			"revision": "748d386b5c1ea99658fd69fe9f03991ce86a90c1",
 			"revisionTime": "2017-07-26T21:28:29Z"
 		},
 		{
-			"checksumSHA1": "KNBQcbF54kfQiSZbzYSLGtzh/WQ=",
+			"checksumSHA1": "WMTjT/WhwABW0CP22n1KeXxb96w=",
 			"path": "github.com/google/uuid",
-			"revision": "281f560d28af7174109514e936f94c2ab2cb2823",
-			"revisionTime": "2017-07-28T17:43:18Z"
+			"revision": ""
 		},
 		{
 			"checksumSHA1": "O0r0hj4YL+jSRNjnshkeH4GY+4s=",
@@ -104,13 +60,13 @@
 			"revisionTime": "2017-07-15T21:28:07Z"
 		},
 		{
-			"checksumSHA1": "ZaU56svwLgiJD0y8JOB3+/mpYBA=",
-			"path": "golang.org/x/crypto/ssh/terminal",
+			"checksumSHA1": "DDHnuGCrmkKSXdNzc8pmn6P5O28=",
+			"path": "golang.org/x/crypto/sha3",
 			"revision": "4bc1c249b153ce1da9f55437759cec51fe6acabb",
 			"revisionTime": "2017-07-15T21:28:07Z"
 		},
 		{
-			"checksumSHA1": "dr5+PfIRzXeN+l1VG+s0lea9qz8=",
+			"checksumSHA1": "3rq5kQaIw24lowiunMoMK2BVu9c=",
 			"path": "golang.org/x/net/context",
 			"revision": "f5079bd7f6f74e23c4d65efa0f4ce14cbd6a3c0f",
 			"revisionTime": "2017-07-19T21:11:51Z"
@@ -128,7 +84,7 @@
 			"revisionTime": "2017-01-11T21:10:42Z"
 		},
 		{
-			"checksumSHA1": "d+A151umi7aKIlP1tFdN+fxj4vA=",
+			"checksumSHA1": "el9DEzKfMH55dvGi+ZAKKjq4I/Q=",
 			"path": "gopkg.in/gorethink/gorethink.v3",
 			"revision": "7ab832f7b65573104a555d84a27992ae9ea1f659",
 			"revisionTime": "2017-04-17T08:51:06Z"

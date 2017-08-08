@@ -24,4 +24,9 @@ func init() {
 	regStruct["sha3256/base58/ed25519"] = &sha3256_base58_ed25519.Sha3256_base58_ed25519{}
 }
 
-
+func GetCrypto() Crypto{
+	var c Crypto
+	str := "sha3256/base58/ed25519"//TODO Config
+	c = regStruct[str]
+	return c
+}
