@@ -31,5 +31,15 @@ func main(){
 //	}
 	c :=common.GetCrypto()
 	fmt.Println(c.Hash("jihao"))
-	fmt.Println(c.GenerateKeypair("AvRjG1FogNfNiyhMGRM34mNaDaZoCDNCnKnqoj73SesY"))
+	fmt.Println(c.GenerateKeypair("6hXsHQ4fdWQ9UY1XkBYCYRouAagRW8rXxYSLgpveQNYY"))
+	msg := "hello unichain 2017"
+	pub := "3FyHdZVX4adfSSTg7rZDPMzqzM8k5fkpu43vbRLvEXLJ"
+	pub2 := "AZfjdKxEr9G3NwdAkco22nN8PfgQvCr5TDPK1tqsGZrk"
+	pri := "5Pv7F7g9BvNDEMdb8HV5aLHpNTNkxVpNqnLTQ58Z5heC"
+	sig := "48cpAsUuNf6qKCMFFKitSNjaA8nfPM4o7MacVp8U3QVMbVUr34SSRTTpahi3WEv3GaF2bVWG7J4SLTojgDoacLxT"
+	sig2 := c.Sign(pri, msg)
+	fmt.Println(sig,sig2)
+	fmt.Println(c.Verify(pub,msg,sig))
+	fmt.Println(c.Verify(pub2,msg,sig))
+
 }
