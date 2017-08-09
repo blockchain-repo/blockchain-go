@@ -31,4 +31,5 @@ func main(){
 //	}
 	c :=common.GetCrypto()
 	fmt.Println(c.Hash("jihao"))
+	fmt.Println(c.GenerateKeypair("AvRjG1FogNfNiyhMGRM34mNaDaZoCDNCnKnqoj73SesY"))
 }

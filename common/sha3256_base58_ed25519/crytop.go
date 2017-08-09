@@ -4,8 +4,12 @@ import (
 	"hash"
 	"encoding/hex"
 
+	"unichain-go/log"
+
 	"golang.org/x/crypto/sha3"
 	"github.com/btcsuite/btcutil/base58"
+	"golang.org/x/crypto/ed25519"
+	"bytes"
 )
 
 type Sha3256_base58_ed25519 struct {
@@ -35,7 +39,19 @@ func (c *Sha3256_base58_ed25519)Decode(str string) []byte {
 
 //encrypt
 func (c *Sha3256_base58_ed25519)GenerateKeypair(seed ...string) (pub string,priv string) {
-	return "",""
+	var publicKeyBytes, privateKeyBytes []byte
+	var err error
+	if len(seed) >= 1 {
+		publicKeyBytes, privateKeyBytes, err = ed25519.GenerateKey(bytes.NewReader(base58.Decode(seed[0])))
+	} else  {
+		publicKeyBytes, privateKeyBytes, err = ed25519.GenerateKey(nil)
+	}
+	if err != nil {
+		log.Error(err.Error())
+	}
+	publicKeyBase58 := base58.Encode(publicKeyBytes)
+	privateKeyBase58 := base58.Encode(privateKeyBytes[0:32])
+	return publicKeyBase58, privateKeyBase58
 }
 
 func (c *Sha3256_base58_ed25519)Sign(priv string, msg string) string {
