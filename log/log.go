@@ -39,7 +39,7 @@ func init() {
 
 	iniConfig, err := config.NewConfig("ini", confPath)
 	if err != nil {
-		panic(err)
+		return
 	}
 
 	myBeegoLogAdapterMultiFile := &MyBeegoLogAdapterMultiFile{}
