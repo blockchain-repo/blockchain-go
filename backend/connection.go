@@ -15,7 +15,7 @@ type Connection interface {
 	//query
 	GetTransactionFromBacklog(id string) string
 	SetTransactionToBacklog(transaction string) int
-	//changefeed TODO
+	//changefeed
 	ChangefeedRunForever(operation int) chan interface{}
 	//schema
 	InitDatabase(db string)
