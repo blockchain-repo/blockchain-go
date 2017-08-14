@@ -23,14 +23,14 @@ type Vote struct {
 func (v *Vote) VerifySig() bool {
 	signature := v.Signature
 	pub := v.NodePubkey
-	body := common.Serialize(v.VoteBody)
-	c :=common.GetCrypto()
-	return c.Verify(pub, body, signature)
+	msg := v.BodyToString()
+	c := common.GetCrypto()
+	return c.Verify(pub, msg, signature)
 }
 
 func (v *Vote) Sign() string {
 	priv_key := config.Config.Keypair.PrivateKey
-	msg := common.Serialize(v.VoteBody)
+	msg := v.BodyToString()
 	c := common.GetCrypto()
 	sig := c.Sign(priv_key, msg)
 	v.Signature = sig
@@ -41,6 +41,10 @@ func (v *Vote) GenerateId() string {
 	_id := common.GenerateUUID()
 	v.Id = _id
 	return _id
+}
+
+func (v *Vote) BodyToString() string {
+	return common.Serialize(v.VoteBody)
 }
 
 func (v *Vote) ToString() string {
