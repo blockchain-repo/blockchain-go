@@ -1,6 +1,9 @@
 package models
 
-import "unichain-go/common"
+import (
+	"unichain-go/common"
+	"unichain-go/config"
+)
 
 type VoteBody struct {
 	IsValid       bool   //合约、合约交易投票结果，如true,false
@@ -17,10 +20,29 @@ type Vote struct {
 	Signature  string                  //投票节点签名
 }
 
-func (v *Vote) VerifyVoteSignature() bool {
+func (v *Vote) VerifySig() bool {
 	signature := v.Signature
 	pub := v.NodePubkey
 	body := common.Serialize(v.VoteBody)
 	c :=common.GetCrypto()
 	return c.Verify(pub, body, signature)
+}
+
+func (v *Vote) Sign() string {
+	priv_key := config.Config.Keypair.PrivateKey
+	msg := common.Serialize(v.VoteBody)
+	c := common.GetCrypto()
+	sig := c.Sign(priv_key, msg)
+	v.Signature = sig
+	return sig
+}
+
+func (v *Vote) GenerateId() string {
+	_id := common.GenerateUUID()
+	v.Id = _id
+	return _id
+}
+
+func (v *Vote) ToString() string {
+	return common.Serialize(v)
 }
