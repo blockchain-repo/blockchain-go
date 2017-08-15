@@ -19,7 +19,7 @@ func ungroup(arg interface{}) interface{} {
 }
 
 
-func validateTx(arg interface{}) interface{} {
+func validateBlockTx(arg interface{}) interface{} {
 	return ""
 }
 
@@ -35,7 +35,7 @@ func createVotePipe() (p mp.Pipeline) {
 	cvNodeSlice := make([]*mp.Node, 0)
 	cvNodeSlice = append(cvNodeSlice, &mp.Node{Target: validateBlock, RoutineNum: 1, Name: "validateBlock"})
 	cvNodeSlice = append(cvNodeSlice, &mp.Node{Target: ungroup, RoutineNum: 1, Name: "ungroup"})
-	cvNodeSlice = append(cvNodeSlice, &mp.Node{Target: validateTx, RoutineNum: 1, Name: "validateTx"})
+	cvNodeSlice = append(cvNodeSlice, &mp.Node{Target: validateBlockTx, RoutineNum: 1, Name: "validateBlockTx"})
 	cvNodeSlice = append(cvNodeSlice, &mp.Node{Target: vote, RoutineNum: 1, Name: "vote"})
 	cvNodeSlice = append(cvNodeSlice, &mp.Node{Target: writeVote, RoutineNum: 1, Name: "writeVote"})
 	p = mp.Pipeline{
@@ -47,7 +47,7 @@ func createVotePipe() (p mp.Pipeline) {
 func getVoteChangefeed() mp.Node {
 	conn :=backend.GetConnection()
 	node := mp.Node{
-		Output:conn.ChangefeedRunForever(1),
+		Output:conn.ChangefeedRunForever("unichain","block",1),
 	}
 	return node
 }

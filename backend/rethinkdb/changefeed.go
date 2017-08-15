@@ -14,10 +14,10 @@ const (
 )
 
 
-func (c *RethinkDBConnection)ChangefeedRunForever(operation int) chan interface{} {
+func (c *RethinkDBConnection)ChangefeedRunForever(db string,table string,operation int) chan interface{} {
 	var value interface{}
 	ch := make(chan interface{})
-	res := c.GetChangefeed("test", "test")
+	res := c.GetChangefeed(db, table)
 	go func() {
 		for res.Next(&value){
 			m := value.(map[string]interface{})
