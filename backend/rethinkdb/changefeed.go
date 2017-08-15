@@ -14,7 +14,6 @@ const (
 )
 
 
-
 func (c *RethinkDBConnection)ChangefeedRunForever(operation int) chan interface{} {
 	var value interface{}
 	ch := make(chan interface{})

@@ -7,6 +7,12 @@ import (
 
 )
 
+const (
+	INSERT = 1
+	DELETE = 2
+	UPDATE = 4
+)
+
 var regStruct map[string]Connection
 
 type Connection interface {
