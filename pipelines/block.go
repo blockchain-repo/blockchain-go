@@ -8,19 +8,52 @@ import (
 	mp "github.com/altairlee/multipipelines/multipipes"
 )
 
+//Filter a transaction.
+//Args:
+//tx : the transaction to process.
+//Returns:
+//dict: The transaction if assigned to the current node,
+//``None`` otherwise.
 func filterTx(arg interface{}) interface{} {
 	return ""
 }
 
-
+//Validate a transaction.
+//Also checks if the transaction already exists in the blockchain. If it
+//does, or it's invalid, it's deleted from the backlog immediately.
+//Args:
+//tx : the transaction to validate.
+//Returns:
+//:class:`Transaction`: The transaction if valid,
+//``None`` otherwise.
+//
 func validateTx(arg interface{}) interface{} {
 	return ""
 }
 
+//"Create a block.
+//This method accumulates transactions to put in a block and outputs
+//a block when one of the following conditions is true:
+//- the size limit of the block has been reached, or
+//- a timeout happened.
+//Args:
+//tx (:class:`Transaction`): the transaction
+//to validate, might be None if a timeout happens.
+//timeout (bool): ``True`` if a timeout happened
+//(Default: ``False``).
+//Returns:
+//:class:`Block`: The block,
+//if a block is ready, or ``None``.
 func createBlock(arg interface{}) interface{} {
 	return ""
 }
 
+//Write the block to the Database.
+//Args:
+//block (:class:`Block`): the block of
+//transactions to write to the database.
+//Returns:
+//:class:`Block`: The Block.
 func writeBlock(arg interface{}) interface{} {
 	return ""
 }
