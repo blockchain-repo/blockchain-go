@@ -69,9 +69,10 @@ func ConfigToFile() {
 		log.Error(err.Error())
 	}
 	var newConfig _Config
-//	pub, priv := common.GenerateKeyPair()
-	newConfig.Keypair.PublicKey = ""
-	newConfig.Keypair.PrivateKey = ""
+	c := common.GetCrypto()
+	pub, priv := c.GenerateKeypair()
+	newConfig.Keypair.PublicKey = pub
+	newConfig.Keypair.PrivateKey = priv
 	newConfig.Keyring = []string{}
 	str := common.Serialize(newConfig)
 	n, err := configfile.Write([]byte(str))
