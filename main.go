@@ -13,8 +13,7 @@ import (
 func main(){
 	fmt.Printf("Hello Unichain-go!\n")
 	fmt.Println(os.Args)
-//	cmd(os.Args)
-	web.Server()
+	cmd(os.Args)
 }
 
 func cmd(args []string) {
@@ -69,7 +68,7 @@ func runDrop()  {
 }
 
 func runStart()  {
-	//TODO
+	web.Server()
 }
 
 func runHelp() {
