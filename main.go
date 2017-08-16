@@ -7,11 +7,14 @@ import (
 	"unichain-go/common"
 	"unichain-go/config"
 	"unichain-go/backend"
+	"unichain-go/web"
 )
 
 func main(){
 	fmt.Printf("Hello Unichain-go!\n")
-	cmd(os.Args)
+	fmt.Println(os.Args)
+//	cmd(os.Args)
+	web.Server()
 }
 
 func cmd(args []string) {
