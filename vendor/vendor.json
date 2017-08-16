@@ -15,9 +15,10 @@
 			"revisionTime": "2017-08-03T08:10:46Z"
 		},
 		{
-			"checksumSHA1": "vOVK+3/6ip7qo5xIhgtGGWMVDvo=",
+			"checksumSHA1": "g+4AgCjxvotVLox53tnXxjXuBnQ=",
 			"path": "github.com/astaxie/beego",
-			"revision": ""
+			"revision": "d96289a81bf67728cff7a19b067aaecc65a62ec6",
+			"revisionTime": "2017-07-18T16:56:48Z"
 		},
 		{
 			"checksumSHA1": "bwz/1vy/v5db0uhkckArS/KZ5xI=",
