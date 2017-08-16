@@ -73,7 +73,7 @@ func createBlockPipe() (p mp.Pipeline) {
 func getBlockChangefeed() mp.Node {
 	conn :=backend.GetConnection()
 	node := mp.Node{
-		Output:conn.ChangefeedRunForever("unichain","backend",1),
+		Output:conn.ChangefeedRunForever("unichain","backend",backend.INSERT),
 	}
 	return node
 }

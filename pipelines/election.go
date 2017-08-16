@@ -30,7 +30,7 @@ func createElectionPipe() (p mp.Pipeline) {
 func getElectionChangefeed() mp.Node {
 	conn :=backend.GetConnection()
 	node := mp.Node{
-		Output:conn.ChangefeedRunForever("unichain","vote",1),
+		Output:conn.ChangefeedRunForever("unichain","vote",backend.INSERT),
 	}
 	return node
 }

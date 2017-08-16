@@ -47,7 +47,7 @@ func createVotePipe() (p mp.Pipeline) {
 func getVoteChangefeed() mp.Node {
 	conn :=backend.GetConnection()
 	node := mp.Node{
-		Output:conn.ChangefeedRunForever("unichain","block",1),
+		Output:conn.ChangefeedRunForever("unichain","block",backend.INSERT),
 	}
 	return node
 }
