@@ -42,7 +42,7 @@ func (c *RethinkDBConnection)Delete(db string, table string, id string) r.WriteR
 }
 
 func (c *RethinkDBConnection)GetTransactionFromBacklog(id string) string {
-	res := c.Get("unichain","backlog",id)//TODO
+	res := c.Get("unichain","backlog",id)
 	var value map[string]interface{}
 	err := res.One(&value)
 	map_string :=common.Serialize(value)
@@ -53,7 +53,7 @@ func (c *RethinkDBConnection)GetTransactionFromBacklog(id string) string {
 }
 
 func (c *RethinkDBConnection)SetTransactionToBacklog(transaction string) int {
-	res := c.Insert("unichain","backlog",transaction)//TODO
+	res := c.Insert("unichain","backlog",transaction)
 	fmt.Print(res)
 	return res.Inserted
 }

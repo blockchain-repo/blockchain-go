@@ -15,7 +15,11 @@ func main(){
 }
 
 func cmd(args []string) {
-	//argsCount := len(args)
+	argsCount := len(args)
+	if argsCount == 1{
+		runHelp()
+		return
+	}
 	switch args[1] {
 	case "start":
 		runStart()
@@ -62,7 +66,7 @@ func runDrop()  {
 }
 
 func runStart()  {
-
+	//TODO
 }
 
 func runHelp() {
