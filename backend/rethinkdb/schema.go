@@ -10,9 +10,9 @@ import (
 
 
 var Tables = []string{
+	"backlog",
 	"block",
 	"vote",
-	"backlog",
 	"asset",
 	"contract",
 	"contractvote",
