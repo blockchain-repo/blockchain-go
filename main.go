@@ -11,8 +11,8 @@ import (
 )
 
 func main(){
-	fmt.Printf("Hello Unichain-go!\n")
-	fmt.Println(os.Args)
+	fmt.Printf("main:: Hello Unichain-go!\n")
+	fmt.Println("main::",os.Args)
 	cmd(os.Args)
 }
 
@@ -35,7 +35,7 @@ func cmd(args []string) {
 		runDrop()
 	case "show-config":
 		runShowConfig()
-	case "export-my-pubkeye":
+	case "export-my-pubkey":
 		runExportMyPubkey()
 	default:
 		runHelp()

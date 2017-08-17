@@ -4,5 +4,5 @@ import "github.com/astaxie/beego"
 
 
 func Server() {
-	beego.Run(":19984")
+	beego.Run("localhost:19984")
 }

@@ -16,6 +16,7 @@ type _Config struct {
 	Keypair Keypair
 	Keyring []string `json:"Keyring"`
 	LocalIp string   `json:"LocalIp"`
+	Log Log          `json:"Log"`
 }
 
 type Keypair struct {
@@ -23,6 +24,19 @@ type Keypair struct {
 	PrivateKey string `json:"PrivateKey"`
 }
 
+type Log struct {
+	LogName string
+	LogSaveLevel int
+	LogMaxDays int
+	LogMaxLines int
+	LogMaxSize int
+	LogRotate bool
+	LogDaily bool
+	LogSeparate []string
+	//#error = 3; warning = 4; info = 6; debug = 7
+	LogLevel int
+	LogEnableConsole bool
+}
 var Config _Config
 
 func FileToConfig() {
@@ -43,6 +57,31 @@ func FileToConfig() {
 	if err != nil {
 		log.Error(err.Error())
 	}
+}
+
+func createNewConfig() _Config{
+	var newConfig _Config
+	c := common.GetCrypto()
+	//keypair
+	pub, priv := c.GenerateKeypair()
+	newConfig.Keypair.PublicKey = pub
+	newConfig.Keypair.PrivateKey = priv
+	//keyring
+	newConfig.Keyring = []string{}
+	//LocalIp
+	newConfig.LocalIp = "localhost"
+	//log
+	newConfig.Log.LogName = "/tmp/unichain-go-logs/unichain-go.log"
+	newConfig.Log.LogSaveLevel = 7
+	newConfig.Log.LogMaxDays =10
+	newConfig.Log.LogMaxLines = 0
+	newConfig.Log.LogMaxSize = 0
+	newConfig.Log.LogRotate = true
+	newConfig.Log.LogDaily = true
+	newConfig.Log.LogSeparate = []string{"error","warning","info","debug"}
+	newConfig.Log.LogLevel = 7
+	newConfig.Log.LogEnableConsole = true
+	return newConfig
 }
 
 func ConfigToFile() {
@@ -68,14 +107,10 @@ func ConfigToFile() {
 	if err != nil {
 		log.Error(err.Error())
 	}
-	var newConfig _Config
-	c := common.GetCrypto()
-	pub, priv := c.GenerateKeypair()
-	newConfig.Keypair.PublicKey = pub
-	newConfig.Keypair.PrivateKey = priv
-	newConfig.Keyring = []string{}
-	str := common.Serialize(newConfig)
-	n, err := configfile.Write([]byte(str))
+
+	newConfig := createNewConfig()
+	str := common.SerializePretty(newConfig)
+	n, err := configfile.Write([]byte(str+"\n"))
 	if err != nil {
 		log.Error(err.Error())
 	} else {

@@ -117,7 +117,7 @@ func SerializePretty(obj interface{}, escapeHTML ...bool) string {
 	enc := json.NewEncoder(&buf)
 	// disabled the HTMLEscape for &, <, and > to \u0026, \u003c, and \u003e in json string
 	enc.SetEscapeHTML(setEscapeHTML)
-	enc.SetIndent("", "\t")
+	enc.SetIndent("", "    ")
 	err := enc.Encode(obj)
 	if err != nil {
 		log.Error(err.Error())

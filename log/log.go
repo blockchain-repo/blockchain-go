@@ -7,11 +7,11 @@ import (
 	"path/filepath"
 	"runtime"
 	"strings"
-)
+	"os/user"
 
-import (
 	"github.com/astaxie/beego/config"
 	"github.com/astaxie/beego/logs"
+
 )
 
 //---------------------------------------------------------------------------
@@ -29,29 +29,30 @@ var mapLevelKeys = map[int]string{
 	LevelDebug: "DEBUG",
 }
 
-var (
-	confPath = "log/log.conf"
-)
-
 //---------------------------------------------------------------------------
 func init() {
 	logs.SetLogFuncCall(false)
 
-	iniConfig, err := config.NewConfig("ini", confPath)
+	_user, err := user.Current()
+	if err != nil {
+		logs.Error(err.Error())
+	}
+	fileName := _user.HomeDir + "/.unichain-go"
+	iniConfig, err := config.NewConfig("json", fileName)
 	if err != nil {
 		return
 	}
 
 	myBeegoLogAdapterMultiFile := &MyBeegoLogAdapterMultiFile{}
-	myBeegoLogAdapterMultiFile.FileName = iniConfig.String("log::LogName")
-	myBeegoLogAdapterMultiFile.Level, _ = iniConfig.Int("log::LogSaveLevel")
-	logMaxDays, _ := iniConfig.Int("log::LogMaxDays")
+	myBeegoLogAdapterMultiFile.FileName = iniConfig.String("Log::LogName")
+	myBeegoLogAdapterMultiFile.Level, _ = iniConfig.Int("Log::LogSaveLevel")
+	logMaxDays, _ := iniConfig.Int("Log::LogMaxDays")
 	myBeegoLogAdapterMultiFile.MaxDays = int16(logMaxDays)
-	myBeegoLogAdapterMultiFile.MaxLines, _ = iniConfig.Int64("log::LogMaxLines")
-	myBeegoLogAdapterMultiFile.MaxSize, _ = iniConfig.Int64("log::LogMaxSize")
-	myBeegoLogAdapterMultiFile.Rotate, _ = iniConfig.Bool("log::LogRotate")
-	myBeegoLogAdapterMultiFile.Daily, _ = iniConfig.Bool("log::LogDaily")
-	myBeegoLogAdapterMultiFile.Separate = iniConfig.Strings("log::LogSeparate")
+	myBeegoLogAdapterMultiFile.MaxLines, _ = iniConfig.Int64("Log::LogMaxLines")
+	myBeegoLogAdapterMultiFile.MaxSize, _ = iniConfig.Int64("Log::LogMaxSize")
+	myBeegoLogAdapterMultiFile.Rotate, _ = iniConfig.Bool("Log::LogRotate")
+	myBeegoLogAdapterMultiFile.Daily, _ = iniConfig.Bool("Log::LogDaily")
+	myBeegoLogAdapterMultiFile.Separate = iniConfig.Strings("Log::LogSeparate")
 
 	log_config := NewMyBeegoLogAdapterMultiFile(myBeegoLogAdapterMultiFile)
 	log_config_str := _Serialize(log_config)
@@ -60,11 +61,11 @@ func init() {
 	// order 顺序必须按照
 	// 1. logs.SetLevel(level)
 	// 2. logs.SetLogger(logs.AdapterMultiFile, log_config_str)
-	logLevel, _ := iniConfig.Int("log::LogLevel")
+	logLevel, _ := iniConfig.Int("Log::LogLevel")
 	logs.SetLevel(logLevel)
 	logs.SetLogger(logs.AdapterMultiFile, log_config_str)
 
-	enableconsole, _ := iniConfig.Bool("log::LogEnableConsole")
+	enableconsole, _ := iniConfig.Bool("Log::LogEnableConsole")
 	if enableconsole {
 		logs.SetLogger(logs.AdapterConsole)
 	}
