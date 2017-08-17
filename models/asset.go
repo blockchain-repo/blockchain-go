@@ -1,6 +1,8 @@
 package models
 
-import "unichain-go/common"
+import (
+	"unichain-go/common"
+)
 
 type Asset struct {
 	Id         string   `json:"id"`    //

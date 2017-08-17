@@ -48,7 +48,7 @@ func (t *Transaction) BodyToString() string {
 	if err != nil {
 		log.Error(err.Error())
 	}
-	delete(m, "Id")
+	delete(m, "id")
 	return common.Serialize(m)
 }
 

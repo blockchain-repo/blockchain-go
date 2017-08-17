@@ -48,14 +48,20 @@ func FileToConfig() {
 	file, err := os.Open(fileName)
 	if err != nil {
 		log.Error(err.Error())
+		log.Error("please create default config by 'unichain-go configure' or 'go run main.go configure'")
+		os.Exit(1)
 	}
 	_byte, err := ioutil.ReadAll(file)
 	if err != nil {
 		log.Error(err.Error())
+		log.Error("please checkout your config file",fileName)
+		os.Exit(1)
 	}
 	err = json.Unmarshal(_byte, &Config)
 	if err != nil {
 		log.Error(err.Error())
+		log.Error("please checkout your config file",fileName)
+		os.Exit(1)
 	}
 }
 
