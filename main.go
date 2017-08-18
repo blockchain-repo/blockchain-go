@@ -8,12 +8,20 @@ import (
 	"unichain-go/config"
 	"unichain-go/backend"
 	"unichain-go/web"
+	"unichain-go/core"
 )
 
 func main(){
 	fmt.Printf("main:: Hello Unichain-go!\n")
 	fmt.Println("main::",os.Args)
-	cmd(os.Args)
+	config.FileToConfig()
+	c := core.Chain{
+		PublicKey:  config.Config.Keypair.PublicKey,
+		PrivateKey: config.Config.Keypair.PrivateKey,
+		Keyring:    config.Config.Keyring,
+	}
+	c.CreateTransactionForTest()
+//	cmd(os.Args)
 }
 
 func cmd(args []string) {

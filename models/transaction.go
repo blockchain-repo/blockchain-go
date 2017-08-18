@@ -51,12 +51,3 @@ func (t *Transaction) BodyToString() string {
 	delete(m, "id")
 	return common.Serialize(m)
 }
-
-//tx := models.Transaction{}
-//fmt.Println(common.Serialize(tx))
-//m,err := common.StructToMap(tx)
-//if err != nil {
-//log.Error(err.Error())
-//}
-//delete(m, "id")
-//fmt.Println(common.Serialize(m))
