@@ -1,6 +1,10 @@
 package web
 
-import "github.com/astaxie/beego"
+import (
+	_ "unichain-go/web/routers"
+
+	"github.com/astaxie/beego"
+)
 
 
 func Server() {

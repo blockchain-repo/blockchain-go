@@ -8,16 +8,12 @@ import (
 	"unichain-go/config"
 	"unichain-go/backend"
 	"unichain-go/web"
-	"unichain-go/models"
 )
 
 func main(){
 	fmt.Printf("main:: Hello Unichain-go!\n")
 	fmt.Println("main::",os.Args)
-	tx := models.Transaction{}
-	fmt.Println(tx.BodyToString())
-	fmt.Println(tx.ToString())
-//	cmd(os.Args)
+	cmd(os.Args)
 }
 
 func cmd(args []string) {
