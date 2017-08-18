@@ -1,8 +1,11 @@
 package models
 
 import (
+	"reflect"
+
 	"unichain-go/common"
 	"unichain-go/log"
+	"unichain-go/config"
 )
 
 type PreOut struct {
@@ -39,6 +42,18 @@ func (t *Transaction) GenerateId() string {
 	return _id
 }
 
+func (t *Transaction) Sign() string {
+	priv_key := config.Config.Keypair.PrivateKey
+	msg := t.StringForSign()
+	c := common.GetCrypto()
+	sig := c.Sign(priv_key, msg)
+
+	for i:=0;i<len(t.Inputs);i++{
+		t.Inputs[i].Signature = sig
+	}
+	return sig
+}
+
 func (t *Transaction) ToString() string {
 	return common.Serialize(t)
 }
@@ -50,4 +65,32 @@ func (t *Transaction) BodyToString() string {
 	}
 	delete(m, "id")
 	return common.Serialize(m)
+}
+
+func (t *Transaction) StringForSign() string {
+	m,err := common.StructToMap(t)
+	if err != nil {
+		log.Error(err.Error())
+	}
+	delete(m, "id")
+	s := ToSlice(m["Inputs"])
+	for i, in := range s{
+		delete(in.(map[string]interface{}),"Signature")
+		s[i]=in
+	}
+	m["Inputs"] = s
+	return common.Serialize(m)
+}
+
+func ToSlice(arr interface{}) []interface{} {
+	v := reflect.ValueOf(arr)
+	if v.Kind() != reflect.Slice {
+		panic("arr not slice")
+	}
+	l := v.Len()
+	ret := make([]interface{}, l)
+	for i := 0; i < l; i++ {
+		ret[i] = v.Index(i).Interface()
+	}
+	return ret
 }

@@ -2,8 +2,8 @@ package core
 
 import (
 	"unichain-go/models"
-	"fmt"
 	"unichain-go/common"
+	"fmt"
 )
 
 type Chain struct {
@@ -19,7 +19,7 @@ func (c *Chain)CreateTransactionForTest(){
 	}
 	input := models.Input{
 		OwnersBefore: c.PublicKey,
-		Signature:    "",//TODO
+		Signature:    "",
 		PreOut:       preOut,
 	}
 	output :=models.Output{
@@ -38,6 +38,7 @@ func (c *Chain)CreateTransactionForTest(){
 		Metadata:  m,
 		Version:   "1",
 	}
+	tx.Sign()
 	tx.GenerateId()
 	fmt.Println(tx.ToString())
 }
