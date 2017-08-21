@@ -54,6 +54,5 @@ func (c *RethinkDBConnection)GetTransactionFromBacklog(id string) string {
 
 func (c *RethinkDBConnection)SetTransactionToBacklog(transaction string) int {
 	res := c.Insert("unichain","backlog",transaction)
-	fmt.Print(res)
 	return res.Inserted
 }

@@ -1,29 +1,48 @@
 package core
 
 import (
+	"time"
+	"math/rand"
+
 	"unichain-go/models"
 	"unichain-go/common"
-	"fmt"
+	"unichain-go/config"
+	"unichain-go/backend"
 )
 
 type Chain struct {
-	PublicKey string
-	PrivateKey string
-	Keyring []string
+
 }
 
-func (c *Chain)CreateTransactionForTest(){
+var PublicKey string
+var PrivateKey string
+var Keyring []string
+var AllPub []string
+var Conn backend.Connection
+
+func init() {
+	config.FileToConfig()
+	PublicKey = config.Config.Keypair.PublicKey
+	PrivateKey = config.Config.Keypair.PrivateKey
+	Keyring = config.Config.Keyring
+	AllPub = append(Keyring, PublicKey)
+	Conn = backend.GetConnection()
+}
+
+
+//Just for test
+func CreateTransactionForTest() string{
 	preOut :=models.PreOut{
 		Tx:    "0",
 		Index: "0",
 	}
 	input := models.Input{
-		OwnersBefore: c.PublicKey,
+		OwnersBefore: PublicKey,
 		Signature:    "",
 		PreOut:       preOut,
 	}
 	output :=models.Output{
-		OwnersAfter: c.PublicKey,
+		OwnersAfter: PublicKey,
 		Amount:      "1",
 	}
 	m := map[string]interface{}{}
@@ -40,5 +59,14 @@ func (c *Chain)CreateTransactionForTest(){
 	}
 	tx.Sign()
 	tx.GenerateId()
-	fmt.Println(tx.ToString())
+	return tx.ToString()
+}
+
+func InsertToBacklog(m map[string]interface{}){
+	rand.Seed(time.Now().UnixNano())
+	//add key
+	m["Assign"] = AllPub[rand.Intn(len(AllPub))]
+	m["AssignTime"] = common.GenTimestamp()
+	str := common.Serialize(m)
+	Conn.SetTransactionToBacklog(str)
 }

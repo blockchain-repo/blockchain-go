@@ -8,19 +8,13 @@ import (
 	"unichain-go/config"
 	"unichain-go/backend"
 	"unichain-go/web"
-	"unichain-go/core"
+
 )
 
 func main(){
 	fmt.Printf("main:: Hello Unichain-go!\n")
 	fmt.Println("main::",os.Args)
-	config.FileToConfig()
-	c := core.Chain{
-		PublicKey:  config.Config.Keypair.PublicKey,
-		PrivateKey: config.Config.Keypair.PrivateKey,
-		Keyring:    config.Config.Keyring,
-	}
-	c.CreateTransactionForTest()
+	runStart()
 //	cmd(os.Args)
 }
 
@@ -50,6 +44,7 @@ func cmd(args []string) {
 	}
 }
 
+//Fist
 func runConfigure() {
 	config.ConfigToFile()
 }
@@ -65,9 +60,11 @@ func runExportMyPubkey() {
 	fmt.Println(config.Config.Keypair.PublicKey)
 }
 
+//Second
 func runInit()  {
 	conn :=backend.GetConnection()
 	conn.InitDatabase(backend.DBNAME)
+	//genesis BLOCK
 }
 
 func runDrop()  {

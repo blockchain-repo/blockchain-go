@@ -8,5 +8,6 @@ import (
 
 
 func Server() {
+	beego.BConfig.CopyRequestBody =true
 	beego.Run("localhost:19984")
 }
