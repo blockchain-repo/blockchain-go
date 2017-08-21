@@ -6,6 +6,7 @@ import (
 	"unichain-go/backend"
 
 	mp "github.com/altairlee/multipipelines/multipipes"
+	"fmt"
 )
 
 //Filter a transaction.
@@ -15,6 +16,7 @@ import (
 //dict: The transaction if assigned to the current node,
 //``None`` otherwise.
 func filterTx(arg interface{}) interface{} {
+	fmt.Println("filterTx",arg)
 	return ""
 }
 
@@ -73,12 +75,13 @@ func createBlockPipe() (p mp.Pipeline) {
 func getBlockChangefeed() mp.Node {
 	conn :=backend.GetConnection()
 	node := mp.Node{
-		Output:conn.ChangefeedRunForever("unichain","backend",backend.INSERT),
+		Output:conn.ChangefeedRunForever("unichain","backlog",backend.INSERT),
 	}
 	return node
 }
 
 func StartBlockPipe() {
+	fmt.Println("Block Pipeline Start")
 	p := createBlockPipe()
 	changefeed := getBlockChangefeed()
 	p.Setup(&changefeed,nil)

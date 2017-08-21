@@ -8,6 +8,7 @@ import (
 	"unichain-go/config"
 	"unichain-go/backend"
 	"unichain-go/web"
+	"unichain-go/pipelines"
 )
 
 func main(){
@@ -72,6 +73,7 @@ func runDrop()  {
 
 func runStart()  {
 	config.FileToConfig()
+	go pipelines.StartBlockPipe()
 	web.Server()
 }
 

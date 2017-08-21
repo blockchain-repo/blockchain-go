@@ -21,8 +21,8 @@ func (c *RethinkDBConnection)ChangefeedRunForever(db string,table string,operati
 	go func() {
 		for res.Next(&value){
 			m := value.(map[string]interface{})
-			isInsert := (m["old_val"] == nil)
-			isDelete := (m["new_val"] == nil)
+			isInsert := m["old_val"] == nil
+			isDelete := m["new_val"] == nil
 			isUpdate := !isInsert && !isDelete
 			if isInsert && ((operation & INSERT) != 0) {
 				ch<- common.Serialize(m["new_val"])
