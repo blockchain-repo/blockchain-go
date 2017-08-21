@@ -13,7 +13,6 @@ import (
 
 func main(){
 	fmt.Printf("main:: Hello Unichain-go!\n")
-	fmt.Println("main::",os.Args)
 	cmd(append(os.Args, "start"))
 }
 
@@ -50,12 +49,10 @@ func runConfigure() {
 
 
 func runShowConfig() {
-	config.FileToConfig()
 	fmt.Println(common.Serialize(config.Config))
 }
 
 func runExportMyPubkey() {
-	config.FileToConfig()
 	fmt.Println(config.Config.Keypair.PublicKey)
 }
 
@@ -72,7 +69,6 @@ func runDrop()  {
 }
 
 func runStart()  {
-	config.FileToConfig()
 	go pipelines.StartBlockPipe()
 	web.Server()
 }

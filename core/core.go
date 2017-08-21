@@ -21,7 +21,6 @@ var AllPub []string
 var Conn backend.Connection
 
 func init() {
-	config.FileToConfig()
 	PublicKey = config.Config.Keypair.PublicKey
 	PrivateKey = config.Config.Keypair.PrivateKey
 	Keyring = config.Config.Keyring

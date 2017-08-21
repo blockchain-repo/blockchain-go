@@ -1,12 +1,12 @@
 package pipelines
 
 import (
+	"fmt"
 	"sync"
 
 	"unichain-go/backend"
 
 	mp "github.com/altairlee/multipipelines/multipipes"
-	"fmt"
 )
 
 //Filter a transaction.
@@ -72,19 +72,17 @@ func createBlockPipe() (p mp.Pipeline) {
 	return p
 }
 
-func getBlockChangefeed() mp.Node {
-	conn :=backend.GetConnection()
-	node := mp.Node{
-		Output:conn.ChangefeedRunForever("unichain","backlog",backend.INSERT),
-	}
-	return node
+func getBlockChangeNode() *mp.Node {
+	cn := &changeNode{}
+	go cn.getChange("unichain","backlog",backend.INSERT)
+	return &cn.node
 }
 
 func StartBlockPipe() {
 	fmt.Println("Block Pipeline Start")
 	p := createBlockPipe()
-	changefeed := getBlockChangefeed()
-	p.Setup(&changefeed,nil)
+	changefeed := getBlockChangeNode()
+	p.Setup(changefeed,nil)
 	p.Start()
 
 	waitRoutine := sync.WaitGroup{}

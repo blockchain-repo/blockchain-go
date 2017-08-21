@@ -14,7 +14,7 @@ const (
 )
 
 
-func (c *RethinkDBConnection)ChangefeedRunForever(db string,table string,operation int) chan interface{} {
+func (c *RethinkDBConnection)Changefeed(db string,table string,operation int) chan interface{} {
 	var value interface{}
 	ch := make(chan interface{})
 	res := c.GetChangefeed(db, table)

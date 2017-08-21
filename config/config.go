@@ -39,6 +39,20 @@ type Log struct {
 }
 var Config _Config
 
+func init() {
+	_user, err := user.Current()
+	if err != nil {
+		log.Error(err.Error())
+	}
+	fileName := _user.HomeDir + "/.unichain-go"
+	_, err = os.Open(fileName)
+	if err != nil {
+		log.Info(err.Error())
+		return
+	}
+	FileToConfig()
+}
+
 func FileToConfig() {
 	_user, err := user.Current()
 	if err != nil {
@@ -54,13 +68,13 @@ func FileToConfig() {
 	_byte, err := ioutil.ReadAll(file)
 	if err != nil {
 		log.Error(err.Error())
-		log.Error("please checkout your config file",fileName)
+		log.Error("please checkout your config file OR remove it",fileName)
 		os.Exit(1)
 	}
 	err = json.Unmarshal(_byte, &Config)
 	if err != nil {
 		log.Error(err.Error())
-		log.Error("please checkout your config file",fileName)
+		log.Error("please checkout your config file OR remove it",fileName)
 		os.Exit(1)
 	}
 }
@@ -96,7 +110,7 @@ func ConfigToFile() {
 		log.Error(err.Error())
 	}
 	fileName := _user.HomeDir + "/.unichain-go"
-	fileInfo, err := os.Stat(fileName)
+	_, err = os.Stat(fileName)
 	if err == nil { //文件存在
 		fmt.Println("Config file already exist, do you want to override it?")
 		fmt.Println("Please input y(es) or n(o) ")
@@ -104,7 +118,7 @@ func ConfigToFile() {
 		p := make([]byte, 10)
 		inputReader.Read(p)
 		if p[0] != []byte("y")[0] {
-			fmt.Println("Give Up to override it!", fileInfo)
+			fmt.Println("Give up to override it!")
 			return
 		}
 	}
@@ -116,11 +130,11 @@ func ConfigToFile() {
 
 	newConfig := createNewConfig()
 	str := common.SerializePretty(newConfig)
-	n, err := configfile.Write([]byte(str+"\n"))
+	_, err = configfile.Write([]byte(str+"\n"))
 	if err != nil {
 		log.Error(err.Error())
 	} else {
-		fmt.Println("crate config file successful", n)
+		fmt.Println("crate config file successful!\n", str)
 	}
 
 }
