@@ -13,12 +13,9 @@ import (
 	"unichain-go/models"
 )
 
-//Filter a transaction.
-//Args:
-//tx : the transaction to process.
-//Returns:
-//dict: The transaction if assigned to the current node,
-//``None`` otherwise.
+// Filter a transaction.
+// Args: tx(string)
+// Returns: The transaction map if assigned to the current node, ``Nil`` otherwise.
 func filterTx(arg interface{}) interface{} {
 	fmt.Println("filterTx", arg)
 	var m map[string]interface{}

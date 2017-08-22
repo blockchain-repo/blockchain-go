@@ -69,5 +69,11 @@ func InsertToBacklog(m map[string]interface{}) {
 }
 
 func ValidateTransaction(tx models.Transaction) bool {
+	//TODO
+	//check hash
+	//check sig
+	//check asset
+	//check input
+	//check amoumt
 	return true
 }
