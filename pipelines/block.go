@@ -1,12 +1,16 @@
 package pipelines
 
 import (
+	"encoding/json"
 	"fmt"
 	"sync"
 
 	"unichain-go/backend"
+	"unichain-go/common"
+	"unichain-go/core"
 
 	mp "github.com/altairlee/multipipelines/multipipes"
+	"unichain-go/models"
 )
 
 //Filter a transaction.
@@ -16,8 +20,15 @@ import (
 //dict: The transaction if assigned to the current node,
 //``None`` otherwise.
 func filterTx(arg interface{}) interface{} {
-	fmt.Println("filterTx",arg)
-	return ""
+	fmt.Println("filterTx", arg)
+	var m map[string]interface{}
+	json.Unmarshal([]byte(arg.(string)), &m)
+	if m["Assign"] == core.PublicKey {
+		delete(m, "Assign")
+		delete(m, "AssignTime")
+		return m
+	}
+	return nil
 }
 
 //Validate a transaction.
@@ -30,7 +41,22 @@ func filterTx(arg interface{}) interface{} {
 //``None`` otherwise.
 //
 func validateTx(arg interface{}) interface{} {
-	return ""
+	fmt.Println("validateTx", common.Serialize(arg))
+	//check already exists
+	//check tx
+	txByte, err := json.Marshal(arg)
+	if err != nil {
+		return nil
+	}
+	tx := models.Transaction{}
+	err = json.Unmarshal(txByte, &tx)
+	if err != nil {
+		return nil
+	}
+	if core.ValidateTransaction(tx) == false {
+		return nil
+	}
+	return tx
 }
 
 //"Create a block.
@@ -47,6 +73,7 @@ func validateTx(arg interface{}) interface{} {
 //:class:`Block`: The block,
 //if a block is ready, or ``None``.
 func createBlock(arg interface{}) interface{} {
+	fmt.Println("createBlock", common.Serialize(arg))
 	return ""
 }
 
@@ -74,15 +101,15 @@ func createBlockPipe() (p mp.Pipeline) {
 
 func getBlockChangeNode() *mp.Node {
 	cn := &changeNode{}
-	go cn.getChange("unichain","backlog",backend.INSERT)
+	go cn.getChange("unichain", "backlog", backend.INSERT)
 	return &cn.node
 }
 
 func StartBlockPipe() {
 	fmt.Println("Block Pipeline Start")
 	p := createBlockPipe()
-	changefeed := getBlockChangeNode()
-	p.Setup(changefeed,nil)
+	changeNode := getBlockChangeNode()
+	p.Setup(changeNode, nil)
 	p.Start()
 
 	waitRoutine := sync.WaitGroup{}

@@ -4,35 +4,35 @@ import (
 	"reflect"
 
 	"unichain-go/common"
-	"unichain-go/log"
 	"unichain-go/config"
+	"unichain-go/log"
 )
 
 type PreOut struct {
-	Tx            string
-	Index         string
+	Tx    string
+	Index string
 }
 
 type Input struct {
-	OwnersBefore  string     //
-	Signature     string     //
-	PreOut        PreOut     //
+	OwnersBefore string //
+	Signature    string //
+	PreOut       PreOut //
 }
 
 type Output struct {
-	OwnersAfter   string   //
-	Amount        string   //
+	OwnersAfter string //
+	Amount      string //
 }
 
 type Transaction struct {
-	Id         string   `json:"id"`      //
-	Inputs     []Input                   //
-	Outputs    []Output                  //
-	Operation  string                    //???
-	Asset      string                    //
-	Chain      string                    //???
-	Metadata   map[string]interface{}    //
-	Version    string                    //
+	Id        string                 `json:"id"` //
+	Inputs    []Input                //
+	Outputs   []Output               //
+	Operation string                 //???
+	Asset     string                 //
+	Chain     string                 //???
+	Metadata  map[string]interface{} //
+	Version   string                 //
 }
 
 func (t *Transaction) GenerateId() string {
@@ -48,7 +48,7 @@ func (t *Transaction) Sign() string {
 	c := common.GetCrypto()
 	sig := c.Sign(priv_key, msg)
 
-	for i:=0;i<len(t.Inputs);i++{
+	for i := 0; i < len(t.Inputs); i++ {
 		t.Inputs[i].Signature = sig
 	}
 	return sig
@@ -59,7 +59,7 @@ func (t *Transaction) ToString() string {
 }
 
 func (t *Transaction) BodyToString() string {
-	m,err := common.StructToMap(t)
+	m, err := common.StructToMap(t)
 	if err != nil {
 		log.Error(err.Error())
 	}
@@ -68,15 +68,15 @@ func (t *Transaction) BodyToString() string {
 }
 
 func (t *Transaction) StringForSign() string {
-	m,err := common.StructToMap(t)
+	m, err := common.StructToMap(t)
 	if err != nil {
 		log.Error(err.Error())
 	}
 	delete(m, "id")
 	s := ToSlice(m["Inputs"])
-	for i, in := range s{
-		delete(in.(map[string]interface{}),"Signature")
-		s[i]=in
+	for i, in := range s {
+		delete(in.(map[string]interface{}), "Signature")
+		s[i] = in
 	}
 	m["Inputs"] = s
 	return common.Serialize(m)

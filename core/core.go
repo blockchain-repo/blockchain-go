@@ -1,17 +1,16 @@
 package core
 
 import (
-	"time"
 	"math/rand"
+	"time"
 
-	"unichain-go/models"
+	"unichain-go/backend"
 	"unichain-go/common"
 	"unichain-go/config"
-	"unichain-go/backend"
+	"unichain-go/models"
 )
 
 type Chain struct {
-
 }
 
 var PublicKey string
@@ -28,10 +27,9 @@ func init() {
 	Conn = backend.GetConnection()
 }
 
-
 //Just for test
-func CreateTransactionForTest() string{
-	preOut :=models.PreOut{
+func CreateTransactionForTest() string {
+	preOut := models.PreOut{
 		Tx:    "0",
 		Index: "0",
 	}
@@ -40,13 +38,13 @@ func CreateTransactionForTest() string{
 		Signature:    "",
 		PreOut:       preOut,
 	}
-	output :=models.Output{
+	output := models.Output{
 		OwnersAfter: PublicKey,
 		Amount:      "1",
 	}
 	m := map[string]interface{}{}
-	m["timestamp"]= common.GenTimestamp()
-	tx :=models.Transaction{
+	m["timestamp"] = common.GenTimestamp()
+	tx := models.Transaction{
 		Id:        "",
 		Inputs:    []models.Input{input},
 		Outputs:   []models.Output{output},
@@ -61,11 +59,15 @@ func CreateTransactionForTest() string{
 	return tx.ToString()
 }
 
-func InsertToBacklog(m map[string]interface{}){
+func InsertToBacklog(m map[string]interface{}) {
 	rand.Seed(time.Now().UnixNano())
 	//add key
 	m["Assign"] = AllPub[rand.Intn(len(AllPub))]
 	m["AssignTime"] = common.GenTimestamp()
 	str := common.Serialize(m)
 	Conn.SetTransactionToBacklog(str)
+}
+
+func ValidateTransaction(tx models.Transaction) bool {
+	return true
 }
