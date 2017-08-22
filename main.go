@@ -1,24 +1,24 @@
 package main
 
 import (
-	"os"
 	"fmt"
+	"os"
 
+	"unichain-go/backend"
 	"unichain-go/common"
 	"unichain-go/config"
-	"unichain-go/backend"
-	"unichain-go/web"
 	"unichain-go/pipelines"
+	"unichain-go/web"
 )
 
-func main(){
+func main() {
 	fmt.Printf("main:: Hello Unichain-go!\n")
 	cmd(append(os.Args, "start"))
 }
 
 func cmd(args []string) {
 	argsCount := len(args)
-	if argsCount == 1{
+	if argsCount == 1 {
 		runHelp()
 		return
 	}
@@ -47,7 +47,6 @@ func runConfigure() {
 	config.ConfigToFile()
 }
 
-
 func runShowConfig() {
 	fmt.Println(common.Serialize(config.Config))
 }
@@ -57,29 +56,29 @@ func runExportMyPubkey() {
 }
 
 //Second
-func runInit()  {
-	conn :=backend.GetConnection()
+func runInit() {
+	conn := backend.GetConnection()
 	conn.InitDatabase(backend.DBNAME)
 	//genesis BLOCK
 }
 
-func runDrop()  {
-	conn :=backend.GetConnection()
+func runDrop() {
+	conn := backend.GetConnection()
 	conn.DropDatabase(backend.DBNAME)
 }
 
-func runStart()  {
+func runStart() {
 	go pipelines.StartBlockPipe()
 	web.Server()
 }
 
 func runHelp() {
-	fmt.Printf("Commands:\n"+
-	"  {configure,show-config,init,drop,start,export-my-pubkey}\n"+
-	"	configure           Prepare the config file and create the node keypair\n"+
-	"	show-config         Show the current configuration\n"+
-	"	export-my-pubkey    Export this node's public key\n"+
-	"	init                Init the database\n"+
-	"	drop                Drop the database\n"+
-	"	start               Start unichain-go\n")
+	fmt.Printf("Commands:\n" +
+		"  {configure,show-config,init,drop,start,export-my-pubkey}\n" +
+		"	configure           Prepare the config file and create the node keypair\n" +
+		"	show-config         Show the current configuration\n" +
+		"	export-my-pubkey    Export this node's public key\n" +
+		"	init                Init the database\n" +
+		"	drop                Drop the database\n" +
+		"	start               Start unichain-go\n")
 }
