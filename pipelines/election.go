@@ -17,27 +17,25 @@ func requeueTransactions(arg interface{}) interface{} {
 }
 
 func createElectionPipe() (p mp.Pipeline) {
-	cvNodeSlice := make([]*mp.Node, 0)
-	cvNodeSlice = append(cvNodeSlice, &mp.Node{Target: checkForQuorum, RoutineNum: 1, Name: "checkForQuorum"})
-	cvNodeSlice = append(cvNodeSlice, &mp.Node{Target: requeueTransactions, RoutineNum: 1, Name: "requeueTransactions"})
+	nodeSlice := make([]*mp.Node, 0)
+	nodeSlice = append(nodeSlice, &mp.Node{Target: checkForQuorum, RoutineNum: 1, Name: "checkForQuorum"})
+	nodeSlice = append(nodeSlice, &mp.Node{Target: requeueTransactions, RoutineNum: 1, Name: "requeueTransactions"})
 	p = mp.Pipeline{
-		Nodes: cvNodeSlice,
+		Nodes: nodeSlice,
 	}
 	return p
 }
 
-func getElectionChangefeed() mp.Node {
-	conn := backend.GetConnection()
-	node := mp.Node{
-		Output: conn.Changefeed("unichain", "vote", backend.INSERT),
-	}
-	return node
+func getElectionChangeNode() *mp.Node {
+	cn := &changeNode{}
+	go cn.getChange("unichain", "vote", backend.INSERT)
+	return &cn.node
 }
 
 func StartElectionPipe() {
 	p := createElectionPipe()
-	changefeed := getElectionChangefeed()
-	p.Setup(&changefeed, nil)
+	changeNode := getElectionChangeNode()
+	p.Setup(changeNode, nil)
 	p.Start()
 
 	waitRoutine := sync.WaitGroup{}
