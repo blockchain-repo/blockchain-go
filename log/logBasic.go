@@ -4,9 +4,7 @@ import (
 	"os"
 	"path"
 	"path/filepath"
-)
 
-import (
 	"github.com/astaxie/beego/logs"
 )
 

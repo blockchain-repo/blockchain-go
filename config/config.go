@@ -1,13 +1,13 @@
 package config
 
 import (
-	"os/user"
-
 	"bufio"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"os"
+	"os/user"
+
 	"unichain-go/common"
 	"unichain-go/log"
 )

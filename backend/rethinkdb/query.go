@@ -2,6 +2,7 @@ package rethinkdb
 
 import (
 	"fmt"
+
 	"unichain-go/common"
 	"unichain-go/log"
 

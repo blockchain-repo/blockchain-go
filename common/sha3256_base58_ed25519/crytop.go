@@ -1,12 +1,12 @@
 package sha3256_base58_ed25519
 
 import (
+	"bytes"
 	"encoding/hex"
 	"hash"
 
 	"unichain-go/log"
 
-	"bytes"
 	"github.com/btcsuite/btcutil/base58"
 	"golang.org/x/crypto/ed25519"
 	"golang.org/x/crypto/sha3"

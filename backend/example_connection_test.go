@@ -1,6 +1,8 @@
 package backend
 
-import "fmt"
+import (
+	"fmt"
+)
 
 func ExampleConnection() {
 	conn := GetConnection()
