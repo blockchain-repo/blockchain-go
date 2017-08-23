@@ -92,13 +92,13 @@ func writeBlock(arg interface{}) interface{} {
 }
 
 func createBlockPipe() (p mp.Pipeline) {
-	cvNodeSlice := make([]*mp.Node, 0)
-	cvNodeSlice = append(cvNodeSlice, &mp.Node{Target: filterTx, RoutineNum: 1, Name: "filterTx"})
-	cvNodeSlice = append(cvNodeSlice, &mp.Node{Target: validateTx, RoutineNum: 1, Name: "validateTx"})
-	cvNodeSlice = append(cvNodeSlice, &mp.Node{Target: createBlock, RoutineNum: 1, Name: "createBlock"})
-	cvNodeSlice = append(cvNodeSlice, &mp.Node{Target: writeBlock, RoutineNum: 1, Name: "writeBlock"})
+	nodeSlice := make([]*mp.Node, 0)
+	nodeSlice = append(nodeSlice, &mp.Node{Target: filterTx, RoutineNum: 1, Name: "filterTx"})
+	nodeSlice = append(nodeSlice, &mp.Node{Target: validateTx, RoutineNum: 1, Name: "validateTx"})
+	nodeSlice = append(nodeSlice, &mp.Node{Target: createBlock, RoutineNum: 1, Name: "createBlock"})
+	nodeSlice = append(nodeSlice, &mp.Node{Target: writeBlock, RoutineNum: 1, Name: "writeBlock"})
 	p = mp.Pipeline{
-		Nodes: cvNodeSlice,
+		Nodes: nodeSlice,
 	}
 	return p
 }
