@@ -68,6 +68,7 @@ func runDrop() {
 
 func runStart() {
 	go pipelines.StartBlockPipe()
+	go pipelines.StartVotePipe()
 	web.Server()
 }
 

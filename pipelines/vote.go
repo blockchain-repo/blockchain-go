@@ -10,10 +10,28 @@ import (
 	"unichain-go/models"
 
 	mp "github.com/altairlee/multipipelines/multipipes"
+	"fmt"
 )
 
 func validateBlock(arg interface{}) interface{} {
 	log.Info("step1: validateBlock:", arg)
+	var m map[string]interface{}
+	json.Unmarshal([]byte(arg.(string)), &m)
+
+
+	//TODO err
+	blockByte, err := json.Marshal(arg)
+	if err != nil {
+		return nil
+	}
+	block := models.Block{}
+	err = json.Unmarshal(blockByte, &block)
+	if err != nil {
+		fmt.Printf("%T\n",blockByte)
+		log.Error(err)
+		return nil
+	}
+	return nil
 
 	bs, err := json.Marshal(arg)
 	if err != nil {
@@ -22,8 +40,8 @@ func validateBlock(arg interface{}) interface{} {
 	}
 	log.Info(bs)
 
-	block := models.Block{}
-	err = json.Unmarshal(bs, &block)
+	block1 := models.Block{}
+	err = json.Unmarshal(bs, &block1)
 	if err != nil {
 		log.Error(err.Error())
 		return nil
@@ -82,8 +100,8 @@ func getVoteChangefeed() *mp.Node {
 func StartVotePipe() {
 	log.Info("Vote Pipeline Start")
 	p := createVotePipe()
-	changefeed := getVoteChangefeed()
-	p.Setup(changefeed, nil)
+	changeNode := getVoteChangefeed()
+	p.Setup(changeNode, nil)
 	p.Start()
 
 	waitRoutine := sync.WaitGroup{}
