@@ -71,7 +71,7 @@ func createBlock(arg interface{}) interface{} {
 	var txs []models.Transaction
 	txs = append(txs, arg.(models.Transaction))
 	flag := true
-	//TODO when to create
+	//TODO when to create [length,timeout]
 	if flag == true {
 		block := core.CreateBlock(txs)
 		log.Info("Create Block : ", block.Id)
