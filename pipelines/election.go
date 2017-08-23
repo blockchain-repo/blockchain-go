@@ -9,10 +9,14 @@ import (
 )
 
 func checkForQuorum(arg interface{}) interface{} {
+	//TODO
+	//core.election(blockId string)
 	return ""
 }
 
 func requeueTransactions(arg interface{}) interface{} {
+	//TODO
+	//core.requeue(blockId string)
 	return ""
 }
 
