@@ -11,7 +11,6 @@ import (
 	"unichain-go/models"
 
 	mp "github.com/altairlee/multipipelines/multipipes"
-	"fmt"
 )
 
 // Filter a transaction.
@@ -41,10 +40,6 @@ func validateTx(arg interface{}) interface{} {
 	//check already exists
 	//check tx
 	txByte, err := json.Marshal(arg)
-	fmt.Printf("%T\n",txByte)
-	if err != nil {
-		return nil
-	}
 	tx := models.Transaction{}
 	err = json.Unmarshal(txByte, &tx)
 	if err != nil {

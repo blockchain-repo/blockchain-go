@@ -20,12 +20,9 @@ func validateBlock(arg interface{}) interface{} {
 
 
 	//TODO err
-	blockByte, err := json.Marshal(arg)
-	if err != nil {
-		return nil
-	}
+	blockByte := []byte(arg.(string))
 	block := models.Block{}
-	err = json.Unmarshal(blockByte, &block)
+	err := json.Unmarshal(blockByte, &block)
 	if err != nil {
 		fmt.Printf("%T\n",blockByte)
 		log.Error(err)
