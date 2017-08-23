@@ -12,7 +12,6 @@ import (
 )
 
 func main() {
-	fmt.Printf("main:: Hello Unichain-go!\n")
 	cmd(append(os.Args, "start"))
 }
 

@@ -3,20 +3,20 @@ package config
 import (
 	"os/user"
 
-	"unichain-go/log"
-	"os"
-	"io/ioutil"
+	"bufio"
 	"encoding/json"
 	"fmt"
-	"bufio"
+	"io/ioutil"
+	"os"
 	"unichain-go/common"
+	"unichain-go/log"
 )
 
 type _Config struct {
 	Keypair Keypair
 	Keyring []string `json:"Keyring"`
 	LocalIp string   `json:"LocalIp"`
-	Log Log          `json:"Log"`
+	Log     Log      `json:"Log"`
 }
 
 type Keypair struct {
@@ -25,18 +25,19 @@ type Keypair struct {
 }
 
 type Log struct {
-	LogName string
+	LogName      string
 	LogSaveLevel int
-	LogMaxDays int
-	LogMaxLines int
-	LogMaxSize int
-	LogRotate bool
-	LogDaily bool
-	LogSeparate []string
+	LogMaxDays   int
+	LogMaxLines  int
+	LogMaxSize   int
+	LogRotate    bool
+	LogDaily     bool
+	LogSeparate  []string
 	//#error = 3; warning = 4; info = 6; debug = 7
-	LogLevel int
+	LogLevel         int
 	LogEnableConsole bool
 }
+
 var Config _Config
 
 func init() {
@@ -68,18 +69,18 @@ func FileToConfig() {
 	_byte, err := ioutil.ReadAll(file)
 	if err != nil {
 		log.Error(err.Error())
-		log.Error("please checkout your config file OR remove it",fileName)
+		log.Error("please checkout your config file OR remove it", fileName)
 		os.Exit(1)
 	}
 	err = json.Unmarshal(_byte, &Config)
 	if err != nil {
 		log.Error(err.Error())
-		log.Error("please checkout your config file OR remove it",fileName)
+		log.Error("please checkout your config file OR remove it", fileName)
 		os.Exit(1)
 	}
 }
 
-func createNewConfig() _Config{
+func createNewConfig() _Config {
 	var newConfig _Config
 	c := common.GetCrypto()
 	//keypair
@@ -93,12 +94,12 @@ func createNewConfig() _Config{
 	//log
 	newConfig.Log.LogName = "/tmp/unichain-go-logs/unichain-go.log"
 	newConfig.Log.LogSaveLevel = 7
-	newConfig.Log.LogMaxDays =10
+	newConfig.Log.LogMaxDays = 10
 	newConfig.Log.LogMaxLines = 0
 	newConfig.Log.LogMaxSize = 0
 	newConfig.Log.LogRotate = true
 	newConfig.Log.LogDaily = true
-	newConfig.Log.LogSeparate = []string{"error","warning","info","debug"}
+	newConfig.Log.LogSeparate = []string{"error", "warning", "info", "debug"}
 	newConfig.Log.LogLevel = 7
 	newConfig.Log.LogEnableConsole = true
 	return newConfig
@@ -130,7 +131,7 @@ func ConfigToFile() {
 
 	newConfig := createNewConfig()
 	str := common.SerializePretty(newConfig)
-	_, err = configfile.Write([]byte(str+"\n"))
+	_, err = configfile.Write([]byte(str + "\n"))
 	if err != nil {
 		log.Error(err.Error())
 	} else {

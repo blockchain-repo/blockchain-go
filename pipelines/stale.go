@@ -6,7 +6,6 @@ import (
 	mp "github.com/altairlee/multipipelines/multipipes"
 )
 
-
 func checkTransactions(arg interface{}) interface{} {
 	return ""
 }

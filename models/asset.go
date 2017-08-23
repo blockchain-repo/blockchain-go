@@ -5,8 +5,8 @@ import (
 )
 
 type Asset struct {
-	Id         string   `json:"id"`    //
-	Data       map[string]interface{}
+	Id   string `json:"id"` //
+	Data map[string]interface{}
 }
 
 func (a *Asset) GenerateId() string {

@@ -7,7 +7,7 @@ func ExampleConnection() {
 	conn.DropDatabase("unichain")
 	conn.InitDatabase("unichain")
 
-	int_res := conn.SetTransactionToBacklog(`{"id":"5556","back":"j22222ihhh"}`)
+	int_res := conn.WriteTransactionToBacklog(`{"id":"5556","back":"j22222ihhh"}`)
 	fmt.Println(int_res)
 	map_string := conn.GetTransactionFromBacklog("5556")
 	fmt.Printf("tx:%s\n", map_string)

@@ -1,23 +1,22 @@
 package sha3256_base58_ed25519
 
 import (
-	"hash"
 	"encoding/hex"
+	"hash"
 
 	"unichain-go/log"
 
-	"golang.org/x/crypto/sha3"
+	"bytes"
 	"github.com/btcsuite/btcutil/base58"
 	"golang.org/x/crypto/ed25519"
-	"bytes"
+	"golang.org/x/crypto/sha3"
 )
 
 type Sha3256_base58_ed25519 struct {
-
 }
 
 //hash
-func (c *Sha3256_base58_ed25519)Hash(str string) string {
+func (c *Sha3256_base58_ed25519) Hash(str string) string {
 	var hash hash.Hash
 	var x string = ""
 	hash = sha3.New256()
@@ -30,20 +29,20 @@ func (c *Sha3256_base58_ed25519)Hash(str string) string {
 }
 
 //encode
-func (c *Sha3256_base58_ed25519)Encode(b []byte) string {
+func (c *Sha3256_base58_ed25519) Encode(b []byte) string {
 	return base58.Encode(b)
 }
-func (c *Sha3256_base58_ed25519)Decode(str string) []byte {
+func (c *Sha3256_base58_ed25519) Decode(str string) []byte {
 	return base58.Decode(str)
 }
 
 //encrypt
-func (c *Sha3256_base58_ed25519)GenerateKeypair(seed ...string) (pub string,priv string) {
+func (c *Sha3256_base58_ed25519) GenerateKeypair(seed ...string) (pub string, priv string) {
 	var publicKeyBytes, privateKeyBytes []byte
 	var err error
 	if len(seed) >= 1 {
 		publicKeyBytes, privateKeyBytes, err = ed25519.GenerateKey(bytes.NewReader(c.Decode(seed[0])))
-	} else  {
+	} else {
 		publicKeyBytes, privateKeyBytes, err = ed25519.GenerateKey(nil)
 	}
 	if err != nil {
@@ -54,8 +53,8 @@ func (c *Sha3256_base58_ed25519)GenerateKeypair(seed ...string) (pub string,priv
 	return publicKeyBase58, privateKeyBase58
 }
 
-func (c *Sha3256_base58_ed25519)Sign(priv string, msg string) string {
-	pub,_ := c.GenerateKeypair(priv)
+func (c *Sha3256_base58_ed25519) Sign(priv string, msg string) string {
+	pub, _ := c.GenerateKeypair(priv)
 	privByte := base58.Decode(priv)
 	pubByte := base58.Decode(pub)
 	privateKey := make([]byte, 64)
@@ -65,7 +64,7 @@ func (c *Sha3256_base58_ed25519)Sign(priv string, msg string) string {
 	return base58.Encode(sigByte)
 }
 
-func (c *Sha3256_base58_ed25519)Verify(pub string, msg string, sig string) bool {
+func (c *Sha3256_base58_ed25519) Verify(pub string, msg string, sig string) bool {
 	pubByte := c.Decode(pub)
 	publicKey := make([]byte, 32)
 	copy(publicKey, pubByte)

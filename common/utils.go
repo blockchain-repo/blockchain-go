@@ -1,11 +1,11 @@
 package common
 
 import (
-	"time"
 	"bytes"
+	"encoding/json"
 	"strconv"
 	"strings"
-	"encoding/json"
+	"time"
 
 	"unichain-go/log"
 
@@ -28,7 +28,6 @@ func GenDate() string {
 func GenerateUUID() string {
 	return uuid.New().String()
 }
-
 
 /*
 The json package always orders keys when marshalling. Specifically:
@@ -73,7 +72,6 @@ func Serialize(obj interface{}, escapeHTML ...bool) string {
 	}
 	return _Serialize(objMap)
 }
-
 
 /*------------- Structs keys are marshalled in the order defined in the struct ------------------*/
 func _Serialize(obj interface{}, escapeHTML ...bool) string {

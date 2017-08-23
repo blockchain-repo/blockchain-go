@@ -65,7 +65,7 @@ func InsertToBacklog(m map[string]interface{}) {
 	m["Assign"] = AllPub[rand.Intn(len(AllPub))]
 	m["AssignTime"] = common.GenTimestamp()
 	str := common.Serialize(m)
-	Conn.SetTransactionToBacklog(str)
+	Conn.WriteTransactionToBacklog(str)
 }
 
 func ValidateTransaction(tx models.Transaction) bool {
@@ -74,6 +74,27 @@ func ValidateTransaction(tx models.Transaction) bool {
 	//check sig
 	//check asset
 	//check input
-	//check amoumt
+	//check amount
 	return true
+}
+
+func CreateBlock(txs []models.Transaction) models.Block {
+	blockBody := models.BlockBody{
+		Transactions: txs,
+		NodePubkey:   PublicKey,
+		Voters:       AllPub,
+		Timestamp:    common.GenTimestamp(),
+	}
+	block := models.Block{
+		Id:        "",
+		BlockBody: blockBody,
+		Signature: "",
+	}
+	block.GenerateId()
+	block.Sign()
+	return block
+}
+
+func WriteBlock(block string) {
+	Conn.WriteBlock(block)
 }

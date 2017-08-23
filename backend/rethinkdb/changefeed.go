@@ -1,8 +1,8 @@
 package rethinkdb
 
 import (
-	"unichain-go/log"
 	"unichain-go/common"
+	"unichain-go/log"
 
 	r "gopkg.in/gorethink/gorethink.v3"
 )
@@ -13,19 +13,18 @@ const (
 	UPDATE = 4
 )
 
-
-func (c *RethinkDBConnection)Changefeed(db string,table string,operation int) chan interface{} {
+func (c *RethinkDBConnection) Changefeed(db string, table string, operation int) chan interface{} {
 	var value interface{}
 	ch := make(chan interface{})
 	res := c.GetChangefeed(db, table)
 	go func() {
-		for res.Next(&value){
+		for res.Next(&value) {
 			m := value.(map[string]interface{})
 			isInsert := m["old_val"] == nil
 			isDelete := m["new_val"] == nil
 			isUpdate := !isInsert && !isDelete
 			if isInsert && ((operation & INSERT) != 0) {
-				ch<- common.Serialize(m["new_val"])
+				ch <- common.Serialize(m["new_val"])
 			}
 			if isDelete && ((operation & DELETE) != 0) {
 				ch <- common.Serialize(m["old_val"])
@@ -38,11 +37,10 @@ func (c *RethinkDBConnection)Changefeed(db string,table string,operation int) ch
 	return ch
 }
 
-func (c *RethinkDBConnection)GetChangefeed(db string, table string) *r.Cursor {
+func (c *RethinkDBConnection) GetChangefeed(db string, table string) *r.Cursor {
 	res, err := r.DB(db).Table(table).Changes().Run(c.Session)
 	if err != nil {
 		log.Error(err)
 	}
 	return res
 }
-

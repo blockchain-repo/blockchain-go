@@ -8,9 +8,9 @@ import (
 	"unichain-go/backend"
 	"unichain-go/common"
 	"unichain-go/core"
+	"unichain-go/models"
 
 	mp "github.com/altairlee/multipipelines/multipipes"
-	"unichain-go/models"
 )
 
 // Filter a transaction.
@@ -71,7 +71,15 @@ func validateTx(arg interface{}) interface{} {
 //if a block is ready, or ``None``.
 func createBlock(arg interface{}) interface{} {
 	fmt.Println("createBlock", common.Serialize(arg))
-	return ""
+	var txs []models.Transaction
+	txs = append(txs, arg.(models.Transaction))
+	flag := true
+	//TODO when to create
+	if flag == true {
+		block := core.CreateBlock(txs)
+		return block
+	}
+	return nil
 }
 
 //Write the block to the Database.
@@ -81,7 +89,9 @@ func createBlock(arg interface{}) interface{} {
 //Returns:
 //:class:`Block`: The Block.
 func writeBlock(arg interface{}) interface{} {
-	return ""
+	fmt.Println("writeBlock", common.Serialize(arg))
+	core.WriteBlock(common.Serialize(arg))
+	return nil
 }
 
 func createBlockPipe() (p mp.Pipeline) {
@@ -103,7 +113,6 @@ func getBlockChangeNode() *mp.Node {
 }
 
 func StartBlockPipe() {
-	fmt.Println("Block Pipeline Start")
 	p := createBlockPipe()
 	changeNode := getBlockChangeNode()
 	p.Setup(changeNode, nil)

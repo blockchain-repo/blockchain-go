@@ -4,14 +4,13 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"os/user"
 	"path/filepath"
 	"runtime"
 	"strings"
-	"os/user"
 
 	"github.com/astaxie/beego/config"
 	"github.com/astaxie/beego/logs"
-
 )
 
 //---------------------------------------------------------------------------

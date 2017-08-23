@@ -2,9 +2,7 @@ package backend
 
 import (
 	"unichain-go/backend/rethinkdb"
-//	"unichain-go/backend/mongodb"
-
-
+	//	"unichain-go/backend/mongodb"
 )
 
 const (
@@ -21,9 +19,11 @@ type Connection interface {
 	Connect()
 	//query
 	GetTransactionFromBacklog(id string) string
-	SetTransactionToBacklog(transaction string) int
+	WriteTransactionToBacklog(transaction string) int
+
+	WriteBlock(block string) int
 	//changefeed
-	Changefeed(db string, table string,operation int) chan interface{}
+	Changefeed(db string, table string, operation int) chan interface{}
 	//schema
 	InitDatabase(db string)
 	DropDatabase(db string)
@@ -35,10 +35,10 @@ func init() {
 	//regStruct["mongodb"] = &mongodb.MongoDBConnection{}
 }
 
-func GetConnection() Connection{
+func GetConnection() Connection {
 	var conn Connection
-	str := "rethinkdb"//TODO Config
+	str := "rethinkdb" //TODO Config
 	conn = regStruct[str]
-	conn.Connect()//needed?
+	conn.Connect() //needed?
 	return conn
 }

@@ -14,10 +14,10 @@ type VoteBody struct {
 }
 
 type Vote struct {
-	Id         string   `json:"id"`    //投票唯一标识ID，UUID
-	NodePubkey string                  //投票节点的公钥
-	VoteBody   VoteBody                //投票信息
-	Signature  string                  //投票节点签名
+	Id         string   `json:"id"` //投票唯一标识ID，UUID
+	NodePubkey string   //投票节点的公钥
+	VoteBody   VoteBody //投票信息
+	Signature  string   //投票节点签名
 }
 
 func (v *Vote) VerifySig() bool {

@@ -8,7 +8,6 @@ import (
 	mp "github.com/altairlee/multipipelines/multipipes"
 )
 
-
 func checkForQuorum(arg interface{}) interface{} {
 	return ""
 }
@@ -28,9 +27,9 @@ func createElectionPipe() (p mp.Pipeline) {
 }
 
 func getElectionChangefeed() mp.Node {
-	conn :=backend.GetConnection()
+	conn := backend.GetConnection()
 	node := mp.Node{
-		Output:conn.Changefeed("unichain","vote",backend.INSERT),
+		Output: conn.Changefeed("unichain", "vote", backend.INSERT),
 	}
 	return node
 }
@@ -38,7 +37,7 @@ func getElectionChangefeed() mp.Node {
 func StartElectionPipe() {
 	p := createElectionPipe()
 	changefeed := getElectionChangefeed()
-	p.Setup(&changefeed,nil)
+	p.Setup(&changefeed, nil)
 	p.Start()
 
 	waitRoutine := sync.WaitGroup{}

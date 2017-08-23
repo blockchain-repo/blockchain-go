@@ -10,7 +10,7 @@ type RethinkDBConnection struct {
 	Session *r.Session
 }
 
-func (c *RethinkDBConnection)Connect() {
+func (c *RethinkDBConnection) Connect() {
 	ip := "localhost"
 	session, err := r.Connect(r.ConnectOpts{
 		Address: ip + ":28015",
@@ -19,5 +19,5 @@ func (c *RethinkDBConnection)Connect() {
 	if err != nil {
 		log.Error(err)
 	}
-	c.Session =session
+	c.Session = session
 }
