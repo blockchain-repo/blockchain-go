@@ -1,15 +1,15 @@
 package pipelines
 
 import (
+	"encoding/json"
 	"sync"
 
 	"unichain-go/backend"
-	"unichain-go/log"
-
-	"encoding/json"
-	mp "github.com/altairlee/multipipelines/multipipes"
 	"unichain-go/common"
+	"unichain-go/log"
 	"unichain-go/models"
+
+	mp "github.com/altairlee/multipipelines/multipipes"
 )
 
 func validateBlock(arg interface{}) interface{} {
@@ -35,7 +35,7 @@ func validateBlock(arg interface{}) interface{} {
 	//validate block content
 	err = block.ValidateBlock()
 	if err != nil {
-		//TOOD generate the dummy_tx
+		//TODO generate the dummy_tx
 		return []interface{}{block.Id, []string{}}
 	}
 	return []interface{}{block.Id, block.BlockBody.Transactions}
@@ -62,13 +62,13 @@ func writeVote(arg interface{}) interface{} {
 }
 
 func createVotePipe() (p mp.Pipeline) {
-	cvNodeSlice := make([]*mp.Node, 0)
-	cvNodeSlice = append(cvNodeSlice, &mp.Node{Target: validateBlock, RoutineNum: 1, Name: "validateBlock"})
-	cvNodeSlice = append(cvNodeSlice, &mp.Node{Target: validateBlockTx, RoutineNum: 1, Name: "validateBlockTx"})
-	cvNodeSlice = append(cvNodeSlice, &mp.Node{Target: vote, RoutineNum: 1, Name: "vote"})
-	cvNodeSlice = append(cvNodeSlice, &mp.Node{Target: writeVote, RoutineNum: 1, Name: "writeVote"})
+	nodeSlice := make([]*mp.Node, 0)
+	nodeSlice = append(nodeSlice, &mp.Node{Target: validateBlock, RoutineNum: 1, Name: "validateBlock"})
+	nodeSlice = append(nodeSlice, &mp.Node{Target: validateBlockTx, RoutineNum: 1, Name: "validateBlockTx"})
+	nodeSlice = append(nodeSlice, &mp.Node{Target: vote, RoutineNum: 1, Name: "vote"})
+	nodeSlice = append(nodeSlice, &mp.Node{Target: writeVote, RoutineNum: 1, Name: "writeVote"})
 	p = mp.Pipeline{
-		Nodes: cvNodeSlice,
+		Nodes: nodeSlice,
 	}
 	return p
 }
