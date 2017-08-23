@@ -10,24 +10,20 @@ import (
 	"unichain-go/models"
 
 	mp "github.com/altairlee/multipipelines/multipipes"
-	"fmt"
+
 )
 
 func validateBlock(arg interface{}) interface{} {
 	log.Info("step1: validateBlock:", arg)
-	var m map[string]interface{}
-	json.Unmarshal([]byte(arg.(string)), &m)
 
-
-	//TODO err
 	blockByte := []byte(arg.(string))
 	block := models.Block{}
 	err := json.Unmarshal(blockByte, &block)
 	if err != nil {
-		fmt.Printf("%T\n",blockByte)
 		log.Error(err)
 		return nil
 	}
+	//TODO 8.24
 	return nil
 
 	bs, err := json.Marshal(arg)
