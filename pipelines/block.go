@@ -2,16 +2,15 @@ package pipelines
 
 import (
 	"encoding/json"
-	"fmt"
 	"sync"
 
 	"unichain-go/backend"
 	"unichain-go/common"
 	"unichain-go/core"
+	"unichain-go/log"
 	"unichain-go/models"
 
 	mp "github.com/altairlee/multipipelines/multipipes"
-	"unichain-go/log"
 )
 
 // Filter a transaction.
@@ -75,7 +74,7 @@ func createBlock(arg interface{}) interface{} {
 	//TODO when to create
 	if flag == true {
 		block := core.CreateBlock(txs)
-		log.Info("Create Block : ",block.Id)
+		log.Info("Create Block : ", block.Id)
 		return block
 	}
 	return nil

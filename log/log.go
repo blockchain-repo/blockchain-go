@@ -129,8 +129,7 @@ func _WriteLog(key int, format interface{}, v ...interface{}) {
 		f = logs.Debug
 	}
 	slStr := strings.Split(func_.Name(), ".")
-	f("[%s] [%s : %d (%s)] %s", mapLevelKeys[key],
-		slStr[0]+string(filepath.Separator)+filepath.Base(file), line, slStr[len(slStr)-1], _FormatLog(format, v...))
+	f("[%s : %d (%s)] %s", slStr[0]+string(filepath.Separator)+filepath.Base(file), line, slStr[len(slStr)-1], _FormatLog(format, v...))
 }
 
 //---------------------------------------------------------------------------
