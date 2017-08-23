@@ -11,13 +11,13 @@ import (
 	"unichain-go/models"
 
 	mp "github.com/altairlee/multipipelines/multipipes"
+	"unichain-go/log"
 )
 
 // Filter a transaction.
 // Args: tx(string)
 // Returns: The transaction map if assigned to the current node, ``Nil`` otherwise.
 func filterTx(arg interface{}) interface{} {
-	fmt.Println("filterTx", arg)
 	var m map[string]interface{}
 	json.Unmarshal([]byte(arg.(string)), &m)
 	if m["Assign"] == core.PublicKey {
@@ -38,7 +38,6 @@ func filterTx(arg interface{}) interface{} {
 //``None`` otherwise.
 //
 func validateTx(arg interface{}) interface{} {
-	fmt.Println("validateTx", common.Serialize(arg))
 	//check already exists
 	//check tx
 	txByte, err := json.Marshal(arg)
@@ -70,13 +69,13 @@ func validateTx(arg interface{}) interface{} {
 //:class:`Block`: The block,
 //if a block is ready, or ``None``.
 func createBlock(arg interface{}) interface{} {
-	fmt.Println("createBlock", common.Serialize(arg))
 	var txs []models.Transaction
 	txs = append(txs, arg.(models.Transaction))
 	flag := true
 	//TODO when to create
 	if flag == true {
 		block := core.CreateBlock(txs)
+		log.Info("Create Block : ",block.Id)
 		return block
 	}
 	return nil
@@ -89,7 +88,6 @@ func createBlock(arg interface{}) interface{} {
 //Returns:
 //:class:`Block`: The Block.
 func writeBlock(arg interface{}) interface{} {
-	fmt.Println("writeBlock", common.Serialize(arg))
 	core.WriteBlock(common.Serialize(arg))
 	return nil
 }
