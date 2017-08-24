@@ -127,3 +127,12 @@ func CreateVote(valid bool, blockId string) models.Vote {
 func WriteVote(vote string) {
 	Conn.WriteVote(vote)
 }
+
+func Election(blockId string) bool {
+	//TODO
+	return true
+}
+
+func Requeue(blockId string) {
+
+}

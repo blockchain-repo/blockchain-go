@@ -4,20 +4,35 @@ import (
 	"sync"
 
 	"unichain-go/backend"
+	"unichain-go/core"
+	"unichain-go/log"
+	"unichain-go/models"
 
+	"encoding/json"
 	mp "github.com/altairlee/multipipelines/multipipes"
 )
 
 func checkForQuorum(arg interface{}) interface{} {
-	//TODO
-	//core.election(blockId string)
-	return ""
+	voteByte := []byte(arg.(string))
+	vote := models.Vote{}
+	err := json.Unmarshal(voteByte, &vote)
+	if err != nil {
+		log.Error(err)
+		return nil
+	}
+	blockId := vote.VoteBody.VoteBlock
+	valid := core.Election(blockId)
+	log.Info("Elect `", valid, "`for", blockId)
+	if valid != true {
+		return blockId
+	}
+	return nil
 }
 
 func requeueTransactions(arg interface{}) interface{} {
-	//TODO
-	//core.requeue(blockId string)
-	return ""
+	blockId := arg.(string)
+	core.Requeue(blockId)
+	return nil
 }
 
 func createElectionPipe() (p mp.Pipeline) {
