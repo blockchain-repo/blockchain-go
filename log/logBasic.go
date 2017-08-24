@@ -116,7 +116,7 @@ func NewMyBeegoLogAdapterMultiFile(myBeego *MyBeegoLogAdapterMultiFile) *MyBeego
 		}
 
 	}
-	logs.Info("log will store in dir", log_dir)
+	logs.Info("log will be stored in dir", log_dir)
 
 	if myBeego.MaxLines >= 0 {
 		maxlines = myBeego.MaxLines
