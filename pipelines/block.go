@@ -71,7 +71,7 @@ func createBlock(arg interface{}) interface{} {
 	//TODO when to create [length,timeout]
 	if flag == true {
 		block := core.CreateBlock(txs)
-		log.Info("Create Block : ", block.Id)
+		log.Info("Create Block", block.Id)
 		return block
 	}
 	return nil

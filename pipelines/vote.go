@@ -5,71 +5,55 @@ import (
 	"sync"
 
 	"unichain-go/backend"
-	"unichain-go/common"
+	"unichain-go/core"
 	"unichain-go/log"
 	"unichain-go/models"
 
 	mp "github.com/altairlee/multipipelines/multipipes"
-
+	"unichain-go/common"
 )
 
 func validateBlock(arg interface{}) interface{} {
-	log.Info("step1: validateBlock:", arg)
-
 	blockByte := []byte(arg.(string))
 	block := models.Block{}
 	err := json.Unmarshal(blockByte, &block)
+	//TODO generate the dummy_tx
 	if err != nil {
 		log.Error(err)
-		return nil
+		return []interface{}{block.Id, []string{}}
 	}
-	//TODO 8.24
-	return nil
-
-	bs, err := json.Marshal(arg)
-	if err != nil {
-		log.Error(err.Error())
-		return nil
-	}
-	log.Info(bs)
-
-	block1 := models.Block{}
-	err = json.Unmarshal(bs, &block1)
-	if err != nil {
-		log.Error(err.Error())
-		return nil
-	}
-	log.Info(common.Serialize(block))
-
-	//TODO validate the block is the same as the block in db
-
-	//validate block content
-	err = block.ValidateBlock()
-	if err != nil {
-		//TODO generate the dummy_tx
+	if block.ValidateBlock() == false {
 		return []interface{}{block.Id, []string{}}
 	}
 	return []interface{}{block.Id, block.BlockBody.Transactions}
 }
 
 func validateBlockTx(arg interface{}) interface{} {
-	log.Info("step2: validateBlockTx", arg)
 	blockId := arg.([]interface{})[0].(string)
-	log.Info("blockId:", blockId)
 	txs := arg.([]interface{})[1].([]models.Transaction)
-	for index, tx := range txs {
-		log.Info(index)
-		log.Info(common.Serialize(tx))
+	var valid bool
+	//TODO Parallel
+	for _, tx := range txs {
+		if core.ValidateTransaction(tx) == false {
+			valid = false
+			return []interface{}{valid, blockId}
+		}
 	}
-	return ""
+	valid = true
+	return []interface{}{valid, blockId}
 }
 
 func vote(arg interface{}) interface{} {
-	return ""
+	valid := arg.([]interface{})[0].(bool)
+	blockId := arg.([]interface{})[1].(string)
+	vote := core.CreateVote(valid, blockId)
+	log.Info("Vote `", vote.VoteBody.IsValid, "` for", vote.VoteBody.VoteBlock)
+	return vote
 }
 
 func writeVote(arg interface{}) interface{} {
-	return ""
+	core.WriteVote(common.Serialize(arg))
+	return nil
 }
 
 func createVotePipe() (p mp.Pipeline) {

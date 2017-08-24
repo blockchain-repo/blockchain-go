@@ -61,3 +61,8 @@ func (c *RethinkDBConnection) WriteBlock(block string) int {
 	res := c.Insert("unichain", "block", block)
 	return res.Inserted
 }
+
+func (c *RethinkDBConnection) WriteVote(vote string) int {
+	res := c.Insert("unichain", "vote", vote)
+	return res.Inserted
+}

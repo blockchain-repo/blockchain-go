@@ -90,8 +90,8 @@ func CreateBlock(txs []models.Transaction) models.Block {
 		BlockBody: blockBody,
 		Signature: "",
 	}
-	block.GenerateId()
 	block.Sign()
+	block.GenerateId()
 	return block
 }
 
@@ -102,4 +102,28 @@ func WriteBlock(block string) {
 func ValidateBlock(block models.Block) bool {
 	//TODO
 	return true
+}
+
+func CreateVote(valid bool, blockId string) models.Vote {
+	voteBody := models.VoteBody{
+		IsValid:       valid,
+		InvalidReason: "",
+		//TODO PreviousBlock
+		PreviousBlock: "",
+		VoteBlock:     blockId,
+		Timestamp:     common.GenTimestamp(),
+	}
+	vote := models.Vote{
+		Id:         "",
+		NodePubkey: PublicKey,
+		VoteBody:   voteBody,
+		Signature:  "",
+	}
+	vote.Sign()
+	vote.GenerateId()
+	return vote
+}
+
+func WriteVote(vote string) {
+	Conn.WriteVote(vote)
 }

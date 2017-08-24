@@ -22,6 +22,8 @@ type Connection interface {
 	WriteTransactionToBacklog(transaction string) int
 
 	WriteBlock(block string) int
+
+	WriteVote(vote string) int
 	//changefeed
 	Changefeed(db string, table string, operation int) chan interface{}
 	//schema
