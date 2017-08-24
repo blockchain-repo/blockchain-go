@@ -59,7 +59,7 @@ func CreateTransactionForTest() string {
 	return tx.ToString()
 }
 
-func InsertToBacklog(m map[string]interface{}) {
+func WriteTransactionToBacklog(m map[string]interface{}) {
 	rand.Seed(time.Now().UnixNano())
 	//add key
 	m["Assign"] = AllPub[rand.Intn(len(AllPub))]
@@ -97,4 +97,9 @@ func CreateBlock(txs []models.Transaction) models.Block {
 
 func WriteBlock(block string) {
 	Conn.WriteBlock(block)
+}
+
+func ValidateBlock(block models.Block) bool {
+	//TODO
+	return true
 }

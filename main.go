@@ -12,7 +12,8 @@ import (
 )
 
 func main() {
-	cmd(append(os.Args, "start"))
+	args := append(os.Args, "start")
+	cmd(args)
 }
 
 func cmd(args []string) {
@@ -69,6 +70,8 @@ func runDrop() {
 func runStart() {
 	go pipelines.StartBlockPipe()
 	go pipelines.StartVotePipe()
+	//go pipelines.StartElectionPipe()
+	//go pipelines.StartStalePipe()
 	web.Server()
 }
 

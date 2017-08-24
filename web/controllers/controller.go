@@ -30,6 +30,6 @@ func (this *TXController) Post() {
 	this.Data["json"] = common.Serialize(requestParamMap)
 	//add key 'assign' and 'assign_timestamp'
 	//insert to backlog
-	core.InsertToBacklog(requestParamMap)
+	core.WriteTransactionToBacklog(requestParamMap)
 	this.ServeJSON()
 }
