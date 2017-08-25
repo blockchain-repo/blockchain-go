@@ -20,7 +20,6 @@ var blocksValidityStatus map[string]bool = make(map[string]bool)
 var validateChan chan map[string]interface{} = make(chan map[string]interface{})
 
 func validateBlock(arg interface{}) interface{} {
-	log.Info("step1: validateBlock")
 	blockByte := []byte(arg.(string))
 	block := models.Block{}
 	err := json.Unmarshal(blockByte, &block)
@@ -36,7 +35,6 @@ func validateBlock(arg interface{}) interface{} {
 }
 
 func validateTxsInBlock(arg interface{}) interface{} {
-	log.Info("step2: validateTxsInBlock")
 	blockId := arg.([]interface{})[0].(string)
 	txs := arg.([]interface{})[1].([]models.Transaction)
 	//doing Parallel start
@@ -57,10 +55,8 @@ func validateTxsInBlock(arg interface{}) interface{} {
 }
 
 func validateBlockByTxs(arg interface{}) interface{} {
-	log.Info("step3: validateBlockByTxs")
 	//blockId := arg.(string)
 	for {
-		log.Info(counters)
 		validMap := <-validateChan
 		isValidTx := validMap["isValidTx"].(bool)
 		blockId := validMap["blockId"].(string)
@@ -82,11 +78,9 @@ func validateBlockByTxs(arg interface{}) interface{} {
 }
 
 func vote(arg interface{}) interface{} {
-	log.Info("step4: vote")
-	lastVotedBlockId := arg.([]interface{})[0].(string)
+//	lastVotedBlockId := arg.([]interface{})[0].(string)
 	blockId := arg.([]interface{})[1].(string)
 	valid := arg.([]interface{})[2].(bool)
-	log.Info(lastVotedBlockId)
 
 	//TODO update using lastVotedBlockId
 	vote := core.CreateVote(valid, blockId)
@@ -99,7 +93,6 @@ func vote(arg interface{}) interface{} {
 }
 
 func writeVote(arg interface{}) interface{} {
-	log.Info("step5: writeVote")
 	core.WriteVote(common.Serialize(arg))
 	return nil
 }
