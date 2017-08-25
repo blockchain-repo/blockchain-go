@@ -47,33 +47,33 @@ func CreateTransactionForTest() models.Transaction {
 
 //Just for test
 func CreateBlockForTest() models.Block {
-	//PublicKey := config.Config.Keypair.PublicKey
-	//txs := make([]models.Transaction, 0)
-	//for i := 1; i < 5; i++ {
-	//	tx := CreateTransactionForTest()
-	//	txs = append(txs, tx)
-	//}
+	PublicKey := config.Config.Keypair.PublicKey
+	txs := make([]models.Transaction, 0)
+	for i := 1; i < 5; i++ {
+		tx := CreateTransactionForTest()
+		txs = append(txs, tx)
+	}
 	var bloclBody models.BlockBody = models.BlockBody{
-	//Transactions: txs,
-	//NodePubkey:   PublicKey,
-	//Voters:       []string{PublicKey},
-	//Timestamp:    common.GenTimestamp(),
+		Transactions: txs,
+		NodePubkey:   PublicKey,
+		Voters:       []string{PublicKey},
+		Timestamp:    common.GenTimestamp(),
 	}
 	var block models.Block = models.Block{
 		BlockBody: bloclBody,
 	}
-	//block.Sign()
-	//block.GenerateId()
+	block.Sign()
+	block.GenerateId()
 	arg := common.Serialize(block)
-	bs, err := json.Marshal(arg)
-	if err != nil {
-		log.Error(err.Error())
-		//return nil
-	}
-	log.Info(bs)
+	//bs, err := json.Marshal(arg)
+	//if err != nil {
+	//	log.Error(err.Error())
+	//	//return nil
+	//}
+	//log.Info(bs)
 
 	blockStru := models.Block{}
-	err = json.Unmarshal(bs, &blockStru)
+	err := json.Unmarshal([]byte(arg), &blockStru)
 	if err != nil {
 		log.Error(err.Error())
 		//return nil
@@ -83,10 +83,27 @@ func CreateBlockForTest() models.Block {
 
 func TestInsertBlock(t *testing.T) {
 	Conn := backend.GetConnection()
-	block := CreateBlockForTest()
-	Conn.WriteBlock(common.Serialize(block))
+	block1 := CreateBlockForTest()
+	block2 := CreateBlockForTest()
+	block3 := CreateBlockForTest()
+	Conn.WriteBlock(common.Serialize(block1))
+	Conn.WriteBlock(common.Serialize(block2))
+	Conn.WriteBlock(common.Serialize(block3))
 }
 
 func TestVotePip(t *testing.T) {
 	StartVotePipe()
+}
+
+func TestMap(t *testing.T){
+	m := map[string]bool{
+		"a":true,
+	}
+	value,ok := m["a"]
+	log.Info(value)
+	log.Info(ok)
+	value,ok = m["b"]
+	log.Info(value)
+	log.Info(ok)
+
 }
