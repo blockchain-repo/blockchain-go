@@ -17,7 +17,6 @@ import (
 var lastVotedBlockId string = "ididid-lastVotedBlockId"
 var counters map[string]int = make(map[string]int)
 var blocksValidityStatus map[string]bool = make(map[string]bool)
-var validateChan chan map[string]interface{} = make(chan map[string]interface{})
 
 func validateBlock(arg interface{}) interface{} {
 	blockByte := []byte(arg.(string))
@@ -37,7 +36,7 @@ func validateBlock(arg interface{}) interface{} {
 func validateTxsInBlock(arg interface{}) interface{} {
 	blockId := arg.([]interface{})[0].(string)
 	txs := arg.([]interface{})[1].([]models.Transaction)
-	//doing Parallel start
+	validateChan := arg.([]interface{})[2].(chan map[string]interface{})
 	txNum := len(txs)
 	for index, _ := range txs {
 		go func(i int, vc chan map[string]interface{}, bi string, tn int) {
@@ -51,41 +50,53 @@ func validateTxsInBlock(arg interface{}) interface{} {
 		}(index, validateChan, blockId, txNum)
 	}
 
-	return blockId
+	return []interface{}{blockId, txNum, validateChan}
 }
 
+/*
+ */
 func validateBlockByTxs(arg interface{}) interface{} {
-	//blockId := arg.(string)
-	for {
+	blockId := arg.([]interface{})[0].(string)
+	txNum := arg.([]interface{})[1].(int)
+	validateChan := arg.([]interface{})[2].(chan map[string]interface{})
+
+	//TODO deal error and panic?
+	for i := 0; i < txNum; i++ {
 		validMap := <-validateChan
 		isValidTx := validMap["isValidTx"].(bool)
-		blockId := validMap["blockId"].(string)
-		txNum := validMap["txsNum"].(int)
-
+		chanBlockId := validMap["blockId"].(string)
+		if chanBlockId != blockId {
+			log.Error("The func blockId:%s is not the same as the chanBlockId:%s in the channel!", blockId, chanBlockId)
+		}
+		chanTxNum := validMap["txsNum"].(int)
+		if chanTxNum != txNum {
+			log.Error("The func txNum:%d is not the same as the chanTxNum:%d in the channel!", txNum, chanTxNum)
+		}
 		counters[blockId] += 1
 		isValidBlock, ok := blocksValidityStatus[blockId]
 		if !ok {
 			isValidBlock = true
 		}
-
 		blocksValidityStatus[blockId] = isValidTx && isValidBlock
 
-		if counters[blockId] == txNum {
-			return []interface{}{lastVotedBlockId, blockId, blocksValidityStatus[blockId]}
-		}
 	}
-
+	if counters[blockId] == txNum {
+		close(validateChan)
+		return []interface{}{blockId, blocksValidityStatus[blockId]}
+	}
+	log.Error("There should be %d txs,but only get %d txs", txNum, counters[blockId])
+	return []interface{}{blockId, false}
 }
 
 func vote(arg interface{}) interface{} {
-//	lastVotedBlockId := arg.([]interface{})[0].(string)
-	blockId := arg.([]interface{})[1].(string)
-	valid := arg.([]interface{})[2].(bool)
+	blockId := arg.([]interface{})[0].(string)
+	valid := arg.([]interface{})[0].(bool)
 
-	//TODO update using lastVotedBlockId
-	vote := core.CreateVote(valid, blockId)
+	//valid = blocksValidityStatus[blockId]
+
+	vote := core.CreateVote(valid, blockId, lastVotedBlockId)
+
 	log.Info("Vote `", vote.VoteBody.IsValid, "` for", vote.VoteBody.VoteBlock)
-
 	lastVotedBlockId = blockId
 	delete(counters, blockId)
 	delete(blocksValidityStatus, blockId)
@@ -95,6 +106,12 @@ func vote(arg interface{}) interface{} {
 func writeVote(arg interface{}) interface{} {
 	core.WriteVote(common.Serialize(arg))
 	return nil
+}
+
+func initUnvotedBlock() []string {
+	unvotedBlock := []string{}
+	//TODO get unvoted block
+	return unvotedBlock
 }
 
 func createVotePipe() (p mp.Pipeline) {
@@ -111,8 +128,9 @@ func createVotePipe() (p mp.Pipeline) {
 }
 
 func getVoteChangefeed() *mp.Node {
-	cn := &changeNode{}
-	go cn.getChange("unichain", "block", backend.INSERT)
+	preBlock := initUnvotedBlock()
+	cn := &changeNode{prefeed: preBlock, db: "unichain", table: "block", operation: backend.INSERT}
+	go cn.runForever()
 	return &cn.node
 }
 

@@ -104,12 +104,11 @@ func ValidateBlock(block models.Block) bool {
 	return true
 }
 
-func CreateVote(valid bool, blockId string) models.Vote {
+func CreateVote(valid bool, blockId string, previousBlock string) models.Vote {
 	voteBody := models.VoteBody{
 		IsValid:       valid,
 		InvalidReason: "",
-		//TODO PreviousBlock
-		PreviousBlock: "",
+		PreviousBlock: previousBlock,
 		VoteBlock:     blockId,
 		Timestamp:     common.GenTimestamp(),
 	}
