@@ -135,3 +135,9 @@ func Election(blockId string) bool {
 func Requeue(blockId string) {
 
 }
+
+func GetUnvotedBlock() []string {
+	//TODO get unvoted block
+	Conn.GetUnvotedBlock(PublicKey)
+	return nil
+}

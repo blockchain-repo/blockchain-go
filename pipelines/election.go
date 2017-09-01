@@ -46,7 +46,7 @@ func createElectionPipe() (p mp.Pipeline) {
 }
 
 func getElectionChangeNode() *mp.Node {
-	cn := &changeNode{db: "unichain", table: "vote", operation: backend.INSERT}
+	cn := &changeNode{db: "unichain", table: "votes", operation: backend.INSERT}
 	go cn.runForever()
 	return &cn.node
 }

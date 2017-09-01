@@ -66,3 +66,20 @@ func (c *RethinkDBConnection) WriteVote(vote string) int {
 	res := c.Insert("unichain", "vote", vote)
 	return res.Inserted
 }
+func (c *RethinkDBConnection) GetUnvotedBlock(pubkey string) []string {
+	//TODO doing
+	res, err := r.DB("unichain").Table("block").Filter(
+		func() {
+
+		},
+	).Run(c.Session)
+
+	//.Run(c.Session)
+	var value []map[string]interface{}
+	err = res.All(&value)
+	if err != nil {
+
+	}
+	//return common.Serialize(value)
+	return nil
+}

@@ -129,7 +129,7 @@ func createVotePipe() (p mp.Pipeline) {
 
 func getVoteChangefeed() *mp.Node {
 	preBlock := initUnvotedBlock()
-	cn := &changeNode{prefeed: preBlock, db: "unichain", table: "block", operation: backend.INSERT}
+	cn := &changeNode{prefeed: preBlock, db: "unichain", table: "blocks", operation: backend.INSERT}
 	go cn.runForever()
 	return &cn.node
 }
