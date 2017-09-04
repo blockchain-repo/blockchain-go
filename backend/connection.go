@@ -25,6 +25,7 @@ type Connection interface {
 
 	WriteVote(vote string) int
 
+	GetBlockCount() (int,error)
 	GetUnvotedBlock(pubkey string) []string
 	//changefeed
 	Changefeed(db string, table string, operation int) chan interface{}

@@ -13,7 +13,7 @@ type BlockBody struct {
 }
 
 type Block struct {
-	Id         string    `json:"id"`   //
+	Id         string    `json:"id,omitempty"`   //
 	BlockBody  BlockBody               //
 	Signature  string                  //
 }

@@ -4,14 +4,31 @@ import (
 	"math/rand"
 	"time"
 
+	"errors"
 	"unichain-go/backend"
 	"unichain-go/common"
 	"unichain-go/config"
+	"unichain-go/log"
 	"unichain-go/models"
+)
+
+const (
+	CREATE   = "CREATE"
+	TRANSFER = "TRANSFER"
+	GENESIS  = "GENESIS"
+	INTERIM  = "INTERIM"
+	CONTRACT = "CONTRACT"
+	METADATA = "METADATA"
+)
+const (
+	VERSIONCHAIN    = "1"
+	VERSIONCONTRACT = "2" //?
 )
 
 type Chain struct {
 }
+
+var ALLOWED_OPERATIONS []string = []string{CREATE, TRANSFER, GENESIS, CONTRACT, INTERIM, METADATA}
 
 var PublicKey string
 var PrivateKey string
@@ -27,6 +44,87 @@ func init() {
 	Conn = backend.GetConnection()
 }
 
+//
+func CreateGenesisBlock() string {
+	blockCount, err := Conn.GetBlockCount()
+	if err != nil {
+		log.Error(err)
+		return ""
+	}
+	if blockCount != 0 {
+		log.Error("There are some blocks in the DB. Cannot create the Genesis block!")
+		return ""
+	}
+	block := prepareGenesisBlock()
+	log.Info("GenesisBlock: Hello World from the Unichain!")
+	WriteBlock(block)
+	return block
+}
+
+func prepareGenesisBlock() string {
+	var txSigners []string = []string{PublicKey}
+	var amount float64 = 1
+	var recipients []interface{} = []interface{}{[]interface{}{PublicKey, amount}}
+	m := map[string]interface{}{}
+	m["message"] = "Hello World from the Unichain"
+	var version string = VERSIONCHAIN
+	tx, err := Create(txSigners, recipients, GENESIS, m, "", "", version, "", "")
+	if err != nil {
+		log.Info(err)
+	}
+	tx.Sign()
+	tx.GenerateId()
+	txs := []models.Transaction{tx}
+	block := CreateBlock(txs)
+	return block.ToString()
+}
+
+func Create(txSigners []string, recipients []interface{}, operation string, metadata map[string]interface{}, asset string, chainType string, version string, relation string, contract string) (models.Transaction, error) {
+	var tx models.Transaction
+	var err error
+	if len(txSigners) == 0 {
+		err = errors.New("txSigners can not be empty")
+		return tx, err
+	}
+	if len(recipients) == 0 {
+		err = errors.New("recipients can not be empty")
+		return tx, err
+	}
+	//TODO do some params validte
+
+	// generate outputs
+	var outputs []models.Output
+	for _, value := range recipients {
+		ownerAfterInfo := value.([]interface{})
+		ownerAfter := ownerAfterInfo[0].(string)
+		amount := ownerAfterInfo[1].(float64)
+		output := models.Output{
+			OwnersAfter: ownerAfter,
+			Amount:      amount,
+		}
+		outputs = append(outputs, output)
+	}
+
+	// generate inputs. Operation CREATE tx only need one and nil preout
+	var inputs []models.Input
+	var input models.Input = models.Input{
+		OwnersBefore: PublicKey,
+		Signature:    "",
+		PreOut:       nil,
+	}
+	inputs = append(inputs, input)
+	tx = models.Transaction{
+		Inputs:    inputs,
+		Outputs:   outputs,
+		Operation: operation,
+		Asset:     asset,
+		Chain:     chainType,
+		Metadata:  metadata,
+		Version:   version,
+	}
+	return tx, nil
+}
+
 //Just for test
 func CreateTransactionForTest() string {
 	preOut := models.PreOut{
@@ -36,11 +134,11 @@ func CreateTransactionForTest() string {
 	input := models.Input{
 		OwnersBefore: PublicKey,
 		Signature:    "",
-		PreOut:       preOut,
+		PreOut:       &preOut,
 	}
 	output := models.Output{
 		OwnersAfter: PublicKey,
-		Amount:      "1",
+		Amount:      1,
 	}
 	m := map[string]interface{}{}
 	m["timestamp"] = common.GenTimestamp()
@@ -86,7 +184,6 @@ func CreateBlock(txs []models.Transaction) models.Block {
 		Timestamp:    common.GenTimestamp(),
 	}
 	block := models.Block{
-		Id:        "",
 		BlockBody: blockBody,
 		Signature: "",
 	}

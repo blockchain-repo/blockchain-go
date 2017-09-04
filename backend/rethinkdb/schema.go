@@ -8,6 +8,17 @@ import (
 	r "gopkg.in/gorethink/gorethink.v3"
 )
 
+const(
+	DBUNICHAIN = "unichain"
+
+	TABLEBACKLOG = "backlog"
+	TABLEBLOCKS = "blocks"
+	TABLEVOTES = "votes"
+	TABLEASSETS = "assets"
+	TABLECONTRACTS = "contracts"
+	TABLECONTRACTVOTES = "contractvotes"
+	TABLECONTRACTOUTPUTS = "contractoutputs"
+)
 var Tables = []string{
 	"backlog",
 	"blocks",
@@ -25,7 +36,7 @@ func (c *RethinkDBConnection) CreateSecondaryIndex() {
 	//Create blocks index
 
 	//Create votes index
-	response, err := r.DB("unichain").Table("vote").IndexCreateFunc("block_and_voter",
+	response, err := r.DB(DBUNICHAIN).Table(TABLEVOTES).IndexCreateFunc("block_and_voter",
 		func(row r.Term) interface{} {
 			return []interface{}{row.Field("VoteBody").Field("VoteBlock"), row.Field("NodePubkey")}
 		},

@@ -14,18 +14,18 @@ type PreOut struct {
 }
 
 type Input struct {
-	OwnersBefore string //
-	Signature    string //
-	PreOut       PreOut //
+	OwnersBefore string  //
+	Signature    string  //
+	PreOut       *PreOut //
 }
 
 type Output struct {
-	OwnersAfter string //
-	Amount      string //
+	OwnersAfter string  //
+	Amount      float64 //
 }
 
 type Transaction struct {
-	Id        string                 `json:"id"` //
+	Id        string                 `json:"id,omitempty"` //
 	Inputs    []Input                //
 	Outputs   []Output               //
 	Operation string                 //???
@@ -57,7 +57,20 @@ func (t *Transaction) Sign() string {
 func (t *Transaction) ToString() string {
 	return common.Serialize(t)
 }
-
+func (t *Transaction) TxToMap() string {
+	m, err := common.StructToMap(t)
+	if err != nil {
+		log.Error(err.Error())
+	}
+	delete(m, "id")
+	s := ToSlice(m["Inputs"])
+	for i, in := range s {
+		delete(in.(map[string]interface{}), "Signature")
+		s[i] = in
+	}
+	m["Inputs"] = s
+	return common.Serialize(m)
+}
 func (t *Transaction) BodyToString() string {
 	m, err := common.StructToMap(t)
 	if err != nil {

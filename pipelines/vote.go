@@ -90,7 +90,7 @@ func validateBlockByTxs(arg interface{}) interface{} {
 
 func vote(arg interface{}) interface{} {
 	blockId := arg.([]interface{})[0].(string)
-	valid := arg.([]interface{})[0].(bool)
+	valid := arg.([]interface{})[1].(bool)
 
 	//valid = blocksValidityStatus[blockId]
 

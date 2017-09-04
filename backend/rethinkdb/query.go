@@ -42,7 +42,7 @@ func (c *RethinkDBConnection) Delete(db string, table string, id string) r.Write
 }
 
 func (c *RethinkDBConnection) GetTransactionFromBacklog(id string) string {
-	res := c.Get("unichain", "backlog", id)
+	res := c.Get(DBUNICHAIN, TABLEBACKLOG, id)
 	var value map[string]interface{}
 	err := res.One(&value)
 	map_string := common.Serialize(value)
@@ -53,22 +53,22 @@ func (c *RethinkDBConnection) GetTransactionFromBacklog(id string) string {
 }
 
 func (c *RethinkDBConnection) WriteTransactionToBacklog(transaction string) int {
-	res := c.Insert("unichain", "backlog", transaction)
+	res := c.Insert(DBUNICHAIN, TABLEBACKLOG, transaction)
 	return res.Inserted
 }
 
 func (c *RethinkDBConnection) WriteBlock(block string) int {
-	res := c.Insert("unichain", "block", block)
+	res := c.Insert(DBUNICHAIN, TABLEBLOCKS, block)
 	return res.Inserted
 }
 
 func (c *RethinkDBConnection) WriteVote(vote string) int {
-	res := c.Insert("unichain", "vote", vote)
+	res := c.Insert(DBUNICHAIN, TABLEVOTES, vote)
 	return res.Inserted
 }
 func (c *RethinkDBConnection) GetUnvotedBlock(pubkey string) []string {
-	//TODO doing
-	res, err := r.DB("unichain").Table("block").Filter(
+	//TODO doing unfinished
+	res, err := r.DB(DBUNICHAIN).Table(TABLEBLOCKS).Filter(
 		func() {
 
 		},
@@ -82,4 +82,15 @@ func (c *RethinkDBConnection) GetUnvotedBlock(pubkey string) []string {
 	}
 	//return common.Serialize(value)
 	return nil
+}
+
+func (c *RethinkDBConnection) GetBlockCount() (int, error) {
+	res, err := r.DB(DBUNICHAIN).Table(TABLEBLOCKS).Count().Run(c.Session)
+	if err != nil {
+		log.Error(err)
+		return -1, err
+	}
+	var cnt int
+	res.One(&cnt)
+	return cnt, err
 }
