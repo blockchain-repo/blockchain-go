@@ -8,14 +8,44 @@ import (
 	r "gopkg.in/gorethink/gorethink.v3"
 )
 
+const(
+	DBUNICHAIN = "unichain"
+
+	TABLEBACKLOG = "backlog"
+	TABLEBLOCKS = "blocks"
+	TABLEVOTES = "votes"
+	TABLEASSETS = "assets"
+	TABLECONTRACTS = "contracts"
+	TABLECONTRACTVOTES = "contractvotes"
+	TABLECONTRACTOUTPUTS = "contractoutputs"
+)
 var Tables = []string{
 	"backlog",
-	"block",
-	"vote",
-	"asset",
-	"contract",
-	"contractvote",
-	"contractoutput",
+	"blocks",
+	"votes",
+	"assets",
+	"contracts",
+	"contractvotes",
+	"contractoutputs",
+}
+
+func (c *RethinkDBConnection) CreateSecondaryIndex() {
+	log.Info("Create `%s` secondary index.", "unichain")
+	//Create backlog index
+
+	//Create blocks index
+
+	//Create votes index
+	response, err := r.DB(DBUNICHAIN).Table(TABLEVOTES).IndexCreateFunc("block_and_voter",
+		func(row r.Term) interface{} {
+			return []interface{}{row.Field("VoteBody").Field("VoteBlock"), row.Field("NodePubkey")}
+		},
+	).RunWrite(c.Session)
+	if err != nil {
+		log.Error("Error creating index: %s", err)
+	}
+	log.Info("%d index created", response.Created)
+
 }
 
 func (c *RethinkDBConnection) CreateTable(db string, table string) {

@@ -24,8 +24,13 @@ type Connection interface {
 	WriteBlock(block string) int
 
 	WriteVote(vote string) int
+
+	GetBlockCount() (int, error)
+	GetUnvotedBlock(pubkey string) []string
 	//changefeed
 	Changefeed(db string, table string, operation int) chan interface{}
+	//index
+	CreateSecondaryIndex()
 	//schema
 	InitDatabase(db string)
 	DropDatabase(db string)

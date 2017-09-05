@@ -13,9 +13,13 @@ import (
 	mp "github.com/altairlee/multipipelines/multipipes"
 )
 
-// Filter a transaction.
-// Args: tx(string)
-// Returns: The transaction map if assigned to the current node, ``Nil`` otherwise.
+/*
+Filter a transaction.
+Args:
+	tx(string)
+Returns:
+	The transaction map if assigned to the current node, ``Nil`` otherwise.
+*/
 func filterTx(arg interface{}) interface{} {
 	var m map[string]interface{}
 	json.Unmarshal([]byte(arg.(string)), &m)
@@ -27,15 +31,16 @@ func filterTx(arg interface{}) interface{} {
 	return nil
 }
 
-//Validate a transaction.
-//Also checks if the transaction already exists in the blockchain. If it
-//does, or it's invalid, it's deleted from the backlog immediately.
-//Args:
-//tx : the transaction to validate.
-//Returns:
-//:class:`Transaction`: The transaction if valid,
-//``None`` otherwise.
-//
+/*
+Validate a transaction.
+	Also checks if the transaction already exists in the blockchain.
+	If it does, or it's invalid, it's deleted from the backlog immediately.
+Args:
+	tx : the transaction to validate.
+Returns:
+	:class:`Transaction`: The transaction if valid,
+	``None`` otherwise.
+*/
 func validateTx(arg interface{}) interface{} {
 	//check already exists
 	//check tx
@@ -51,19 +56,17 @@ func validateTx(arg interface{}) interface{} {
 	return tx
 }
 
-//"Create a block.
-//This method accumulates transactions to put in a block and outputs
-//a block when one of the following conditions is true:
-//- the size limit of the block has been reached, or
-//- a timeout happened.
-//Args:
-//tx (:class:`Transaction`): the transaction
-//to validate, might be None if a timeout happens.
-//timeout (bool): ``True`` if a timeout happened
-//(Default: ``False``).
-//Returns:
-//:class:`Block`: The block,
-//if a block is ready, or ``None``.
+/*
+"Create a block.
+	This method accumulates transactions to put in a block and outputs a block when one of the following conditions is true:
+		the size limit of the block has been reached, or a timeout happened.
+	Args:
+		tx (:class:`Transaction`): the transaction to validate, might be None if a timeout happens.
+		timeout (bool): ``True`` if a timeout happened
+		(Default: ``False``).
+	Returns:
+		:class:`Block`: The block, if a block is ready, or ``None``.
+*/
 func createBlock(arg interface{}) interface{} {
 	var txs []models.Transaction
 	txs = append(txs, arg.(models.Transaction))
@@ -77,15 +80,22 @@ func createBlock(arg interface{}) interface{} {
 	return nil
 }
 
-//Write the block to the Database.
-//Args:
-//block (:class:`Block`): the block of
-//transactions to write to the database.
-//Returns:
-//:class:`Block`: The Block.
+/*
+Write the block to the Database.
+Args:
+	block (:class:`Block`): the block of transactions to write to the database.
+Returns:
+	:class:`Block`: The Block.
+*/
 func writeBlock(arg interface{}) interface{} {
 	core.WriteBlock(common.Serialize(arg))
 	return nil
+}
+
+func initUnassignTx() []string {
+	unassignTx := []string{}
+	//TODO get unassign txs
+	return unassignTx
 }
 
 func createBlockPipe() (p mp.Pipeline) {
@@ -101,8 +111,9 @@ func createBlockPipe() (p mp.Pipeline) {
 }
 
 func getBlockChangeNode() *mp.Node {
-	cn := &changeNode{}
-	go cn.getChange("unichain", "backlog", backend.INSERT)
+	preTx := initUnassignTx()
+	cn := &changeNode{prefeed: preTx, db: "unichain", table: "backlog", operation: backend.INSERT}
+	go cn.runForever()
 	return &cn.node
 }
 
