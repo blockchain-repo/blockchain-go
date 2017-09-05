@@ -19,17 +19,17 @@ type TXController struct {
 }
 
 func (this *MainController) Get() {
-	this.Data["json"] = common.Serialize(config.Config)
-	this.ServeJSON()
+	this.Ctx.Output.Header("Content-Type", "application/json; charset=utf-8")
+	this.Ctx.Output.Body([]byte(common.Serialize(config.Config)))
 }
 
 func (this *TXController) Post() {
 	//get json
 	var requestParamMap map[string]interface{}
 	json.Unmarshal(this.Ctx.Input.RequestBody, &requestParamMap)
-	this.Data["json"] = common.Serialize(requestParamMap)
 	//add key 'assign' and 'assign_timestamp'
 	//insert to backlog
 	core.WriteTransactionToBacklog(requestParamMap)
-	this.ServeJSON()
+	this.Ctx.Output.Header("Content-Type", "application/json; charset=utf-8")
+	this.Ctx.Output.Body([]byte(common.Serialize(requestParamMap)))
 }
