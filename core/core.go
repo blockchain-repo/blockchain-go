@@ -52,7 +52,7 @@ func CreateGenesisBlock() string {
 		return ""
 	}
 	if blockCount != 0 {
-		log.Error("There are some blocks in the DB. Cannot create the Genesis block!")
+		log.Error("Cannot create the Genesis block!")
 		return ""
 	}
 	block := prepareGenesisBlock()

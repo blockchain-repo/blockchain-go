@@ -4,9 +4,11 @@ import (
 	"fmt"
 	"os"
 
+	"unibusiness/log"
 	"unichain-go/backend"
 	"unichain-go/common"
 	"unichain-go/config"
+	"unichain-go/core"
 	"unichain-go/pipelines"
 	"unichain-go/web"
 )
@@ -59,7 +61,8 @@ func runExportMyPubkey() {
 func runInit() {
 	conn := backend.GetConnection()
 	conn.InitDatabase(backend.DBNAME)
-	//genesis BLOCK
+	core.CreateGenesisBlock()
+	log.Info("Done, have fun!")
 }
 
 func runDrop() {
