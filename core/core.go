@@ -63,12 +63,12 @@ func CreateGenesisBlock() string {
 
 func prepareGenesisBlock() string {
 	var txSigners []string = []string{PublicKey}
-	var amount float64 = 1
+	var amount int = 1
 	var recipients []interface{} = []interface{}{[]interface{}{PublicKey, amount}}
 	m := map[string]interface{}{}
 	m["message"] = "Hello World from the Unichain"
 	var version string = VERSIONCHAIN
-	tx, err := Create(txSigners, recipients, GENESIS, m, "", "", version, "", "")
+	tx, err := CreateTransaction(txSigners, recipients, GENESIS, m, "", "", version, "", "")
 	if err != nil {
 		log.Info(err)
 	}
@@ -79,7 +79,7 @@ func prepareGenesisBlock() string {
 	return block.ToString()
 }
 
-func Create(txSigners []string, recipients []interface{}, operation string, metadata map[string]interface{}, asset string, chainType string, version string, relation string, contract string) (models.Transaction, error) {
+func CreateTransaction(txSigners []string, recipients []interface{}, operation string, metadata map[string]interface{}, asset string, chainType string, version string, relation string, contract string) (models.Transaction, error) {
 	var tx models.Transaction
 	var err error
 	if len(txSigners) == 0 {
@@ -97,7 +97,7 @@ func Create(txSigners []string, recipients []interface{}, operation string, meta
 	for _, value := range recipients {
 		ownerAfterInfo := value.([]interface{})
 		ownerAfter := ownerAfterInfo[0].(string)
-		amount := ownerAfterInfo[1].(float64)
+		amount := ownerAfterInfo[1].(int)
 		output := models.Output{
 			OwnersAfter: ownerAfter,
 			Amount:      amount,

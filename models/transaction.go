@@ -21,7 +21,7 @@ type Input struct {
 
 type Output struct {
 	OwnersAfter string  //
-	Amount      float64 //
+	Amount      int //
 }
 
 type Transaction struct {
