@@ -13,8 +13,8 @@ import (
 func TestTXController_Post(t *testing.T) {
 	url := "http://127.0.0.1:19984/tx"
 
-	post := core.CreateTransactionForTest()
-	var jsonStr = []byte(post)
+	tx := core.CreateTransactionForTest()
+	var jsonStr = []byte(tx)
 	req, err := http.NewRequest("POST", url, bytes.NewBuffer(jsonStr))
 	if err != nil {
 		panic(err)

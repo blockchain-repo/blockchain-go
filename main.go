@@ -44,7 +44,7 @@ func cmd(args []string) {
 	}
 }
 
-//Fist
+//First
 func runConfigure() {
 	config.ConfigToFile()
 }
