@@ -2,7 +2,7 @@ package rethinkdb
 
 import (
 	"testing"
-	"unibusiness/log"
+	"unichain-go/log"
 )
 
 func Test_GetBlockCount(t *testing.T) {

@@ -4,7 +4,7 @@ import (
 	"testing"
 	"unichain-go/backend/rethinkdb"
 	"reflect"
-	"unibusiness/log"
+	"unichain-go/log"
 )
 
 func ExampleConnection() {

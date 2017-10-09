@@ -3,7 +3,7 @@ package core
 import (
 	"fmt"
 	"testing"
-	"unibusiness/log"
+	"unichain-go/log"
 	"unichain-go/common"
 )
 
