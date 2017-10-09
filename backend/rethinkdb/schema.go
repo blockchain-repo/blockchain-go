@@ -80,4 +80,5 @@ func (c *RethinkDBConnection) InitDatabase(db string) {
 	for _, x := range Tables {
 		c.CreateTable(db, x)
 	}
+	c.CreateSecondaryIndex()
 }
