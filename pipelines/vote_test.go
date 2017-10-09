@@ -22,11 +22,11 @@ func CreateTransactionForTest() models.Transaction {
 	input := models.Input{
 		OwnersBefore: PublicKey,
 		Signature:    "",
-		PreOut:       preOut,
+		PreOut:       &preOut,
 	}
 	output := models.Output{
 		OwnersAfter: PublicKey,
-		Amount:      "1",
+		Amount:      1,
 	}
 	m := map[string]interface{}{}
 	m["timestamp"] = common.GenTimestamp()
@@ -95,15 +95,19 @@ func TestVotePip(t *testing.T) {
 	StartVotePipe()
 }
 
-func TestMap(t *testing.T){
+func TestMap(t *testing.T) {
 	m := map[string]bool{
-		"a":true,
+		"a": true,
 	}
-	value,ok := m["a"]
+	value, ok := m["a"]
 	log.Info(value)
 	log.Info(ok)
-	value,ok = m["b"]
+	value, ok = m["b"]
 	log.Info(value)
 	log.Info(ok)
 
+}
+
+func TestLog(t *testing.T) {
+	log.Error("There should be %d txs,but only get %d txs", 1, 2)
 }

@@ -18,15 +18,15 @@ type Connection interface {
 	//connection
 	Connect()
 	//query
+	//transaction
 	GetTransactionFromBacklog(id string) string
 	WriteTransactionToBacklog(transaction string) int
-
+	//block
 	WriteBlock(block string) int
-
-	WriteVote(vote string) int
-
 	GetBlockCount() (int, error)
 	GetUnvotedBlock(pubkey string) []string
+	//vote
+	WriteVote(vote string) int
 	//changefeed
 	Changefeed(db string, table string, operation int) chan interface{}
 	//schema

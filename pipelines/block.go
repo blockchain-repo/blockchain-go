@@ -42,14 +42,14 @@ func filterTx(arg interface{}) interface{} {
 		``None`` otherwise.
 */
 func validateTx(arg interface{}) interface{} {
-	//check already exists
-	//check tx
 	txByte, err := json.Marshal(arg)
 	tx := models.Transaction{}
 	err = json.Unmarshal(txByte, &tx)
 	if err != nil {
 		return nil
 	}
+	//TODO check already exists
+	//check tx
 	if core.ValidateTransaction(tx) == false {
 		return nil
 	}
