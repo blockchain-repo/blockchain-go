@@ -4,7 +4,6 @@ import (
 	"reflect"
 
 	"unichain-go/common"
-	"unichain-go/config"
 	"unichain-go/log"
 )
 
@@ -42,16 +41,33 @@ func (t *Transaction) GenerateId() string {
 	return _id
 }
 
-func (t *Transaction) Sign() string {
-	priv_key := config.Config.Keypair.PrivateKey
+func (t *Transaction) CheckId() bool {
+	c := common.GetCrypto()
+	_id := c.Hash(t.BodyToString())
+	return t.Id == _id
+}
+
+func (t *Transaction) Sign(private []string) {
+	//TODO multi
 	msg := t.StringForSign()
 	c := common.GetCrypto()
-	sig := c.Sign(priv_key, msg)
 
 	for i := 0; i < len(t.Inputs); i++ {
+		sig := c.Sign(private[0], msg)
 		t.Inputs[i].Signature = sig
 	}
-	return sig
+}
+
+func (t *Transaction) Verify() bool {
+	msg := t.StringForSign()
+	c := common.GetCrypto()
+	for i := 0; i < len(t.Inputs); i++ {
+		flag :=c.Verify(t.Inputs[i].OwnersBefore,msg,t.Inputs[i].Signature)
+		if flag == false{
+			return false
+		}
+	}
+	return true
 }
 
 func (t *Transaction) ToString() string {

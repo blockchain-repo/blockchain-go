@@ -9,6 +9,7 @@ import (
 	"unichain-go/log"
 
 	"github.com/astaxie/beego"
+	"unichain-go/models"
 )
 
 type MainController struct {
@@ -25,12 +26,19 @@ func (this *MainController) Get() {
 }
 
 func (this *TXController) Post() {
-	//get json
-	var txMap map[string]interface{}
-	json.Unmarshal(this.Ctx.Input.RequestBody, &txMap)
 	//TODO validate tx
-	log.Debug("Api receive tx",txMap["id"])
-	core.WriteTransactionToBacklog(txMap)
-	this.Ctx.Output.Header("Content-Type", "application/json; charset=utf-8")
-	this.Ctx.Output.Body([]byte(common.Serialize(txMap)))
+	var tx models.Transaction
+	json.Unmarshal(this.Ctx.Input.RequestBody, &tx)
+	log.Debug("Api receive tx", tx.Id)
+	flag := core.ValidateTransaction(tx)
+	if flag {
+		core.WriteTransactionToBacklog(tx)
+		this.Ctx.Output.Header("Content-Type", "application/json; charset=utf-8")
+		this.Ctx.Output.Status = 202
+		this.Ctx.Output.Body([]byte(common.Serialize(tx)))
+	} else {
+		this.Ctx.Output.Header("Content-Type", "application/json; charset=utf-8")
+		this.Ctx.Output.Status = 400
+		this.Ctx.Output.Body([]byte(common.Serialize(tx)))
+	}
 }

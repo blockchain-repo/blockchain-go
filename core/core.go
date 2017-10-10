@@ -72,7 +72,7 @@ func prepareGenesisBlock() string {
 	if err != nil {
 		log.Info(err)
 	}
-	tx.Sign()
+	tx.Sign([]string{PrivateKey})
 	tx.GenerateId()
 	txs := []models.Transaction{tx}
 	block := CreateBlock(txs)
@@ -152,12 +152,17 @@ func CreateTransactionForTest() string {
 		Metadata:  m,
 		Version:   "1",
 	}
-	tx.Sign()
+	tx.Sign([]string{PrivateKey})
 	tx.GenerateId()
 	return tx.ToString()
 }
 
-func WriteTransactionToBacklog(m map[string]interface{}) {
+func WriteTransactionToBacklog(tx models.Transaction) {
+	var m map[string]interface{}
+	m,err := common.StructToMap(tx)
+	if err != nil{
+		log.Error("StructToMap failed")
+	}
 	rand.Seed(time.Now().UnixNano())
 	//add key
 	m["Assign"] = AllPub[rand.Intn(len(AllPub))]
@@ -167,13 +172,23 @@ func WriteTransactionToBacklog(m map[string]interface{}) {
 }
 
 func ValidateTransaction(tx models.Transaction) bool {
-	//TODO
 	//check hash
+	flag := tx.CheckId()
+	log.Debug("CheckId tx", tx.Id, flag)
+	if flag == false {
+		return false
+	}
 	//check sig
+	flag = tx.Verify()
+	log.Debug("Verify tx", tx.Id, flag)
+	if flag == false {
+		return false
+	}
+	//TODO transfer
 	//check asset
 	//check input
 	//check amount
-	return true
+	return flag
 }
 
 func IsNewTransaction(id string) bool {

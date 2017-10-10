@@ -1,11 +1,11 @@
 package controllers
 
 import (
-	"testing"
 	"bytes"
-	"net/http"
 	"fmt"
 	"io/ioutil"
+	"net/http"
+	"testing"
 
 	"unichain-go/core"
 )
@@ -14,6 +14,7 @@ func TestTXController_Post(t *testing.T) {
 	url := "http://127.0.0.1:19984/tx"
 
 	tx := core.CreateTransactionForTest()
+
 	var jsonStr = []byte(tx)
 	req, err := http.NewRequest("POST", url, bytes.NewBuffer(jsonStr))
 	if err != nil {
