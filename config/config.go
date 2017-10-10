@@ -18,6 +18,7 @@ type _Config struct {
 	Keyring []string `json:"Keyring"`
 	LocalIp string   `json:"LocalIp"`
 	Log     Log      `json:"Log"`
+	Crypto string
 }
 
 type Keypair struct {
@@ -90,7 +91,10 @@ func FileToConfig() {
 
 func createNewConfig() _Config {
 	var newConfig _Config
-	c := common.GetCrypto()
+	//TODO interactive cryptoType
+	cryptoType := "sha3256/base58/ed25519"
+	c := common.SetCrypto(cryptoType)
+	newConfig.Crypto = cryptoType
 	//keypair
 	pub, priv := c.GenerateKeypair()
 	newConfig.Keypair.PublicKey = pub

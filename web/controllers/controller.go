@@ -7,9 +7,9 @@ import (
 	"unichain-go/config"
 	"unichain-go/core"
 	"unichain-go/log"
+	"unichain-go/models"
 
 	"github.com/astaxie/beego"
-	"unichain-go/models"
 )
 
 type MainController struct {
