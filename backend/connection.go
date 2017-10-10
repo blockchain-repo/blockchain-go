@@ -21,6 +21,7 @@ type Connection interface {
 	//transaction
 	GetTransactionFromBacklog(id string) string
 	WriteTransactionToBacklog(transaction string) int
+	DeleteTransaction(id string) int
 	//block
 	WriteBlock(block string) int
 	GetBlockCount() (int, error)

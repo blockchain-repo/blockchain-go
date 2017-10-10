@@ -13,6 +13,8 @@ import (
 	mp "github.com/altairlee/multipipelines/multipipes"
 )
 
+var txs []models.Transaction
+
 /*
 	Filter a transaction.
 	Args:
@@ -48,9 +50,14 @@ func validateTx(arg interface{}) interface{} {
 	if err != nil {
 		return nil
 	}
-	//TODO check already exists
+	//check already exists
+	if core.IsNewTransaction(tx.Id) == false {
+		core.DeleteTransaction(tx.Id)
+		return nil
+	}
 	//check tx
 	if core.ValidateTransaction(tx) == false {
+		core.DeleteTransaction(tx.Id)
 		return nil
 	}
 	return tx
@@ -68,12 +75,12 @@ func validateTx(arg interface{}) interface{} {
 			:class:`Block`: The block, if a block is ready, or ``None``.
 */
 func createBlock(arg interface{}) interface{} {
-	var txs []models.Transaction
 	txs = append(txs, arg.(models.Transaction))
-	flag := true
 	//TODO when to create [length,timeout]
-	if flag == true {
+	if len(txs) == 1000 || (len(txs) == 2) {
 		block := core.CreateBlock(txs)
+		var newTxs []models.Transaction
+		txs = newTxs
 		log.Info("Create Block", block.Id)
 		return block
 	}
@@ -88,14 +95,17 @@ func createBlock(arg interface{}) interface{} {
 		:class:`Block`: The Block.
 */
 func writeBlock(arg interface{}) interface{} {
-	core.WriteBlock(common.Serialize(arg))
-	return nil
+	block := arg.(models.Block)
+	core.WriteBlock(common.Serialize(block))
+	return block
 }
 
-func initUnassignTx() []string {
-	unassignTx := []string{}
-	//TODO get unassign txs
-	return unassignTx
+func deleteTransaction(arg interface{}) interface{} {
+	block := arg.(models.Block)
+	for _,tx := range block.BlockBody.Transactions {
+		core.DeleteTransaction(tx.Id)
+	}
+	return nil
 }
 
 func createBlockPipe() (p mp.Pipeline) {
@@ -104,6 +114,7 @@ func createBlockPipe() (p mp.Pipeline) {
 	nodeSlice = append(nodeSlice, &mp.Node{Target: validateTx, RoutineNum: 1, Name: "validateTx"})
 	nodeSlice = append(nodeSlice, &mp.Node{Target: createBlock, RoutineNum: 1, Name: "createBlock"})
 	nodeSlice = append(nodeSlice, &mp.Node{Target: writeBlock, RoutineNum: 1, Name: "writeBlock"})
+	nodeSlice = append(nodeSlice, &mp.Node{Target: deleteTransaction, RoutineNum: 1, Name: "deleteTransaction"})
 	p = mp.Pipeline{
 		Nodes: nodeSlice,
 	}
@@ -111,8 +122,7 @@ func createBlockPipe() (p mp.Pipeline) {
 }
 
 func getBlockChangeNode() *mp.Node {
-	preTx := initUnassignTx()
-	cn := &changeNode{prefeed: preTx, db: "unichain", table: "backlog", operation: backend.INSERT}
+	cn := &changeNode{db: "unichain", table: "backlog", operation: backend.INSERT|backend.UPDATE}
 	go cn.runForever()
 	return &cn.node
 }

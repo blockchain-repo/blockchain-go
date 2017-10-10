@@ -176,6 +176,14 @@ func ValidateTransaction(tx models.Transaction) bool {
 	return true
 }
 
+func IsNewTransaction(id string) bool {
+	return true
+}
+
+func DeleteTransaction(id string) {
+	Conn.DeleteTransaction(id)
+}
+
 func CreateBlock(txs []models.Transaction) models.Block {
 	blockBody := models.BlockBody{
 		Transactions: txs,

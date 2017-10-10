@@ -57,6 +57,11 @@ func (c *RethinkDBConnection) WriteTransactionToBacklog(transaction string) int 
 	return res.Inserted
 }
 
+func (c *RethinkDBConnection) DeleteTransaction(id string) int {
+	res := c.Delete(DBUNICHAIN, TABLEBACKLOG, id)
+	return res.Deleted
+}
+
 func (c *RethinkDBConnection) WriteBlock(block string) int {
 	res := c.Insert(DBUNICHAIN, TABLEBLOCKS, block)
 	return res.Inserted

@@ -6,6 +6,7 @@ import (
 	"unichain-go/common"
 	"unichain-go/config"
 	"unichain-go/core"
+	"unichain-go/log"
 
 	"github.com/astaxie/beego"
 )
@@ -25,11 +26,11 @@ func (this *MainController) Get() {
 
 func (this *TXController) Post() {
 	//get json
-	var requestParamMap map[string]interface{}
-	json.Unmarshal(this.Ctx.Input.RequestBody, &requestParamMap)
-	//add key 'assign' and 'assign_timestamp'
-	//insert to backlog
-	core.WriteTransactionToBacklog(requestParamMap)
+	var txMap map[string]interface{}
+	json.Unmarshal(this.Ctx.Input.RequestBody, &txMap)
+	//TODO validate tx
+	log.Debug("Api receive tx",txMap["id"])
+	core.WriteTransactionToBacklog(txMap)
 	this.Ctx.Output.Header("Content-Type", "application/json; charset=utf-8")
-	this.Ctx.Output.Body([]byte(common.Serialize(requestParamMap)))
+	this.Ctx.Output.Body([]byte(common.Serialize(txMap)))
 }
