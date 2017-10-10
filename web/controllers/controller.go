@@ -26,7 +26,6 @@ func (this *MainController) Get() {
 }
 
 func (this *TXController) Post() {
-	//TODO validate tx
 	var tx models.Transaction
 	json.Unmarshal(this.Ctx.Input.RequestBody, &tx)
 	log.Debug("Api receive tx", tx.Id)

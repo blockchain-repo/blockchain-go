@@ -14,6 +14,7 @@ import (
 
 type _Config struct {
 	Keypair Keypair
+	Database Database
 	Keyring []string `json:"Keyring"`
 	LocalIp string   `json:"LocalIp"`
 	Log     Log      `json:"Log"`
@@ -22,6 +23,13 @@ type _Config struct {
 type Keypair struct {
 	PublicKey  string `json:"PublicKey"`
 	PrivateKey string `json:"PrivateKey"`
+}
+
+type Database struct {
+	Backend  string `json:"Backend"`
+	Host string `json:"Host"`
+	Port string `json:"Port"`
+	Name string `json:"Name"`
 }
 
 type Log struct {
@@ -102,6 +110,11 @@ func createNewConfig() _Config {
 	newConfig.Log.LogSeparate = []string{"error", "warning", "info", "debug"}
 	newConfig.Log.LogLevel = 7
 	newConfig.Log.LogEnableConsole = true
+	//database
+	newConfig.Database.Backend = "rethinkdb"
+	newConfig.Database.Host = "localhost"
+	newConfig.Database.Port = "28015"
+	newConfig.Database.Name = "unichain"
 	return newConfig
 }
 

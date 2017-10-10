@@ -159,8 +159,8 @@ func CreateTransactionForTest() string {
 
 func WriteTransactionToBacklog(tx models.Transaction) {
 	var m map[string]interface{}
-	m,err := common.StructToMap(tx)
-	if err != nil{
+	m, err := common.StructToMap(tx)
+	if err != nil {
 		log.Error("StructToMap failed")
 	}
 	rand.Seed(time.Now().UnixNano())
@@ -188,10 +188,18 @@ func ValidateTransaction(tx models.Transaction) bool {
 	//check asset
 	//check input
 	//check amount
-	return flag
+	return true
 }
 
-func IsNewTransaction(id string) bool {
+/*
+	Return True if the transaction does not exist in any
+	VALID or UNDECIDED block. Return False otherwise.
+	Args:
+	txid (str): Transaction ID
+	exclude_block_id (str): Exclude block from search
+*/
+func IsNewTransaction(id string, exclude_block_id string) bool {
+	//TODO
 	return true
 }
 

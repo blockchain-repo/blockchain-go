@@ -3,6 +3,7 @@ package backend
 import (
 	"unichain-go/backend/rethinkdb"
 	//	"unichain-go/backend/mongodb"
+	"unichain-go/config"
 )
 
 const (
@@ -43,7 +44,7 @@ func init() {
 
 func GetConnection() Connection {
 	var conn Connection
-	str := "rethinkdb" //TODO Config
+	str := config.Config.Database.Host
 	conn = regStruct[str]
 	conn.Connect() //needed?
 	return conn

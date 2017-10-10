@@ -19,8 +19,8 @@ type Input struct {
 }
 
 type Output struct {
-	OwnersAfter string  //
-	Amount      int //
+	OwnersAfter string //
+	Amount      int    //
 }
 
 type Transaction struct {
@@ -47,23 +47,32 @@ func (t *Transaction) CheckId() bool {
 	return t.Id == _id
 }
 
-func (t *Transaction) Sign(private []string) {
-	//TODO multi
-	msg := t.StringForSign()
+func (t *Transaction) Sign(private []string) bool {
 	c := common.GetCrypto()
-
+	keyMap := make(map[string]string)
+	for _, seed := range private {
+		pub, pri := c.GenerateKeypair(seed)
+		keyMap[pub] = pri
+	}
+	msg := t.StringForSign()
 	for i := 0; i < len(t.Inputs); i++ {
-		sig := c.Sign(private[0], msg)
+		pub := t.Inputs[i].OwnersBefore
+		priv, ok := keyMap[pub]
+		if !ok {
+			return false
+		}
+		sig := c.Sign(priv, msg)
 		t.Inputs[i].Signature = sig
 	}
+	return true
 }
 
 func (t *Transaction) Verify() bool {
 	msg := t.StringForSign()
 	c := common.GetCrypto()
 	for i := 0; i < len(t.Inputs); i++ {
-		flag :=c.Verify(t.Inputs[i].OwnersBefore,msg,t.Inputs[i].Signature)
-		if flag == false{
+		flag := c.Verify(t.Inputs[i].OwnersBefore, msg, t.Inputs[i].Signature)
+		if flag == false {
 			return false
 		}
 	}
