@@ -51,7 +51,7 @@ func validateTx(arg interface{}) interface{} {
 		return nil
 	}
 	//check already exists
-	if core.IsNewTransaction(tx.Id) == false {
+	if core.IsNewTransaction(tx.Id,"") == false {
 		core.DeleteTransaction(tx.Id)
 		return nil
 	}

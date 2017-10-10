@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"os"
+	"time"
 
 	"unichain-go/backend"
 	"unichain-go/common"
@@ -75,6 +76,7 @@ func runStart() {
 	//go pipelines.StartVotePipe()
 	//go pipelines.StartElectionPipe()
 	//go pipelines.StartStalePipe()
+	time.Sleep(time.Second * 1)
 	web.Server()
 }
 

@@ -1,24 +1,23 @@
 package rethinkdb
 
 import (
-	"fmt"
-
 	"unichain-go/log"
 
 	r "gopkg.in/gorethink/gorethink.v3"
 )
 
-const(
+const (
 	DBUNICHAIN = "unichain"
 
-	TABLEBACKLOG = "backlog"
-	TABLEBLOCKS = "blocks"
-	TABLEVOTES = "votes"
-	TABLEASSETS = "assets"
-	TABLECONTRACTS = "contracts"
-	TABLECONTRACTVOTES = "contractvotes"
+	TABLEBACKLOG         = "backlog"
+	TABLEBLOCKS          = "blocks"
+	TABLEVOTES           = "votes"
+	TABLEASSETS          = "assets"
+	TABLECONTRACTS       = "contracts"
+	TABLECONTRACTVOTES   = "contractvotes"
 	TABLECONTRACTOUTPUTS = "contractoutputs"
 )
+
 var Tables = []string{
 	"backlog",
 	"blocks",
@@ -30,7 +29,6 @@ var Tables = []string{
 }
 
 func (c *RethinkDBConnection) CreateSecondaryIndex() {
-	log.Info("Create `%s` secondary index.", "unichain")
 	//Create backlog index
 
 	//Create blocks index
@@ -42,7 +40,7 @@ func (c *RethinkDBConnection) CreateSecondaryIndex() {
 		},
 	).RunWrite(c.Session)
 	if err != nil {
-		log.Error("Error creating index: %s", err)
+		log.Error("Error creating index:", err)
 	}
 	log.Info("%d index created", response.Created)
 
@@ -51,28 +49,28 @@ func (c *RethinkDBConnection) CreateSecondaryIndex() {
 func (c *RethinkDBConnection) CreateTable(db string, table string) {
 	respo, err := r.DB(db).TableCreate(table).RunWrite(c.Session)
 	if err != nil {
-		log.Error("Error creating table: %s", err)
+		log.Error("Error creating table:", err)
 	}
 
-	fmt.Printf("%d table created\n", respo.TablesCreated)
+	log.Info("%d table created %s", respo.TablesCreated, table)
 }
 
 func (c *RethinkDBConnection) CreateDatabase(db string) {
 	resp, err := r.DBCreate(db).RunWrite(c.Session)
 	if err != nil {
-		log.Error("Error creating database: %s", err)
+		log.Error("Error creating database:", err)
 	}
 
-	fmt.Printf("%d DB created\n", resp.DBsCreated)
+	log.Info("%d DB created %s", resp.DBsCreated, db)
 }
 
 func (c *RethinkDBConnection) DropDatabase(db string) {
 	resp, err := r.DBDrop(db).RunWrite(c.Session)
 	if err != nil {
-		log.Error("Error dropping database: %s", err)
+		log.Error("Error dropping database:", err)
 	}
 
-	fmt.Printf("%d DB dropped, %d tables dropped\n", resp.DBsDropped, resp.TablesDropped)
+	log.Info("%d DB dropped, %d tables dropped\n", resp.DBsDropped, resp.TablesDropped)
 }
 
 func (c *RethinkDBConnection) InitDatabase(db string) {

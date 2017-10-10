@@ -44,8 +44,11 @@ func init() {
 
 func GetConnection() Connection {
 	var conn Connection
-	str := config.Config.Database.Host
-	conn = regStruct[str]
+	str := config.Config.Database.Backend
+	conn, ok := regStruct[str]
+	if !ok {
+		return nil
+	}
 	conn.Connect() //needed?
 	return conn
 }
