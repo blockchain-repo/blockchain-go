@@ -76,7 +76,7 @@ func validateTx(arg interface{}) interface{} {
 */
 func createBlock(arg interface{}) interface{} {
 	txs = append(txs, arg.(models.Transaction))
-	//TODO when to create [length,timeout]
+	//TODO when to create [length,timeout] timeout lizhen
 	if len(txs) == 1000 || (len(txs) == 2) {
 		block := core.CreateBlock(txs)
 		var newTxs []models.Transaction

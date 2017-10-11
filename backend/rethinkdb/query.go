@@ -72,7 +72,7 @@ func (c *RethinkDBConnection) WriteVote(vote string) int {
 	return res.Inserted
 }
 func (c *RethinkDBConnection) GetUnvotedBlock(pubkey string) []string {
-	//TODO doing unfinished
+	//TODO doing unfinished lizhen
 	res, err := r.DB(DBUNICHAIN).Table(TABLEBLOCKS).Filter(
 		func() {
 

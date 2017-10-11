@@ -27,7 +27,7 @@ func validateBlock(arg interface{}) interface{} {
 		log.Error(err)
 		return []interface{}{block.Id, []string{}}
 	}
-	if block.ValidateBlock() == false {
+	if core.ValidateBlock(block) == false {
 		return []interface{}{block.Id, []string{}}
 	}
 	return []interface{}{block.Id, block.BlockBody.Transactions}

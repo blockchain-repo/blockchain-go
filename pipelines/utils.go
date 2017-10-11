@@ -20,7 +20,7 @@ func (cn *changeNode) runForever() {
 		cn.node.Output <- value
 	}
 	for {
-		//TODO deal error and panic
+		//TODO deal error and panic lizhen
 		cn.getChange()
 	}
 

@@ -41,13 +41,3 @@ func (b *Block) BodyToString() string {
 func (b *Block) ToString() string {
 	return common.Serialize(b)
 }
-
-func (b *Block) ValidateBlock() bool {
-	//Check if the block was created by a federation node
-
-	//Check that the signature is valid
-
-	//Check that the block contains no duplicated transactions
-
-	return true
-}

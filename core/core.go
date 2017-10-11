@@ -90,7 +90,7 @@ func CreateTransaction(txSigners []string, recipients []interface{}, operation s
 		err = errors.New("recipients can not be empty")
 		return tx, err
 	}
-	//TODO do some params validte
+	//TODO do some params validate lizhen
 
 	// generate outputs
 	var outputs []models.Output
@@ -184,7 +184,7 @@ func ValidateTransaction(tx models.Transaction) bool {
 	if flag == false {
 		return false
 	}
-	//TODO transfer
+	//TODO transfer and others
 	//check asset
 	//check input
 	//check amount
@@ -199,7 +199,7 @@ func ValidateTransaction(tx models.Transaction) bool {
 	exclude_block_id (str): Exclude block from search
 */
 func IsNewTransaction(id string, exclude_block_id string) bool {
-	//TODO
+	//TODO backend
 	return true
 }
 
@@ -229,6 +229,10 @@ func WriteBlock(block string) {
 
 func ValidateBlock(block models.Block) bool {
 	//TODO
+	//node_pubkey
+	//hash
+	//sig
+	//Check that the block contains no duplicated transactions
 	return true
 }
 
@@ -257,6 +261,7 @@ func WriteVote(vote string) {
 
 func Election(blockId string) bool {
 	//TODO
+
 	return true
 }
 
@@ -265,7 +270,8 @@ func Requeue(blockId string) {
 }
 
 func GetUnvotedBlock() []string {
-	//TODO get unvoted block
+	//TODO get unvoted block lizhen
+	//NOT necessary see bigchaindb #1325
 	Conn.GetUnvotedBlock(PublicKey)
 	return nil
 }
