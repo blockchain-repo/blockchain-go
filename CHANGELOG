@@ -1,13 +1,15 @@
 TODOs
 
+
+1. backend Tx validate 延展
+2. backend lastVotedBlockId 实现
+3. backend IsNewTransaction 实现
+4. backend Election 实现
+5. stale Requeue 实现
 1. pipeline Block 超时 lizhen
-2. backend Tx validate 延展
-3. backend lastVotedBlockId 实现
-4. Block validate 实现
-5. backend IsNewTransaction 实现
-6. backend Election 实现
-7. *backend GetUnvotedBlock lizhen
-8. stale 实现 Requeue
+2  voet bug validateChan lizhen
+3. *backend GetUnvotedBlock lizhen
+
 
 1.contractoutput
 2.contractvote
@@ -18,3 +20,7 @@ TODOs
 2. mongodb implement
 3. config 交互
 4. field ‘Chain’ Type in tx
+
+DONEs
+
+1. core Block validate 实现

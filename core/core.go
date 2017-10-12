@@ -248,7 +248,7 @@ func CreateBlock(txs []models.Transaction) models.Block {
 		BlockBody: blockBody,
 		Signature: "",
 	}
-	block.Sign()
+	block.Sign(PrivateKey)
 	block.GenerateId()
 	return block
 }
@@ -258,11 +258,42 @@ func WriteBlock(block string) {
 }
 
 func ValidateBlock(block models.Block) bool {
-	//TODO
+	/*
+		Validate the Block without validating the transactions.
+	*/
+
 	//node_pubkey
+	keySet := common.NewHashSet()
+	for _, key := range AllPub {
+		keySet.Add(key)
+	}
+	flag := keySet.Has(block.BlockBody.NodePubkey)
+	log.Debug("Check node_pubkey", flag)
+	if flag == false {
+		return false
+	}
 	//hash
+	flag = block.CheckId()
+	log.Debug("Check block id", flag)
+	if flag == false {
+		return false
+	}
 	//sig
+	flag = block.Verify()
+	log.Debug("Check block sig", flag)
+	if flag == false {
+		return false
+	}
 	//Check that the block contains no duplicated transactions
+	txSet := common.NewHashSet()
+	for _, tx := range block.BlockBody.Transactions {
+		txSet.Add(tx.Id)
+	}
+	flag = txSet.Len() == len(block.BlockBody.Transactions)
+	log.Debug("Check block duplicated transactions", flag, txSet.Len(), len(block.BlockBody.Transactions))
+	if flag == false {
+		return false
+	}
 	return true
 }
 

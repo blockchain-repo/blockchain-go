@@ -2,7 +2,6 @@ package models
 
 import (
 	"unichain-go/common"
-	"unichain-go/config"
 )
 
 type BlockBody struct {
@@ -18,13 +17,22 @@ type Block struct {
 	Signature  string                  //
 }
 
-func (b *Block) Sign() string {
-	priv_key := config.Config.Keypair.PrivateKey
+func (b *Block) Sign(private string) string {
 	msg := b.BodyToString()
 	c := common.GetCrypto()
-	sig := c.Sign(priv_key, msg)
+	sig := c.Sign(private, msg)
 	b.Signature = sig
 	return sig
+}
+
+func (b *Block) Verify() bool {
+	msg := b.BodyToString()
+	c := common.GetCrypto()
+	flag := c.Verify(b.BlockBody.NodePubkey, msg, b.Signature)
+	if flag == false {
+		return false
+	}
+	return true
 }
 
 func (b *Block) GenerateId() string {
@@ -32,6 +40,12 @@ func (b *Block) GenerateId() string {
 	_id := c.Hash(b.BodyToString())
 	b.Id = _id
 	return _id
+}
+
+func (b *Block) CheckId() bool {
+	c := common.GetCrypto()
+	_id := c.Hash(b.BodyToString())
+	return b.Id == _id
 }
 
 func (b *Block) BodyToString() string {
