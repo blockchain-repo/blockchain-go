@@ -45,10 +45,10 @@ func (c *RethinkDBConnection) GetTransactionFromBacklog(id string) string {
 	res := c.Get(DBUNICHAIN, TABLEBACKLOG, id)
 	var value map[string]interface{}
 	err := res.One(&value)
-	map_string := common.Serialize(value)
 	if err != nil {
 		fmt.Printf("Error scanning database result: %s", err)
 	}
+	map_string := common.Serialize(value)
 	return map_string
 }
 
@@ -61,6 +61,18 @@ func (c *RethinkDBConnection) DeleteTransaction(id string) int {
 	res := c.Delete(DBUNICHAIN, TABLEBACKLOG, id)
 	return res.Deleted
 }
+
+func (c *RethinkDBConnection) GetBlock(id string) string {
+	res := c.Get(DBUNICHAIN, TABLEBLOCKS, id)
+	var value map[string]interface{}
+	err := res.One(&value)
+	if err != nil {
+		fmt.Printf("Error scanning database result: %s", err)
+	}
+	map_string := common.Serialize(value)
+	return map_string
+}
+
 
 func (c *RethinkDBConnection) WriteBlock(block string) int {
 	res := c.Insert(DBUNICHAIN, TABLEBLOCKS, block)

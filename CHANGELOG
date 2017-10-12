@@ -1,11 +1,10 @@
 TODOs
 
-
-1. backend Tx validate 延展
-2. backend lastVotedBlockId 实现
-3. backend IsNewTransaction 实现
-4. backend Election 实现
-5. stale Requeue 实现
+1. backend GetBlocksStatusContainingTx 实现
+3. backend lastVotedBlockId 实现
+4. backend Tx validate 延展
+5. backend Election 实现
+5. stale 实现
 6. benchmark 测试
 ----------------------------
 1. pipeline Block 超时 lizhen
@@ -18,9 +17,3 @@ TODOs
 3.contract lizhen
 4.field ‘Chain’ Type in tx lizhen
 5.Extended API wangxin
-
-
-
-DONEs
-
-1. core Block validate 实现

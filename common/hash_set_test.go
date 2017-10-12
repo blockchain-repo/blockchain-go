@@ -33,7 +33,7 @@ func Test_HashSet(t *testing.T) {
 		fmt.Println("2 exist in item")
 	}
 	fmt.Println(s.Has(4))
-	s.Remove(2)
+	s.Remove(4)
 	//s.Remove(3)
 	fmt.Println("无序的切片", s.Elements())
 	haseSet2 := NewHashSet()

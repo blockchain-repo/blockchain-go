@@ -31,7 +31,10 @@ func checkForQuorum(arg interface{}) interface{} {
 
 func requeueTransactions(arg interface{}) interface{} {
 	blockId := arg.(string)
-	core.Requeue(blockId)
+	block := core.GetBlock(blockId)
+	for _,tx := range block.BlockBody.Transactions {
+		core.WriteTransactionToBacklog(tx)
+	}
 	return nil
 }
 

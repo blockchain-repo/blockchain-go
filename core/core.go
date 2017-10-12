@@ -4,6 +4,7 @@ import (
 	"math/rand"
 	"time"
 
+	"encoding/json"
 	"errors"
 	"unichain-go/backend"
 	"unichain-go/common"
@@ -23,6 +24,21 @@ const (
 const (
 	VERSIONCHAIN    = "1"
 	VERSIONCONTRACT = "2" //?
+)
+const (
+	BLOCK_INVALID = "invalid"
+	//return if a block has been voted invalid
+
+	BLOCK_VALID = "valid"
+	TX_VALID    = "valid"
+	//return if a block is valid, or tx is in valid block
+
+	BLOCK_UNDECIDED = "undecided"
+	TX_UNDECIDED    = "undecided"
+	//return if block is undecided, or tx is in undecided block
+
+	TX_IN_BACKLOG = "backlog"
+	//return if transaction is in backlog
 )
 
 type Chain struct {
@@ -229,8 +245,20 @@ func ValidateTransaction(tx models.Transaction) bool {
 	exclude_block_id (str): Exclude block from search
 */
 func IsNewTransaction(id string, exclude_block_id string) bool {
-	//TODO backend
+	block_statuses := GetBlocksStatusContainingTx(id)
+	delete(block_statuses, exclude_block_id)
+	for _, status := range block_statuses {
+		if status != BLOCK_INVALID {
+			return false
+		}
+	}
 	return true
+}
+
+func GetBlocksStatusContainingTx(id string) map[string]string {
+	//TODO
+	var result map[string]string
+	return result
 }
 
 func DeleteTransaction(id string) {
@@ -255,6 +283,16 @@ func CreateBlock(txs []models.Transaction) models.Block {
 
 func WriteBlock(block string) {
 	Conn.WriteBlock(block)
+}
+
+func GetBlock(id string) models.Block {
+	var block models.Block
+	blockStr := Conn.GetBlock(id)
+	err := json.Unmarshal([]byte(blockStr), &block)
+	if err != nil {
+		log.Error(err)
+	}
+	return block
 }
 
 func ValidateBlock(block models.Block) bool {
@@ -324,10 +362,6 @@ func Election(blockId string) bool {
 	//TODO
 
 	return true
-}
-
-func Requeue(blockId string) {
-	//TODO
 }
 
 func GetUnvotedBlock() []string {

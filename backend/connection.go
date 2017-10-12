@@ -18,16 +18,16 @@ var regStruct map[string]Connection
 type Connection interface {
 	//connection
 	Connect()
-	//query
-	//transaction
+	//query //table.backlog
 	GetTransactionFromBacklog(id string) string
 	WriteTransactionToBacklog(transaction string) int
 	DeleteTransaction(id string) int
-	//block
+	//query //table.blocks
+	GetBlock(id string) string
 	WriteBlock(block string) int
 	GetBlockCount() (int, error)
 	GetUnvotedBlock(pubkey string) []string
-	//vote
+	//query //table.votes
 	WriteVote(vote string) int
 	//changefeed
 	Changefeed(db string, table string, operation int) chan interface{}

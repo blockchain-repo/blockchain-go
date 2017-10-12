@@ -31,10 +31,9 @@ func ExampleConnection() {
 	//tx:{"back":"j22222ihhh","id":"5556"}
 }
 
-func Test_createIndex(t *testing.T) {
-	conn := GetConnection()
-	conn.CreateSecondaryIndex()
-}
+//func Test_createIndex(t *testing.T) {
+//	conn := GetConnection()
+//}
 
 func Test_testConnection(t *testing.T) {
 	//r := rethinkdb.RethinkDBConnection{}
