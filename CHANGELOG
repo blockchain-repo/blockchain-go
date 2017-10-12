@@ -6,20 +6,20 @@ TODOs
 3. backend IsNewTransaction 实现
 4. backend Election 实现
 5. stale Requeue 实现
+6. benchmark 测试
+----------------------------
 1. pipeline Block 超时 lizhen
 2  voet bug validateChan lizhen
 3. *backend GetUnvotedBlock lizhen
 
 
-1.contractoutput
-2.contractvote
-3.contract
-4.Extended API
+1.contractoutput lizhen
+2.contractvote lizhen
+3.contract lizhen
+4.field ‘Chain’ Type in tx lizhen
+5.Extended API wangxin
 
-1. benchmark
-2. mongodb implement
-3. config 交互
-4. field ‘Chain’ Type in tx
+
 
 DONEs
 
