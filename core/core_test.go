@@ -3,7 +3,9 @@ package core
 import (
 	"fmt"
 	"testing"
+
 	"unichain-go/common"
+	"unichain-go/log"
 )
 
 func TestCreateBlock(t *testing.T) {
@@ -13,6 +15,15 @@ func TestCreateBlock(t *testing.T) {
 func TestGetBlock(t *testing.T) {
 	block := GetBlock("e8e2d19229812d7181bef19aff54741a2219b99447492b79876667a196521089")
 	fmt.Println(common.Serialize(block))
+}
+
+func Test_GetLastVotedBlock(t *testing.T) {
+
+	vote := CreateVote(true, "hhh", "")
+	WriteVote(common.Serialize(vote))
+	res := GetLastVotedBlockId()
+
+	log.Debug(res)
 }
 
 //func Test_create(t *testing.T) {

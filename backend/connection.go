@@ -29,6 +29,7 @@ type Connection interface {
 	GetUnvotedBlock(pubkey string) []string
 	//query //table.votes
 	WriteVote(vote string) int
+	GetLastVotedBlockId(pubkey string) string
 	//changefeed
 	Changefeed(db string, table string, operation int) chan interface{}
 	//schema

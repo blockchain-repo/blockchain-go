@@ -1,15 +1,14 @@
 TODOs
 
-1. backend GetBlocksStatusContainingTx 实现
-3. backend lastVotedBlockId 实现
-4. backend Tx validate 延展
-5. backend Election 实现
-5. stale 实现
-6. benchmark 测试
+1. GetBlocksStatusContainingTx block+vote 实现
+2. Tx.validate 延展
+3. Election block+vote实现
+4. stale 实现
+5. benchmark 测试
 ----------------------------
-1. pipeline Block 超时 lizhen
-2  voet bug validateChan lizhen
-3. *backend GetUnvotedBlock lizhen
+1. pipeline Block 超时 lizhen !
+2  voet bug validateChan lizhen !
+3. backend GetUnvotedBlock lizhen *
 
 
 1.contractoutput lizhen

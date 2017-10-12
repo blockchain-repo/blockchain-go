@@ -73,7 +73,6 @@ func (c *RethinkDBConnection) GetBlock(id string) string {
 	return map_string
 }
 
-
 func (c *RethinkDBConnection) WriteBlock(block string) int {
 	res := c.Insert(DBUNICHAIN, TABLEBLOCKS, block)
 	return res.Inserted
@@ -83,6 +82,22 @@ func (c *RethinkDBConnection) WriteVote(vote string) int {
 	res := c.Insert(DBUNICHAIN, TABLEVOTES, vote)
 	return res.Inserted
 }
+
+func (c *RethinkDBConnection) GetLastVotedBlockId(pubkey string) string {
+	res, err := r.DB(DBUNICHAIN).Table(TABLEVOTES).
+		Filter(r.Row.Field("NodePubkey").Eq(pubkey)).
+		Max(r.Row.Field("VoteBody").Field("Timestamp")).
+		Run(c.Session)
+	var value map[string]interface{}
+	//TODO 1.might have more than one vote per timestamp 2.Genesis block 3.return id
+	err = res.One(&value)
+	if err != nil {
+		fmt.Printf("Error scanning database result: %s", err)
+	}
+	map_string := common.Serialize(value)
+	return map_string
+}
+
 func (c *RethinkDBConnection) GetUnvotedBlock(pubkey string) []string {
 	//TODO doing unfinished lizhen
 	res, err := r.DB(DBUNICHAIN).Table(TABLEBLOCKS).Filter(

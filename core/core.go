@@ -295,6 +295,15 @@ func GetBlock(id string) models.Block {
 	return block
 }
 
+func GetLastVotedBlockId() string {
+	var vote models.Vote
+	voteStr := Conn.GetLastVotedBlockId(PublicKey)
+	err := json.Unmarshal([]byte(voteStr), &vote)
+	if err != nil {
+		log.Error(err)
+	}
+	return vote.VoteBody.VoteBlock
+}
 func ValidateBlock(block models.Block) bool {
 	/*
 		Validate the Block without validating the transactions.

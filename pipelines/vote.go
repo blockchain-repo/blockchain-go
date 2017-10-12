@@ -13,8 +13,7 @@ import (
 	"unichain-go/common"
 )
 
-//TODO init lastVotedBlockId
-var lastVotedBlockId string = "ididid-lastVotedBlockId"
+var lastVotedBlockId string = ""
 var counters map[string]int = make(map[string]int)
 var blocksValidityStatus map[string]bool = make(map[string]bool)
 
@@ -128,6 +127,7 @@ func createVotePipe() (p mp.Pipeline) {
 }
 
 func getVoteChangefeed() *mp.Node {
+	lastVotedBlockId = core.GetLastVotedBlockId()
 	preBlock := initUnvotedBlock()
 	cn := &changeNode{prefeed: preBlock, db: "unichain", table: "blocks", operation: backend.INSERT}
 	go cn.runForever()
