@@ -125,6 +125,36 @@ func CreateTransaction(txSigners []string, recipients []interface{}, operation s
 	return tx, nil
 }
 
+func CreateDummyTransaction() string {
+	preOut := models.PreOut{
+		Tx:    "0",
+		Index: "0",
+	}
+	input := models.Input{
+		OwnersBefore: PublicKey,
+		Signature:    "",
+		PreOut:       &preOut,
+	}
+	output := models.Output{
+		OwnersAfter: PublicKey,
+		Amount:      1,
+	}
+	m := map[string]interface{}{}
+	m["timestamp"] = common.GenTimestamp()
+	tx := models.Transaction{
+		Id:        "",
+		Inputs:    []models.Input{input},
+		Outputs:   []models.Output{output},
+		Operation: "CREATE",
+		Asset:     "0",
+		Chain:     "0",
+		Metadata:  m,
+		Version:   "1",
+	}
+	tx.GenerateId()
+	return tx.ToString()
+}
+
 //Just for test
 func CreateTransactionForTest() string {
 	preOut := models.PreOut{
@@ -266,7 +296,7 @@ func Election(blockId string) bool {
 }
 
 func Requeue(blockId string) {
-
+	//TODO
 }
 
 func GetUnvotedBlock() []string {
