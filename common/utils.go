@@ -3,6 +3,7 @@ package common
 import (
 	"bytes"
 	"encoding/json"
+	"reflect"
 	"strconv"
 	"strings"
 	"time"
@@ -62,15 +63,23 @@ func MapToStruct(mapObj map[string]interface{}) (interface{}, error) {
 /*------------------------------ struct serialize must use this -----------------------------*/
 /*------------------------------ Hash and Sign use this -----------------------------*/
 func Serialize(obj interface{}, escapeHTML ...bool) string {
-	objMap, err := StructToMap(obj)
-	if err != nil {
-		log.Error(err.Error())
-		return ""
+	resultv := reflect.ValueOf(obj)
+	if resultv.Kind() == reflect.Slice {
+		if len(escapeHTML) >= 1 {
+			return _Serialize(obj, escapeHTML[0])
+		}
+		return _Serialize(obj)
+	} else {
+		objMap, err := StructToMap(obj)
+		if err != nil {
+			log.Error(err.Error())
+			return ""
+		}
+		if len(escapeHTML) >= 1 {
+			return _Serialize(objMap, escapeHTML[0])
+		}
+		return _Serialize(objMap)
 	}
-	if len(escapeHTML) >= 1 {
-		return _Serialize(objMap, escapeHTML[0])
-	}
-	return _Serialize(objMap)
 }
 
 /*------------- Structs keys are marshalled in the order defined in the struct ------------------*/

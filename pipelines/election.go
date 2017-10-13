@@ -21,9 +21,9 @@ func checkForQuorum(arg interface{}) interface{} {
 		return nil
 	}
 	blockId := vote.VoteBody.VoteBlock
-	valid := core.Election(blockId)
-	log.Info("Elect `", valid, "`for", blockId)
-	if valid != true {
+	result := core.Election(blockId)
+	log.Info("Elect `", result, "`for", blockId)
+	if result == core.BLOCK_INVALID {
 		return blockId
 	}
 	return nil
@@ -32,7 +32,7 @@ func checkForQuorum(arg interface{}) interface{} {
 func requeueTransactions(arg interface{}) interface{} {
 	blockId := arg.(string)
 	block := core.GetBlock(blockId)
-	for _,tx := range block.BlockBody.Transactions {
+	for _, tx := range block.BlockBody.Transactions {
 		core.WriteTransactionToBacklog(tx)
 	}
 	return nil

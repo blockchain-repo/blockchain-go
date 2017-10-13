@@ -109,7 +109,7 @@ func writeVote(arg interface{}) interface{} {
 
 func initUnvotedBlock() []string {
 	unvotedBlock := []string{}
-	//TODO get unvoted block
+	//TODO get unvoted block lizhen
 	return unvotedBlock
 }
 

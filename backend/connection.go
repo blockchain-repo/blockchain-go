@@ -30,6 +30,7 @@ type Connection interface {
 	//query //table.votes
 	WriteVote(vote string) int
 	GetLastVotedBlockId(pubkey string) string
+	GetVotesByBlockId(id string) string
 	//changefeed
 	Changefeed(db string, table string, operation int) chan interface{}
 	//schema

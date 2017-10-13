@@ -88,6 +88,10 @@ func (c *RethinkDBConnection) GetLastVotedBlockId(pubkey string) string {
 		Filter(r.Row.Field("NodePubkey").Eq(pubkey)).
 		Max(r.Row.Field("VoteBody").Field("Timestamp")).
 		Run(c.Session)
+	if err != nil {
+		log.Error(err)
+	}
+
 	var value map[string]interface{}
 	//TODO 1.might have more than one vote per timestamp 2.Genesis block 3.return id
 	err = res.One(&value)
@@ -96,6 +100,23 @@ func (c *RethinkDBConnection) GetLastVotedBlockId(pubkey string) string {
 	}
 	map_string := common.Serialize(value)
 	return map_string
+}
+
+func (c *RethinkDBConnection) GetVotesByBlockId(id string) string {
+	res, err := r.DB(DBUNICHAIN).Table(TABLEVOTES).
+		Filter(r.Row.Field("VoteBody").Field("VoteBlock").Eq(id)).
+		Run(c.Session)
+	if err != nil {
+		log.Error(err)
+	}
+
+	var value []map[string]interface{}
+	err = res.All(&value)
+	if err != nil {
+		fmt.Printf("Error scanning database result: %s", err)
+	}
+	map_strings := common.Serialize(value)
+	return map_strings
 }
 
 func (c *RethinkDBConnection) GetUnvotedBlock(pubkey string) []string {

@@ -26,6 +26,12 @@ func Test_GetLastVotedBlock(t *testing.T) {
 	log.Debug(res)
 }
 
+func Test_Election(t *testing.T) {
+
+	Election("hhh")
+
+}
+
 //func Test_create(t *testing.T) {
 //	var txSigners []string = []string{"5XAJvuRGb8B3hUesjREL7zdZ82ahZqHuBV6ttf3UEhyL"}
 //	var amount float64 = 100

@@ -367,10 +367,21 @@ func WriteVote(vote string) {
 	Conn.WriteVote(vote)
 }
 
-func Election(blockId string) bool {
-	//TODO
+func Election(blockId string) string {
 
-	return true
+	votesStr := Conn.GetVotesByBlockId(blockId)
+	var votes []models.Vote
+	err := json.Unmarshal([]byte(votesStr), &votes)
+	if err != nil {
+		log.Error(err)
+	}
+	return BlockElection(blockId, votes, AllPub)
+}
+
+func BlockElection(blockId string, votes []models.Vote, keyring []string) string {
+	//TODO
+	log.Debug(blockId, votes, keyring)
+	return BLOCK_VALID
 }
 
 func GetUnvotedBlock() []string {

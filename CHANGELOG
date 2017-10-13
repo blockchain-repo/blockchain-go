@@ -1,9 +1,9 @@
 TODOs
 
-1. GetBlocksStatusContainingTx block+vote 实现
-2. Tx.validate 延展
-3. Election block+vote实现
-4. stale 实现
+1. BlockElection 实现
+2. GetBlocksStatusContainingTx 实现
+3. stale 实现
+4. Tx.validate 延展
 5. benchmark 测试
 ----------------------------
 1. pipeline Block 超时 lizhen !
