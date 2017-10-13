@@ -61,40 +61,9 @@ func init() {
 }
 
 //
-func CreateGenesisBlock() string {
-	blockCount, err := Conn.GetBlockCount()
-	if err != nil {
-		log.Error(err)
-		return ""
-	}
-	if blockCount != 0 {
-		log.Error("Cannot create the Genesis block!")
-		return ""
-	}
-	block := prepareGenesisBlock()
-	log.Info("GenesisBlock: Hello World from the Unichain!")
-	WriteBlock(block)
-	return block
-}
 
-func prepareGenesisBlock() string {
-	var txSigners []string = []string{PublicKey}
-	var amount int = 1
-	var recipients []interface{} = []interface{}{[]interface{}{PublicKey, amount}}
-	m := map[string]interface{}{}
-	m["message"] = "Hello World from the Unichain"
-	var version string = VERSIONCHAIN
-	tx, err := CreateTransaction(txSigners, recipients, GENESIS, m, "", "", version, "", "")
-	if err != nil {
-		log.Info(err)
-	}
-	tx.Sign([]string{PrivateKey})
-	tx.GenerateId()
-	txs := []models.Transaction{tx}
-	block := CreateBlock(txs)
-	return block.ToString()
-}
 
+//transaction
 func CreateTransaction(txSigners []string, recipients []interface{}, operation string, metadata map[string]interface{}, asset string, chainType string, version string, relation string, contract string) (models.Transaction, error) {
 	var tx models.Transaction
 	var err error
@@ -265,6 +234,41 @@ func DeleteTransaction(id string) {
 	Conn.DeleteTransaction(id)
 }
 
+//block
+func CreateGenesisBlock() string {
+	blockCount, err := Conn.GetBlockCount()
+	if err != nil {
+		log.Error(err)
+		return ""
+	}
+	if blockCount != 0 {
+		log.Error("Cannot create the Genesis block!")
+		return ""
+	}
+	block := prepareGenesisBlock()
+	log.Info("GenesisBlock: Hello World from the Unichain!")
+	WriteBlock(block)
+	return block
+}
+
+func prepareGenesisBlock() string {
+	var txSigners []string = []string{PublicKey}
+	var amount int = 1
+	var recipients []interface{} = []interface{}{[]interface{}{PublicKey, amount}}
+	m := map[string]interface{}{}
+	m["message"] = "Hello World from the Unichain"
+	var version string = VERSIONCHAIN
+	tx, err := CreateTransaction(txSigners, recipients, GENESIS, m, "", "", version, "", "")
+	if err != nil {
+		log.Info(err)
+	}
+	tx.Sign([]string{PrivateKey})
+	tx.GenerateId()
+	txs := []models.Transaction{tx}
+	block := CreateBlock(txs)
+	return block.ToString()
+}
+
 func CreateBlock(txs []models.Transaction) models.Block {
 	blockBody := models.BlockBody{
 		Transactions: txs,
@@ -344,6 +348,14 @@ func ValidateBlock(block models.Block) bool {
 	return true
 }
 
+func GetUnvotedBlock() []string {
+	//TODO get unvoted block lizhen
+	//NOT necessary see bigchaindb #1325
+	Conn.GetUnvotedBlock(PublicKey)
+	return nil
+}
+
+//vote
 func CreateVote(valid bool, blockId string, previousBlock string) models.Vote {
 	voteBody := models.VoteBody{
 		IsValid:       valid,
@@ -367,6 +379,11 @@ func WriteVote(vote string) {
 	Conn.WriteVote(vote)
 }
 
+func ValidateVote(vote models.Vote) bool {
+
+}
+
+
 func Election(blockId string) string {
 
 	votesStr := Conn.GetVotesByBlockId(blockId)
@@ -379,14 +396,31 @@ func Election(blockId string) string {
 }
 
 func BlockElection(blockId string, votes []models.Vote, keyring []string) string {
-	//TODO
 	log.Debug(blockId, votes, keyring)
-	return BLOCK_VALID
+	n_voters := len(keyring)
+	eligible_votes := partitionEligibleVotes(votes, keyring)
+	deduped_votes := dedupeByVoter(eligible_votes)
+	n_valid, n_invalid := countVotes(deduped_votes)
+	result := decideVotes(n_voters, n_valid, n_invalid)
+	return result
 }
 
-func GetUnvotedBlock() []string {
-	//TODO get unvoted block lizhen
-	//NOT necessary see bigchaindb #1325
-	Conn.GetUnvotedBlock(PublicKey)
-	return nil
+//TODO 4 func for BlockElection
+func partitionEligibleVotes(votes []models.Vote, keyring []string) []models.Vote {
+	for _,vote := range votes {
+		vote.VerifySig()
+	}
+	return votes
+}
+
+func dedupeByVoter(votes []models.Vote) []models.Vote {
+	return votes
+}
+
+func countVotes(votes []models.Vote) (int, int) {
+	return 0, 0
+}
+
+func decideVotes(n_voters int, n_valid int, n_invalid int) string {
+	return BLOCK_VALID
 }

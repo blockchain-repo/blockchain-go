@@ -1,7 +1,7 @@
 TODOs
 
-1. BlockElection 实现
-2. GetBlocksStatusContainingTx 实现
+1. 4 func for BlockElection 实现
+2. GetBlocksStatusContainingTx 实现 1.tx----blocks 2.each block ---status
 3. stale 实现
 4. Tx.validate 延展
 5. benchmark 测试
