@@ -3,7 +3,6 @@ package rethinkdb
 import (
 	"testing"
 	"unichain-go/log"
-	"unichain-go/core"
 )
 
 func Test_GetBlockCount(t *testing.T) {
@@ -23,3 +22,8 @@ func Test_GetBlock(t *testing.T) {
 	log.Info(res)
 }
 
+func TestRethinkDBConnection_GetBlocksContainTransaction(t *testing.T) {
+	c := &RethinkDBConnection{}
+	c.Connect()
+	log.Debug(c.GetBlocksContainTransaction("c3d2354db940d01446c9088e16066efa1dc16e2a422d42038a4453de6f02ceb5"))
+}

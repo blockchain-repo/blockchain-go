@@ -32,9 +32,17 @@ func (c *RethinkDBConnection) CreateSecondaryIndex() {
 	//Create backlog index
 
 	//Create blocks index
-
+	response, err := r.DB(DBUNICHAIN).Table(TABLEBLOCKS).IndexCreateFunc(
+		"transaction_id",
+		r.Row.Field("BlockBody").Field("Transactions").Field("id"),
+		r.IndexCreateOpts{Multi:true},
+	).RunWrite(c.Session)
+	if err != nil {
+		log.Error("Error creating index:", err)
+	}
+	log.Info("%d index created", response.Created)
 	//Create votes index
-	response, err := r.DB(DBUNICHAIN).Table(TABLEVOTES).IndexCreateFunc("block_and_voter",
+	response, err = r.DB(DBUNICHAIN).Table(TABLEVOTES).IndexCreateFunc("block_and_voter",
 		func(row r.Term) interface{} {
 			return []interface{}{row.Field("VoteBody").Field("VoteBlock"), row.Field("NodePubkey")}
 		},
@@ -43,7 +51,6 @@ func (c *RethinkDBConnection) CreateSecondaryIndex() {
 		log.Error("Error creating index:", err)
 	}
 	log.Info("%d index created", response.Created)
-
 }
 
 func (c *RethinkDBConnection) CreateTable(db string, table string) {

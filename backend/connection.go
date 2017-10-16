@@ -27,6 +27,7 @@ type Connection interface {
 	WriteBlock(block string) int
 	GetBlockCount() (int, error)
 	GetUnvotedBlock(pubkey string) []string
+	GetBlocksContainTransaction(id string) string
 	//query //table.votes
 	WriteVote(vote string) int
 	GetLastVotedBlockId(pubkey string) string

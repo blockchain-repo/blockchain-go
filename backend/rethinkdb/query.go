@@ -73,6 +73,22 @@ func (c *RethinkDBConnection) GetBlock(id string) string {
 	return map_string
 }
 
+func (c *RethinkDBConnection) GetBlocksContainTransaction(id string) string {
+	res, err := r.DB(DBUNICHAIN).Table(TABLEBLOCKS).
+		GetAllByIndex("transaction_id", id).Pluck("id").
+		Run(c.Session)
+	if err != nil {
+		log.Error(err)
+	}
+	var value []map[string]interface{}
+	err = res.All(&value)
+	if err != nil {
+		fmt.Printf("Error scanning database result: %s", err)
+	}
+	map_strings := common.Serialize(value)
+	return map_strings
+}
+
 func (c *RethinkDBConnection) WriteBlock(block string) int {
 	res := c.Insert(DBUNICHAIN, TABLEBLOCKS, block)
 	return res.Inserted

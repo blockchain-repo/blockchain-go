@@ -1,11 +1,11 @@
 package core
 
 import (
+	"encoding/json"
+	"errors"
 	"math/rand"
 	"time"
 
-	"encoding/json"
-	"errors"
 	"unichain-go/backend"
 	"unichain-go/common"
 	"unichain-go/config"
@@ -61,7 +61,6 @@ func init() {
 }
 
 //
-
 
 //transaction
 func CreateTransaction(txSigners []string, recipients []interface{}, operation string, metadata map[string]interface{}, asset string, chainType string, version string, relation string, contract string) (models.Transaction, error) {
@@ -226,7 +225,15 @@ func IsNewTransaction(id string, exclude_block_id string) bool {
 
 func GetBlocksStatusContainingTx(id string) map[string]string {
 	//TODO
-	var result map[string]string
+	var idMap []map[string]string
+	result := map[string]string{}
+	blocks := Conn.GetBlocksContainTransaction(id)
+	json.Unmarshal([]byte(blocks), &idMap)
+	for _, block := range idMap {
+		id := block["id"]
+		electionResult := Election(id)
+		result[id] = electionResult
+	}
 	return result
 }
 
@@ -380,12 +387,11 @@ func WriteVote(vote string) {
 }
 
 func ValidateVote(vote models.Vote) bool {
-
+	flag := vote.VerifySig()
+	return flag
 }
 
-
 func Election(blockId string) string {
-
 	votesStr := Conn.GetVotesByBlockId(blockId)
 	var votes []models.Vote
 	err := json.Unmarshal([]byte(votesStr), &votes)
@@ -402,25 +408,68 @@ func BlockElection(blockId string, votes []models.Vote, keyring []string) string
 	deduped_votes := dedupeByVoter(eligible_votes)
 	n_valid, n_invalid := countVotes(deduped_votes)
 	result := decideVotes(n_voters, n_valid, n_invalid)
+	log.Debug(result)
 	return result
 }
 
-//TODO 4 func for BlockElection
+//4 func for BlockElection start
 func partitionEligibleVotes(votes []models.Vote, keyring []string) []models.Vote {
-	for _,vote := range votes {
-		vote.VerifySig()
+	var eligibleVotes []models.Vote
+	keySet := common.NewHashSet()
+	for _, key := range keyring {
+		keySet.Add(key)
 	}
-	return votes
+	for _, vote := range votes {
+		if keySet.Has(vote.NodePubkey) == true && ValidateVote(vote) == true {
+			eligibleVotes = append(eligibleVotes, vote)
+		} else {
+			log.Debug("ineligibleVotes:", vote)
+		}
+	}
+	return eligibleVotes
 }
 
 func dedupeByVoter(votes []models.Vote) []models.Vote {
-	return votes
+	var dedupedVotes []models.Vote
+	votesSet := common.NewHashSet()
+	for _, vote := range votes {
+		if votesSet.Has(vote.NodePubkey) {
+			log.Debug("duplicateVote:", vote)
+		} else {
+			votesSet.Add(vote.NodePubkey)
+			dedupedVotes = append(dedupedVotes, vote)
+		}
+	}
+	return dedupedVotes
 }
 
 func countVotes(votes []models.Vote) (int, int) {
-	return 0, 0
+	prev_blocks := make(map[string]int, 0)
+	for _, vote := range votes {
+		if vote.VoteBody.IsValid == true {
+			prev_blocks[vote.NodePubkey] += 1
+		}
+	}
+	sorted := common.SortMapByValue(prev_blocks)
+	var n_valid int
+	var n_invalid int
+	if len(sorted) > 0 {
+		n_valid = sorted[len(sorted)-1].Value
+	} else {
+		n_valid = 0
+	}
+	n_invalid = len(votes) - n_valid
+	return n_valid, n_invalid
 }
 
 func decideVotes(n_voters int, n_valid int, n_invalid int) string {
-	return BLOCK_VALID
+	if n_invalid*2 >= n_voters {
+		return BLOCK_INVALID
+	} else if n_valid*2 > n_voters {
+		return BLOCK_VALID
+	} else {
+		return BLOCK_UNDECIDED
+	}
 }
+
+//4 func for BlockElection end.

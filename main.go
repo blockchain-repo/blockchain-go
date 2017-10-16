@@ -15,7 +15,7 @@ import (
 )
 
 func main() {
-	args := append(os.Args, "start")
+	args := append(os.Args, "init")
 	cmd(args)
 }
 
