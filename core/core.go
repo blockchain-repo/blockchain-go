@@ -218,9 +218,11 @@ func ValidateTransaction(tx models.Transaction) bool {
 		return false
 	}
 	//TODO transfer and others
-	//check asset
-	//check input
-	//check amount
+	if tx.Operation == TRANSFER {
+		//check asset
+		//check input
+		//check amount
+	}
 	return true
 }
 
@@ -373,7 +375,7 @@ func ValidateBlock(block models.Block) bool {
 }
 
 func GetUnvotedBlock() []string {
-	//TODO get unvoted block lizhen
+	//TODO get unvoted block lizhen *
 	//NOT necessary see bigchaindb #1325
 	Conn.GetUnvotedBlock(PublicKey)
 	return nil

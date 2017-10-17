@@ -181,7 +181,7 @@ func (c *RethinkDBConnection) GetVotesByBlockId(id string) string {
 }
 
 func (c *RethinkDBConnection) GetUnvotedBlock(pubkey string) []string {
-	//TODO doing unfinished lizhen
+	//TODO doing unfinished lizhen *
 	res, err := r.DB(DBUNICHAIN).Table(TABLEBLOCKS).Filter(
 		func() {
 

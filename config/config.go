@@ -91,7 +91,7 @@ func FileToConfig() {
 
 func createNewConfig() _Config {
 	var newConfig _Config
-	//TODO interactive cryptoType
+	//TODO interactive cryptoType *
 	cryptoType := "sha3256/base58/ed25519"
 	c := common.SetCrypto(cryptoType)
 	newConfig.Crypto = cryptoType
