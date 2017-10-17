@@ -28,7 +28,7 @@ func TestIsNewTransaction(t *testing.T) {
 
 func Test_GetLastVotedBlock(t *testing.T) {
 
-	vote := CreateVote(true, "hhh", "")
+	vote := CreateVote(true, "yyy", "")
 	WriteVote(common.Serialize(vote))
 	res := GetLastVotedBlockId()
 

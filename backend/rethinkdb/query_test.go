@@ -22,6 +22,14 @@ func Test_GetBlock(t *testing.T) {
 	log.Info(res)
 }
 
+func Test_GetGenesisBlock(t *testing.T) {
+	c := &RethinkDBConnection{}
+	c.Connect()
+
+	res:= c.GetGenesisBlock()
+	log.Info(res)
+}
+
 func TestRethinkDBConnection_GetBlocksContainTransaction(t *testing.T) {
 	c := &RethinkDBConnection{}
 	c.Connect()

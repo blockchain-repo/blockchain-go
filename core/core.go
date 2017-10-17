@@ -307,13 +307,8 @@ func GetBlock(id string) models.Block {
 }
 
 func GetLastVotedBlockId() string {
-	var vote models.Vote
-	voteStr := Conn.GetLastVotedBlockId(PublicKey)
-	err := json.Unmarshal([]byte(voteStr), &vote)
-	if err != nil {
-		log.Error(err)
-	}
-	return vote.VoteBody.VoteBlock
+	blockId := Conn.GetLastVotedBlockId(PublicKey)
+	return blockId
 }
 func ValidateBlock(block models.Block) bool {
 	/*

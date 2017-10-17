@@ -74,7 +74,7 @@ func runDrop() {
 func runStart() {
 	go pipelines.StartBlockPipe()
 	go pipelines.StartVotePipe()
-	//go pipelines.StartElectionPipe()
+	go pipelines.StartElectionPipe()
 	//go pipelines.StartStalePipe()
 	time.Sleep(time.Second * 1)
 	web.Server()

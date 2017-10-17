@@ -1,8 +1,6 @@
 package rethinkdb
 
 import (
-	"fmt"
-
 	"unichain-go/common"
 	"unichain-go/log"
 
@@ -46,10 +44,10 @@ func (c *RethinkDBConnection) GetTransactionFromBacklog(id string) string {
 	var value map[string]interface{}
 	err := res.One(&value)
 	if err != nil {
-		fmt.Printf("Error scanning database result: %s", err)
+		log.Error("Error scanning database result:", err)
 	}
-	map_string := common.Serialize(value)
-	return map_string
+	mapString := common.Serialize(value)
+	return mapString
 }
 
 func (c *RethinkDBConnection) WriteTransactionToBacklog(transaction string) int {
@@ -67,15 +65,33 @@ func (c *RethinkDBConnection) GetBlock(id string) string {
 	var value map[string]interface{}
 	err := res.One(&value)
 	if err != nil {
-		fmt.Printf("Error scanning database result: %s", err)
+		log.Error("Error scanning database result:", err)
 	}
-	map_string := common.Serialize(value)
-	return map_string
+	mapString := common.Serialize(value)
+	return mapString
+}
+
+func (c *RethinkDBConnection) GetGenesisBlock() string {
+	res, err := r.DB(DBUNICHAIN).Table(TABLEBLOCKS).
+		Filter(r.Row.Field("BlockBody").Field("Transactions").AtIndex(0).Field("Operation").Eq("GENESIS")).
+		Pluck("id").
+		Run(c.Session)
+	if err != nil {
+		log.Error(err)
+	}
+	var value map[string]string
+	err = res.One(&value)
+	if err != nil {
+		log.Error("Error scanning database result:", err)
+	}
+	blockId := value["id"]
+	return blockId
 }
 
 func (c *RethinkDBConnection) GetBlocksContainTransaction(id string) string {
 	res, err := r.DB(DBUNICHAIN).Table(TABLEBLOCKS).
-		GetAllByIndex("transaction_id", id).Pluck("id").
+		GetAllByIndex("transaction_id", id).
+		Pluck("id").
 		Run(c.Session)
 	if err != nil {
 		log.Error(err)
@@ -83,10 +99,10 @@ func (c *RethinkDBConnection) GetBlocksContainTransaction(id string) string {
 	var value []map[string]interface{}
 	err = res.All(&value)
 	if err != nil {
-		fmt.Printf("Error scanning database result: %s", err)
+		log.Error("Error scanning database result:", err)
 	}
-	map_strings := common.Serialize(value)
-	return map_strings
+	mapStrings := common.Serialize(value)
+	return mapStrings
 }
 
 func (c *RethinkDBConnection) WriteBlock(block string) int {
@@ -103,19 +119,19 @@ func (c *RethinkDBConnection) GetLastVotedBlockId(pubkey string) string {
 	res, err := r.DB(DBUNICHAIN).Table(TABLEVOTES).
 		Filter(r.Row.Field("NodePubkey").Eq(pubkey)).
 		Max(r.Row.Field("VoteBody").Field("Timestamp")).
+		Field("VoteBody").Field("VoteBlock").
 		Run(c.Session)
 	if err != nil {
-		log.Error(err)
+		return c.GetGenesisBlock()
 	}
 
-	var value map[string]interface{}
-	//TODO 1.might have more than one vote per timestamp 2.Genesis block 3.return id
+	var value string
 	err = res.One(&value)
 	if err != nil {
-		fmt.Printf("Error scanning database result: %s", err)
+		log.Error("Error scanning database result:", err)
 	}
-	map_string := common.Serialize(value)
-	return map_string
+	blockId := value
+	return blockId
 }
 
 func (c *RethinkDBConnection) GetVotesByBlockId(id string) string {
@@ -129,10 +145,10 @@ func (c *RethinkDBConnection) GetVotesByBlockId(id string) string {
 	var value []map[string]interface{}
 	err = res.All(&value)
 	if err != nil {
-		fmt.Printf("Error scanning database result: %s", err)
+		log.Error("Error scanning database result:", err)
 	}
-	map_strings := common.Serialize(value)
-	return map_strings
+	mapStrings := common.Serialize(value)
+	return mapStrings
 }
 
 func (c *RethinkDBConnection) GetUnvotedBlock(pubkey string) []string {
