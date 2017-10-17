@@ -21,7 +21,7 @@ func validateBlock(arg interface{}) interface{} {
 	blockByte := []byte(arg.(string))
 	block := models.Block{}
 	err := json.Unmarshal(blockByte, &block)
-	//TODO generate the dummy_tx
+	//TODO generate the dummy_tx  lizhen [method done]
 	if err != nil {
 		log.Error(err)
 		return []interface{}{block.Id, []string{}}
@@ -59,7 +59,7 @@ func validateBlockByTxs(arg interface{}) interface{} {
 	txNum := arg.([]interface{})[1].(int)
 	validateChan := arg.([]interface{})[2].(chan map[string]interface{})
 
-	//TODO deal error and panic?
+	//TODO deal error and panic? lizhen
 	for i := 0; i < txNum; i++ {
 		validMap := <-validateChan
 		isValidTx := validMap["isValidTx"].(bool)

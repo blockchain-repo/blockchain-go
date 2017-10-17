@@ -224,7 +224,6 @@ func IsNewTransaction(id string, exclude_block_id string) bool {
 }
 
 func GetBlocksStatusContainingTx(id string) map[string]string {
-	//TODO
 	var idMap []map[string]string
 	result := map[string]string{}
 	blocks := Conn.GetBlocksContainTransaction(id)
