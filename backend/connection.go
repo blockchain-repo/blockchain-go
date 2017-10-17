@@ -1,6 +1,8 @@
 package backend
 
 import (
+	"time"
+
 	"unichain-go/backend/rethinkdb"
 	//	"unichain-go/backend/mongodb"
 	"unichain-go/config"
@@ -20,7 +22,9 @@ type Connection interface {
 	Connect()
 	//query //table.backlog
 	GetTransactionFromBacklog(id string) string
+	GetStaleTransactions(reassignDelay time.Duration) string
 	WriteTransactionToBacklog(transaction string) int
+	UpdateTransactionToBacklog(id string, jsonStr string) int
 	DeleteTransaction(id string) int
 	//query //table.blocks
 	GetBlock(id string) string

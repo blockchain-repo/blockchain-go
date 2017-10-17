@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"errors"
 	"math/rand"
+	"strconv"
 	"time"
 
 	"unichain-go/backend"
@@ -177,12 +178,30 @@ func WriteTransactionToBacklog(tx models.Transaction) {
 	if err != nil {
 		log.Error("StructToMap failed")
 	}
+	timeNow, err := strconv.Atoi(common.GenTimestamp())
+	if err != nil {
+		log.Error(err)
+	}
 	rand.Seed(time.Now().UnixNano())
 	//add key
 	m["Assign"] = AllPub[rand.Intn(len(AllPub))]
-	m["AssignTime"] = common.GenTimestamp()
+	m["AssignTime"] = timeNow
 	str := common.Serialize(m)
 	Conn.WriteTransactionToBacklog(str)
+}
+
+func UpdateTransactionToBacklog(tx models.Transaction) {
+	m := make(map[string]interface{})
+	timeNow, err := strconv.Atoi(common.GenTimestamp())
+	if err != nil {
+		log.Error(err)
+	}
+	rand.Seed(time.Now().UnixNano())
+	//add key
+	m["Assign"] = AllPub[rand.Intn(len(AllPub))]
+	m["AssignTime"] = timeNow
+	jsonStr := common.Serialize(m)
+	Conn.UpdateTransactionToBacklog(tx.Id, jsonStr)
 }
 
 func ValidateTransaction(tx models.Transaction) bool {
@@ -221,6 +240,10 @@ func IsNewTransaction(id string, exclude_block_id string) bool {
 		}
 	}
 	return true
+}
+
+func GetStaleTransaction(reassignDelay time.Duration) string {
+	return Conn.GetStaleTransactions(reassignDelay)
 }
 
 func GetBlocksStatusContainingTx(id string) map[string]string {

@@ -1,10 +1,13 @@
 package rethinkdb
 
 import (
+	"time"
+
 	"unichain-go/common"
 	"unichain-go/log"
 
 	r "gopkg.in/gorethink/gorethink.v3"
+	"strconv"
 )
 
 func (c *RethinkDBConnection) Get(db string, table string, id string) *r.Cursor {
@@ -50,9 +53,35 @@ func (c *RethinkDBConnection) GetTransactionFromBacklog(id string) string {
 	return mapString
 }
 
+func (c *RethinkDBConnection) GetStaleTransactions(reassignDelay time.Duration) string {
+	timeNow, err := strconv.Atoi(common.GenTimestamp())
+	if err != nil {
+		log.Error(err)
+	}
+	res, err := r.DB(DBUNICHAIN).Table(TABLEBACKLOG).
+		Filter(r.Row.Field("AssignTime").Sub(timeNow).Lt(-reassignDelay)).
+		Run(c.Session)
+	if err != nil {
+		log.Error(err)
+	}
+	var value []map[string]interface{}
+	err = res.All(&value)
+	if err != nil {
+		//log.Debug("Error scanning database result:", err)
+		return ""
+	}
+	mapString := common.Serialize(value)
+	return mapString
+}
+
 func (c *RethinkDBConnection) WriteTransactionToBacklog(transaction string) int {
 	res := c.Insert(DBUNICHAIN, TABLEBACKLOG, transaction)
 	return res.Inserted
+}
+
+func (c *RethinkDBConnection) UpdateTransactionToBacklog(id string, jsonStr string) int {
+	res := c.Update(DBUNICHAIN, TABLEBACKLOG, id, jsonStr)
+	return res.Updated
 }
 
 func (c *RethinkDBConnection) DeleteTransaction(id string) int {

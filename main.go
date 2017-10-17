@@ -15,7 +15,7 @@ import (
 )
 
 func main() {
-	args := append(os.Args, "init")
+	args := append(os.Args, "start")
 	cmd(args)
 }
 
@@ -75,7 +75,7 @@ func runStart() {
 	go pipelines.StartBlockPipe()
 	go pipelines.StartVotePipe()
 	go pipelines.StartElectionPipe()
-	//go pipelines.StartStalePipe()
+	go pipelines.StartStalePipe()
 	time.Sleep(time.Second * 1)
 	web.Server()
 }
