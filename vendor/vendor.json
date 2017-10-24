@@ -9,10 +9,10 @@
 			"revisionTime": "2017-07-28T07:42:14Z"
 		},
 		{
-			"checksumSHA1": "TRqya6LYyHeHzX2LUfTdvj3cs5c=",
+			"checksumSHA1": "OlKTdKNjZGHnU436515Kco0RDyQ=",
 			"path": "github.com/altairlee/multipipelines/multipipes",
-			"revision": "967f2ef04626e4de9375d0d95e5925ec10147ca4",
-			"revisionTime": "2017-08-03T08:10:46Z"
+			"revision": "6d14bba1db100b4edb6dd1dacb01456f70ac2c67",
+			"revisionTime": "2017-10-24T00:53:02Z"
 		},
 		{
 			"checksumSHA1": "g+4AgCjxvotVLox53tnXxjXuBnQ=",
@@ -154,6 +154,10 @@
 			"path": "gopkg.in/gorethink/gorethink.v3/types",
 			"revision": "7ab832f7b65573104a555d84a27992ae9ea1f659",
 			"revisionTime": "2017-04-17T08:51:06Z"
+		},
+		{
+			"path": "https://github.com/altairlee/multipipelines.git",
+			"revision": ""
 		}
 	],
 	"rootPath": "unichain-go"

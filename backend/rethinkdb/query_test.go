@@ -35,3 +35,19 @@ func TestRethinkDBConnection_GetBlocksContainTransaction(t *testing.T) {
 	c.Connect()
 	log.Debug(c.GetBlocksContainTransaction("c3d2354db940d01446c9088e16066efa1dc16e2a422d42038a4453de6f02ceb5"))
 }
+
+func Test_rql(t *testing.T) {
+	c := &RethinkDBConnection{}
+	c.Connect()
+	//.Filter(r.Row.Field("Operation").Eq("GENESIS"))
+	//.Filter(r.Row.Field("BlockBody").Field("Transactions"))
+	//Eq([]interface{}{map[string]interface{}{"Operation":"GENESIS",}}))
+	//r.Row.Field("BlockBody").Field("Transactions").Nth(0).Filter(map[string]interface{}{"Operation":"GENESIS",})
+	res, err := r.DB("unichain").Table("blocks").Filter("").Run(c.Session)
+	log.Info(err)
+	var value map[string]interface{}
+	//var key []string
+	res.One(&value)
+	log.Info(value)
+	log.Info(common.Serialize(value))
+}
