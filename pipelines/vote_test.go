@@ -15,6 +15,7 @@ func CreateTransactionForTest() models.Transaction {
 
 	var PublicKey string
 	PublicKey = config.Config.Keypair.PublicKey
+	PrivateKey := []string{config.Config.Keypair.PrivateKey}
 	preOut := models.PreOut{
 		Tx:    "0",
 		Index: "0",
@@ -40,7 +41,7 @@ func CreateTransactionForTest() models.Transaction {
 		Metadata:  m,
 		Version:   "1",
 	}
-	tx.Sign()
+	tx.Sign(PrivateKey)
 	tx.GenerateId()
 	return tx
 }
@@ -48,6 +49,7 @@ func CreateTransactionForTest() models.Transaction {
 //Just for test
 func CreateBlockForTest() models.Block {
 	PublicKey := config.Config.Keypair.PublicKey
+	PrivateKey := config.Config.Keypair.PrivateKey
 	txs := make([]models.Transaction, 0)
 	for i := 1; i < 5; i++ {
 		tx := CreateTransactionForTest()
@@ -62,7 +64,7 @@ func CreateBlockForTest() models.Block {
 	var block models.Block = models.Block{
 		BlockBody: bloclBody,
 	}
-	block.Sign()
+	block.Sign(PrivateKey)
 	block.GenerateId()
 	arg := common.Serialize(block)
 	//bs, err := json.Marshal(arg)
@@ -84,11 +86,11 @@ func CreateBlockForTest() models.Block {
 func TestInsertBlock(t *testing.T) {
 	Conn := backend.GetConnection()
 	block1 := CreateBlockForTest()
-	block2 := CreateBlockForTest()
-	block3 := CreateBlockForTest()
+	//block2 := CreateBlockForTest()
+	//block3 := CreateBlockForTest()
 	Conn.WriteBlock(common.Serialize(block1))
-	Conn.WriteBlock(common.Serialize(block2))
-	Conn.WriteBlock(common.Serialize(block3))
+	//Conn.WriteBlock(common.Serialize(block2))
+	//Conn.WriteBlock(common.Serialize(block3))
 }
 
 func TestVotePip(t *testing.T) {

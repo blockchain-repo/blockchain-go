@@ -17,7 +17,10 @@ var lastVotedBlockId string = ""
 var counters map[string]int = make(map[string]int)
 var blocksValidityStatus map[string]bool = make(map[string]bool)
 
+var validateChan = make(chan interface{}, 4000)
+
 func validateBlock(arg interface{}) interface{} {
+	log.Debug("step1 validateBlock")
 	blockByte := []byte(arg.(string))
 	block := models.Block{}
 	err := json.Unmarshal(blockByte, &block)
@@ -33,65 +36,51 @@ func validateBlock(arg interface{}) interface{} {
 }
 
 func validateTxsInBlock(arg interface{}) interface{} {
+	log.Debug("step2 validateTxsInBlock")
 	blockId := arg.([]interface{})[0].(string)
 	txs := arg.([]interface{})[1].([]models.Transaction)
-	validateChan := arg.([]interface{})[2].(chan map[string]interface{})
+
 	txNum := len(txs)
 	for index, _ := range txs {
-		go func(i int, vc chan map[string]interface{}, bi string, tn int) {
+		go func(i int, bi string, tn int) {
 			isValidate := core.ValidateTransaction(txs[i])
 			validMap := map[string]interface{}{
 				"isValidTx": isValidate,
 				"blockId":   bi,
 				"txsNum":    tn,
 			}
-			validateChan <- validMap
-		}(index, validateChan, blockId, txNum)
+			validateChan <- validMap //validMap is the result to the next node
+		}(index, blockId, txNum)
 	}
-
-	return []interface{}{blockId, txNum, validateChan}
+	return nil
 }
 
 /*
  */
 func validateBlockByTxs(arg interface{}) interface{} {
-	blockId := arg.([]interface{})[0].(string)
-	txNum := arg.([]interface{})[1].(int)
-	validateChan := arg.([]interface{})[2].(chan map[string]interface{})
+	log.Debug("step3 validateBlockByTxs")
 
-	//TODO deal error and panic? lizhen
-	for i := 0; i < txNum; i++ {
-		validMap := <-validateChan
-		isValidTx := validMap["isValidTx"].(bool)
-		chanBlockId := validMap["blockId"].(string)
-		if chanBlockId != blockId {
-			log.Error("The func blockId:%s is not the same as the chanBlockId:%s in the channel!", blockId, chanBlockId)
-		}
-		chanTxNum := validMap["txsNum"].(int)
-		if chanTxNum != txNum {
-			log.Error("The func txNum:%d is not the same as the chanTxNum:%d in the channel!", txNum, chanTxNum)
-		}
-		counters[blockId] += 1
-		isValidBlock, ok := blocksValidityStatus[blockId]
-		if !ok {
-			isValidBlock = true
-		}
-		blocksValidityStatus[blockId] = isValidTx && isValidBlock
+	dataMap := arg.(map[string]interface{})
+	isValidTx := dataMap["isValidTx"].(bool)
+	chanBlockId := dataMap["blockId"].(string)
+	chanTxNum := dataMap["txsNum"].(int)
+	counters[chanBlockId] += 1
+	isValidBlock, ok := blocksValidityStatus[chanBlockId]
+	if !ok {
+		isValidBlock = true
+	}
+	blocksValidityStatus[chanBlockId] = isValidTx && isValidBlock
 
+	if counters[chanBlockId] == chanTxNum {
+		return []interface{}{chanBlockId, blocksValidityStatus[chanBlockId]}
 	}
-	if counters[blockId] == txNum {
-		close(validateChan)
-		return []interface{}{blockId, blocksValidityStatus[blockId]}
-	}
-	log.Error("There should be %d txs,but only get %d txs", txNum, counters[blockId])
-	return []interface{}{blockId, false}
+	return nil
 }
 
 func vote(arg interface{}) interface{} {
+	log.Debug("step4 vote")
 	blockId := arg.([]interface{})[0].(string)
 	valid := arg.([]interface{})[1].(bool)
-
-	//valid = blocksValidityStatus[blockId]
 
 	vote := core.CreateVote(valid, blockId, lastVotedBlockId)
 
@@ -116,8 +105,8 @@ func initUnvotedBlock() []string {
 func createVotePipe() (p mp.Pipeline) {
 	nodeSlice := make([]*mp.Node, 0)
 	nodeSlice = append(nodeSlice, &mp.Node{Target: validateBlock, RoutineNum: 1, Name: "validateBlock"})
-	nodeSlice = append(nodeSlice, &mp.Node{Target: validateTxsInBlock, RoutineNum: 1, Name: "validateBlockTx"})
-	nodeSlice = append(nodeSlice, &mp.Node{Target: validateBlockByTxs, RoutineNum: 1, Name: "validateBlockByTxs"})
+	nodeSlice = append(nodeSlice, &mp.Node{Target: validateTxsInBlock, RoutineNum: 1, Name: "validateTxsInBlock"})
+	nodeSlice = append(nodeSlice, &mp.Node{Target: validateBlockByTxs, Input: validateChan, RoutineNum: 1, Name: "validateBlockByTxs"})
 	nodeSlice = append(nodeSlice, &mp.Node{Target: vote, RoutineNum: 1, Name: "vote"})
 	nodeSlice = append(nodeSlice, &mp.Node{Target: writeVote, RoutineNum: 1, Name: "writeVote"})
 	p = mp.Pipeline{
